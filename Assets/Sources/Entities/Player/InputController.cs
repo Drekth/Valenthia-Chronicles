@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace Sources.Entities.Player
 {
-    public class PlayerInputs : MonoBehaviour
+    public class InputController : MonoBehaviour
     {
         private void Awake()
         {

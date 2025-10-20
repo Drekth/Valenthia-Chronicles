@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 117315093}
   - component: {fileID: 117315094}
   - component: {fileID: 117315092}
+  - component: {fileID: 117315095}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -151,6 +152,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sources.Entities.Player.PlayerInputs
   moveSpeed: 5
   jumpForce: 10
+  gravity: -20
+  groundY: 0
 --- !u!4 &117315093
 Transform:
   m_ObjectHideFlags: 0
@@ -180,6 +183,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 892897603a5d46918ead7f74890af60d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sources.Entities.Player.Player
+--- !u!114 &117315095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117315091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4b0e14c5f76d41ad894d8a593a434e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  playerCamera: {fileID: 877013362}
 --- !u!1 &125885682
 GameObject:
   m_ObjectHideFlags: 0
