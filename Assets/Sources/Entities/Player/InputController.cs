@@ -10,6 +10,7 @@ namespace Sources.Entities.Player
         private void Awake()
         {
             player = GetComponent<Player>();
+            playerCamera = GetComponent<CameraController>();
             
             inputActionMap = InputSystem.actions;
             if (inputActionMap == null)
@@ -24,12 +25,14 @@ namespace Sources.Entities.Player
             // Find the references to all the actions
             moveAction = inputActionMap.FindAction("Move");
             jumpAction = inputActionMap.FindAction("Jump");
+            zoomAction = inputActionMap.FindAction("Zoom");
         }
 
         private void Update()
         {
             HandleMovementAction();
             HandleJumpAction();
+            HandleZoomAction();
             ApplyGravity();
         }
 
@@ -63,6 +66,19 @@ namespace Sources.Entities.Player
                 isGrounded = false;
             }
         }
+        
+        private void HandleZoomAction()
+        {
+            if (zoomAction == null || playerCamera == null)
+                return;
+            
+            float scrollInput = zoomAction.ReadValue<float>();
+            
+            if (Mathf.Abs(scrollInput) > 0.01f)
+            {
+                playerCamera.AdjustZoom(scrollInput);
+            }
+        }
 
         private void ApplyGravity()
         {
@@ -92,8 +108,10 @@ namespace Sources.Entities.Player
         
         private InputAction moveAction;
         private InputAction jumpAction;
+        private InputAction zoomAction;
 
         private InputActionAsset inputActionMap;
+        private CameraController playerCamera;
         private Player player;
     }
 }

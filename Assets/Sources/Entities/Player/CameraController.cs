@@ -20,23 +20,40 @@ namespace Sources.Entities.Player
         {
             InitializeCamera();
         }
+
+        private void LateUpdate()
+        {
+            UpdateCameraPosition();
+        }
         
         private void InitializeCamera()
         {
-            if (!player)
+            currentDistance = cameraDistance;
+            UpdateCameraPosition();
+        }
+
+        private void UpdateCameraPosition()
+        {
+            if (!player || !playerCamera)
                 return;
 
             Vector3 playerPosition = player.GetPosition();
 
             // Calculate camera height based on distance and angle
             float angleRad = cameraAngle * Mathf.Deg2Rad;
-            float height = cameraDistance * Mathf.Sin(angleRad);
-            float horizontalDistance = cameraDistance * Mathf.Cos(angleRad);
+            float height = currentDistance * Mathf.Sin(angleRad);
+            float horizontalDistance = currentDistance * Mathf.Cos(angleRad);
 
             Vector3 offset = new Vector3(0, height, -horizontalDistance);
             
             playerCamera.transform.position = playerPosition + offset;
             playerCamera.transform.LookAt(playerPosition);
+        }
+
+        public void AdjustZoom(float scrollInput)
+        {
+            currentDistance -= scrollInput * zoomSpeed;
+            currentDistance = Mathf.Clamp(currentDistance, minDistance, maxDistance);
         }
         
         private void OnDrawGizmos()
@@ -68,8 +85,15 @@ namespace Sources.Entities.Player
         [SerializeField] private float cameraDistance = 15f;
         [SerializeField] private float cameraAngle = 45f;
         
+        [Header("Zoom Settings")]
+        [SerializeField] private float minDistance = 5f;
+        [SerializeField] private float maxDistance = 30f;
+        [SerializeField] private float zoomSpeed = 50f;
+        
         [Header("Dependencies")]
         [SerializeField] private Camera playerCamera;
         private Player player;
+        private float currentDistance;
     }
 }
+

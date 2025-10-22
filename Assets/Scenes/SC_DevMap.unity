@@ -198,6 +198,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   cameraDistance: 20
   cameraAngle: 45
+  minDistance: 10
+  maxDistance: 30
+  zoomSpeed: 15
   playerCamera: {fileID: 877013362}
 --- !u!1 &125885682
 GameObject:
