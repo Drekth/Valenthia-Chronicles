@@ -39,7 +39,19 @@ namespace Sources.Entities.Player
             
             if (player)
             {
-                player.transform.Translate(new Vector3(moveValue.x, 0, moveValue.y) * (moveSpeed * Time.deltaTime));
+                // Rotation: left/right input rotates the player
+                if (Mathf.Abs(moveValue.x) > 0.01f)
+                {
+                    float rotationAmount = moveValue.x * rotationSpeed * Time.deltaTime;
+                    player.transform.Rotate(0, rotationAmount, 0);
+                }
+                
+                // Movement: forward/backward input moves in the direction the player is facing
+                if (Mathf.Abs(moveValue.y) > 0.01f)
+                {
+                    Vector3 moveDirection = player.transform.forward * moveValue.y;
+                    player.transform.Translate(moveDirection * (moveSpeed * Time.deltaTime), Space.World);
+                }
             }
         }
         
@@ -71,6 +83,7 @@ namespace Sources.Entities.Player
         }
         
         [SerializeField] private float moveSpeed = 5f;
+        [SerializeField] private float rotationSpeed = 100f;
         [SerializeField] private float jumpForce = 10f;
         [SerializeField] private float gravity = -20f;
         [SerializeField] private float groundY = 0f;
