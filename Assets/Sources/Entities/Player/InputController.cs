@@ -1,16 +1,23 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 namespace Sources.Entities.Player
 {
     public class InputController : MonoBehaviour
     {
+        private static readonly int IsRunning = Animator.StringToHash("isRunning");
+        private static readonly int Jump = Animator.StringToHash("Jump");
+
         private void Awake()
         {
             player = GetComponent<Player>();
             playerCamera = GetComponent<CameraController>();
+            animator = GetComponent<Animator>();
+            
+            if (animator == null)
+            {
+                Debug.LogError("Animator component not found on " + gameObject.name + " or its children");
+            }
             
             inputActionMap = InputSystem.actions;
             if (inputActionMap == null)
@@ -50,10 +57,18 @@ namespace Sources.Entities.Player
                 }
                 
                 // Movement: forward/backward input moves in the direction the player is facing
-                if (Mathf.Abs(moveValue.y) > 0.01f)
+                bool isMoving = Mathf.Abs(moveValue.y) > 0.01f;
+                if (isMoving)
                 {
                     Vector3 moveDirection = player.transform.forward * moveValue.y;
                     player.transform.Translate(moveDirection * (moveSpeed * Time.deltaTime), Space.World);
+                }
+                
+                // Update animator: set isRunning parameter based on movement
+                if (animator)
+                {
+                    animator.SetBool(IsRunning, isMoving);
+                    Debug.Log($"Movement - isMoving: {isMoving}, moveValue.y: {moveValue.y}");
                 }
             }
         }
@@ -64,12 +79,19 @@ namespace Sources.Entities.Player
             {
                 verticalVelocity = jumpForce;
                 isGrounded = false;
+                
+                // Trigger jump animation
+                if (animator)
+                {
+                    animator.SetTrigger(Jump);
+                    Debug.Log("Jump triggered!");
+                }
             }
         }
         
         private void HandleZoomAction()
         {
-            if (zoomAction == null || playerCamera == null)
+            if (zoomAction == null || !playerCamera)
                 return;
             
             float scrollInput = zoomAction.ReadValue<float>();
@@ -102,9 +124,9 @@ namespace Sources.Entities.Player
         [SerializeField] private float rotationSpeed = 100f;
         [SerializeField] private float jumpForce = 10f;
         [SerializeField] private float gravity = -20f;
-        [SerializeField] private float groundY = 0f;
+        [SerializeField] private float groundY;
         private bool isGrounded;
-        private float verticalVelocity = 0f;
+        private float verticalVelocity;
         
         private InputAction moveAction;
         private InputAction jumpAction;
@@ -113,5 +135,6 @@ namespace Sources.Entities.Player
         private InputActionAsset inputActionMap;
         private CameraController playerCamera;
         private Player player;
+        private Animator animator;
     }
 }

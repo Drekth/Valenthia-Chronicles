@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 117315094}
   - component: {fileID: 117315092}
   - component: {fileID: 117315095}
+  - component: {fileID: 117315096}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -202,6 +203,28 @@ MonoBehaviour:
   maxDistance: 30
   zoomSpeed: 15
   playerCamera: {fileID: 877013362}
+--- !u!95 &117315096
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117315091}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 2255221d850daf642981c1a4eedf85a1, type: 3}
+  m_Controller: {fileID: 9100000, guid: 82932cad4277f4bc0b96e1f421775b4e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &125885682
 GameObject:
   m_ObjectHideFlags: 0
