@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Sources;
 
 namespace Sources.Entities.Player
 {
@@ -16,13 +17,13 @@ namespace Sources.Entities.Player
             
             if (animator == null)
             {
-                Debug.LogError("Animator component not found on " + gameObject.name + " or its children");
+                AstralisDebug.LogError("Player", "Animator component not found on " + gameObject.name + " or its children");
             }
             
             inputActionMap = InputSystem.actions;
             if (inputActionMap == null)
             {
-                Debug.LogError("InputSystem.actions is null. Make sure Input Actions are properly configured.");
+                AstralisDebug.LogError("Input", "InputSystem.actions is null. Make sure Input Actions are properly configured.");
                 return;
             }
         }
@@ -68,7 +69,6 @@ namespace Sources.Entities.Player
                 if (animator)
                 {
                     animator.SetBool(IsRunning, isMoving);
-                    Debug.Log($"Movement - isMoving: {isMoving}, moveValue.y: {moveValue.y}");
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace Sources.Entities.Player
                 if (animator)
                 {
                     animator.SetTrigger(Jump);
-                    Debug.Log("Jump triggered!");
+                    AstralisDebug.Log("Input", "Jump triggered!");
                 }
             }
         }
