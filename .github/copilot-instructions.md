@@ -6,6 +6,8 @@
 
 **Keep it simple** - Only implement what the user explicitly requests. Do not add extra features, examples, or "improvements" unless specifically asked.
 
+**Perform web research on main feature** - For feature implementations, search for best practices, examples, and standards in the game industries with Unity.
+
 ## Project Overview
 Unity 6000.2.10f1 game project using Universal Render Pipeline (URP). Early-stage development with foundational player controls and custom debugging infrastructure.
 
