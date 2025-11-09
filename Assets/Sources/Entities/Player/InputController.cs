@@ -4,6 +4,12 @@ using Sources;
 
 namespace Sources.Entities.Player
 {
+    public enum CursorType
+    {
+        Default,
+        Interact
+    }
+
     public class InputController : MonoBehaviour
     {
         private static readonly int IsRunning = Animator.StringToHash("isRunning");
@@ -27,6 +33,12 @@ namespace Sources.Entities.Player
                 return;
             }
         }
+        
+        private void Start()
+        {
+            // Initialize cursor to default
+            SetCursorForObjectType(ObjectType.None);
+        }
 
         private void OnEnable()
         {
@@ -41,6 +53,7 @@ namespace Sources.Entities.Player
             HandleMovementAction();
             HandleJumpAction();
             HandleZoomAction();
+            DetectObjectUnderCursor();
             ApplyGravity();
         }
 
@@ -120,6 +133,127 @@ namespace Sources.Entities.Player
             }
         }
         
+        private void DetectObjectUnderCursor()
+        {
+            // Get camera from CameraController instead of using Camera.main
+            Camera mainCamera = playerCamera != null ? playerCamera.GetCamera() : null;
+            
+            if (mainCamera == null || Mouse.current == null)
+                return;
+            
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Ray ray = mainCamera.ScreenPointToRay(mousePosition);
+            
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, raycastDistance, interactableLayer))
+            {
+                WorldObject worldObject = hit.collider.GetComponent<WorldObject>();
+                
+                if (worldObject != null && worldObject.CanInteract)
+                {
+                    // New object hovered
+                    if (currentHoveredObject != worldObject)
+                    {
+                        OnObjectHoverExit();
+                        currentHoveredObject = worldObject;
+                        OnObjectHoverEnter(worldObject);
+                    }
+                }
+                else
+                {
+                    // Hit something but not a WorldObject
+                    OnObjectHoverExit();
+                }
+            }
+            else
+            {
+                // No hit
+                OnObjectHoverExit();
+            }
+            
+            // Store ray for debug visualization
+            lastRay = ray;
+            lastRayHit = Physics.Raycast(ray, out hit, raycastDistance, interactableLayer);
+            lastRayHitPoint = hit.point;
+        }
+        
+        private void OnObjectHoverEnter(WorldObject worldObject)
+        {
+            SetCursorForObjectType(worldObject.Type);
+        }
+        
+        private void OnObjectHoverExit()
+        {
+            if (currentHoveredObject != null)
+            {
+                currentHoveredObject = null;
+                SetCursorForObjectType(ObjectType.None);
+            }
+        }
+        
+        private void SetCursorForObjectType(ObjectType objectType)
+        {
+            CursorType cursorType = GetCursorTypeForObject(objectType);
+            Texture2D cursorTexture = GetCursorTexture(cursorType);
+            
+            if (cursorTexture != null)
+            {
+                Cursor.SetCursor(cursorTexture, cursorHotspot, CursorMode.Auto);
+            }
+            else
+            {
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            }
+        }
+        
+        private CursorType GetCursorTypeForObject(ObjectType objectType)
+        {
+            switch (objectType)
+            {
+                case ObjectType.NPC:
+                case ObjectType.GameObject:
+                    return CursorType.Interact;
+                case ObjectType.Door:
+                case ObjectType.Item:
+                    return CursorType.Interact;
+                case ObjectType.None:
+                default:
+                    return CursorType.Default;
+            }
+        }
+        
+        private Texture2D GetCursorTexture(CursorType cursorType)
+        {
+            switch (cursorType)
+            {
+                case CursorType.Interact:
+                    return interactCursor;
+                case CursorType.Default:
+                default:
+                    return defaultCursor;
+            }
+        }
+        
+        private void OnDrawGizmos()
+        {
+            // Draw the raycast in the Scene view for debugging
+            if (lastRay.direction != Vector3.zero)
+            {
+                Gizmos.color = lastRayHit ? Color.green : Color.red;
+                
+                if (lastRayHit)
+                {
+                    Gizmos.DrawLine(lastRay.origin, lastRayHitPoint);
+                    Gizmos.DrawWireSphere(lastRayHitPoint, 0.1f);
+                }
+                else
+                {
+                    Gizmos.DrawRay(lastRay.origin, lastRay.direction * raycastDistance);
+                }
+            }
+        }
+        
+        [Header("Movement Settings")]
         [SerializeField] private float moveSpeed = 5f;
         [SerializeField] private float rotationSpeed = 100f;
         [SerializeField] private float jumpForce = 10f;
@@ -127,6 +261,21 @@ namespace Sources.Entities.Player
         [SerializeField] private float groundY;
         private bool isGrounded;
         private float verticalVelocity;
+        
+        [Header("Cursor Detection Settings")]
+        [SerializeField] private LayerMask interactableLayer = ~0;
+        [SerializeField] private float raycastDistance = 100f;
+        private WorldObject currentHoveredObject;
+        
+        [Header("Cursor Textures")]
+        [SerializeField] private Texture2D defaultCursor;
+        [SerializeField] private Texture2D interactCursor;
+        private Vector2 cursorHotspot = new Vector2(0, 0);
+        
+        // Debug visualization
+        private Ray lastRay;
+        private bool lastRayHit;
+        private Vector3 lastRayHitPoint;
         
         private InputAction moveAction;
         private InputAction jumpAction;

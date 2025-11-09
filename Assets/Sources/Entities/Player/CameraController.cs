@@ -56,6 +56,14 @@ namespace Sources.Entities.Player
             currentDistance = Mathf.Clamp(currentDistance, minDistance, maxDistance);
         }
         
+        /// <summary>
+        /// Gets the camera component.
+        /// </summary>
+        public Camera GetCamera()
+        {
+            return playerCamera;
+        }
+        
         private void OnDrawGizmos()
         {
             // In edition mode, Awake() is not called, so we need to recover the references
