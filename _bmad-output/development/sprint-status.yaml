@@ -1,0 +1,126 @@
+# generated: 2026-02-24
+# project: Valenthia Chronicles
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/development
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-02-24
+project: Valenthia Chronicles
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/development
+
+development_status:
+  # === EPIC 1: Core Infrastructure & Bootstrap ===
+  epic-1: in-progress
+  1-1-project-bootstrap-di-setup: ready-for-dev
+  1-2-core-patterns-implementation: backlog
+  1-3-core-interfaces-scaffolding: backlog
+  1-4-assembly-definitions-project-structure: backlog
+  1-5-event-system-foundation: backlog
+  1-6-debug-tools-foundation: backlog
+  epic-1-retrospective: optional
+
+  # === EPIC 2: Scene Management & Zone System ===
+  epic-2: backlog
+  2-1-addressables-setup-asset-pipeline: backlog
+  2-2-zone-loading-system: backlog
+  2-3-zone-transitions: backlog
+  2-4-loading-screen: backlog
+  2-5-fast-travel-foundation: backlog
+  epic-2-retrospective: optional
+
+  # === EPIC 3: Player Controller & Entity Framework ===
+  epic-3: backlog
+  3-1-player-movement: backlog
+  3-2-top-down-camera: backlog
+  3-3-input-system-setup: backlog
+  3-4-entity-base-framework: backlog
+  3-5-npc-manager-trinitycore-pattern: backlog
+  3-6-interaction-system: backlog
+  epic-3-retrospective: optional
+
+  # === EPIC 4: Combat System (stories TBD) ===
+  epic-4: backlog
+  epic-4-retrospective: optional
+
+  # === EPIC 5: UI/HUD Foundation (stories TBD) ===
+  epic-5: backlog
+  epic-5-retrospective: optional
+
+  # === EPIC 6: Character Progression (stories TBD) ===
+  epic-6: backlog
+  epic-6-retrospective: optional
+
+  # === EPIC 7: Save System (stories TBD) ===
+  epic-7: backlog
+  epic-7-retrospective: optional
+
+  # === EPIC 8: Inventory & Equipment (stories TBD) ===
+  epic-8: backlog
+  epic-8-retrospective: optional
+
+  # === EPIC 9: Quest System (stories TBD) ===
+  epic-9: backlog
+  epic-9-retrospective: optional
+
+  # === EPIC 10: Dialogue System (stories TBD) ===
+  epic-10: backlog
+  epic-10-retrospective: optional
+
+  # === EPIC 11: World State & Consequences (stories TBD) ===
+  epic-11: backlog
+  epic-11-retrospective: optional
+
+  # === EPIC 12: NPC, Reputation & Companions (stories TBD) ===
+  epic-12: backlog
+  epic-12-retrospective: optional
+
+  # === EPIC 13: Character Customization (stories TBD) ===
+  epic-13: backlog
+  epic-13-retrospective: optional
+
+  # === EPIC 14: Economy (stories TBD) ===
+  epic-14: backlog
+  epic-14-retrospective: optional
+
+  # === EPIC 15: Dungeons & Raids (stories TBD) ===
+  epic-15: backlog
+  epic-15-retrospective: optional
+
+  # === EPIC 16: Localisation (stories TBD) ===
+  epic-16: backlog
+  epic-16-retrospective: optional
+
+  # === EPIC 17: Art, Audio & Polish (stories TBD) ===
+  epic-17: backlog
+  epic-17-retrospective: optional
