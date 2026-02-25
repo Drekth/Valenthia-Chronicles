@@ -41,18 +41,18 @@ story_location: _bmad-output/development
 
 development_status:
   # === EPIC 1: Core Infrastructure & Bootstrap ===
-  epic-1: in-progress
-  1-1-project-bootstrap-di-setup: ready-for-dev
-  1-2-core-patterns-implementation: backlog
-  1-3-core-interfaces-scaffolding: backlog
-  1-4-assembly-definitions-project-structure: backlog
-  1-5-event-system-foundation: backlog
-  1-6-debug-tools-foundation: backlog
+  epic-1: done
+  1-1-project-bootstrap-di-setup: done
+  1-2-core-patterns-implementation: done
+  1-3-core-interfaces-scaffolding: done
+  1-4-assembly-definitions-project-structure: done
+  1-5-event-system-foundation: done
+  1-6-debug-tools-foundation: done
   epic-1-retrospective: optional
 
   # === EPIC 2: Scene Management & Zone System ===
-  epic-2: backlog
-  2-1-addressables-setup-asset-pipeline: backlog
+  epic-2: in-progress
+  2-1-addressables-setup-asset-pipeline: ready-for-dev
   2-2-zone-loading-system: backlog
   2-3-zone-transitions: backlog
   2-4-loading-screen: backlog
