@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Entities
+namespace Character
 {
     public class HUDController : MonoBehaviour
     {

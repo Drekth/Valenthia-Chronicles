@@ -1,0 +1,17 @@
+{
+    "name": "ValenthiaChronicles.Entities",
+    "rootNamespace": "Entities",
+    "references": [
+        "Unity.RenderPipelines.Universal.Runtime",
+        "VInspector"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

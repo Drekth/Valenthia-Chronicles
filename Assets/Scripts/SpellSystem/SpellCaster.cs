@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Entities;
+using Character;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

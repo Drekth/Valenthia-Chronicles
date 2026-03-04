@@ -1,4 +1,4 @@
-namespace VCore.Conversation
+namespace DialogueAndQuest
 {
     public interface IInteractable
     {

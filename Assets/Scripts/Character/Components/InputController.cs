@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using VCore.Conversation;
+using DialogueAndQuest;
+using Entities;
 
-namespace Entities
+namespace Character
 {
     public class InputController : MonoBehaviour
     {

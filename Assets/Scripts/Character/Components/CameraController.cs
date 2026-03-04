@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Entities
+namespace Character
 {
     public class CameraController : MonoBehaviour
     {

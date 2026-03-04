@@ -1,6 +1,7 @@
 using UnityEngine;
+using Entities;
 
-namespace Entities
+namespace Character
 {
     public class Player : Unit
     {

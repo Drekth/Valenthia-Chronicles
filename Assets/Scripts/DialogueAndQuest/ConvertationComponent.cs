@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace VCore.Conversation
+namespace DialogueAndQuest
 {
     public class ConvertationComponent : MonoBehaviour, IInteractable
     {

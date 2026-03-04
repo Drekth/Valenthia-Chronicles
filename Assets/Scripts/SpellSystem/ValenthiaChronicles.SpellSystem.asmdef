@@ -1,0 +1,19 @@
+{
+    "name": "ValenthiaChronicles.SpellSystem",
+    "rootNamespace": "SpellSystem",
+    "references": [
+        "ValenthiaChronicles.Entities",
+        "ValenthiaChronicles.Character",
+        "Unity.InputSystem",
+        "VInspector"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

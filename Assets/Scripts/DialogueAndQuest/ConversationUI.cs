@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace VCore.Conversation
+namespace DialogueAndQuest
 {
     public class ConversationUI : MonoBehaviour
     {
