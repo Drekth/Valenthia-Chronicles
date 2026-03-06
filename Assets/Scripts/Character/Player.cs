@@ -69,5 +69,10 @@ namespace Character
         {
             return playerRoot != null ? playerRoot.transform.position : Vector3.zero;
         }
+
+        public override Transform GetVisualTransform()
+        {
+            return playerRoot != null ? playerRoot.transform : transform;
+        }
     }
 }

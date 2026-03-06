@@ -35,6 +35,8 @@ namespace Character
         private InputAction selectAction;
         private InputAction attackAction;
         private InputAction zoomAction;
+        private InputAction[] spellSlotActions;
+        private Spell spellCaster;
         private Vector2 moveInput;
         private bool isLeftPunch = true;
 
@@ -50,6 +52,7 @@ namespace Character
         {
             player = GetComponent<Player>();
             cameraController = GetComponent<CameraController>();
+            spellCaster = GetComponent<Spell>();
 
             if (mainCamera == null)
             {
@@ -112,6 +115,18 @@ namespace Character
                 {
                     zoomAction.Enable();
                 }
+
+                spellSlotActions = new InputAction[5];
+                for (int i = 0; i < 5; i++)
+                {
+                    spellSlotActions[i] = inputActions.FindAction($"SpellSlot{i + 1}");
+                    if (spellSlotActions[i] != null)
+                    {
+                        spellSlotActions[i].Enable();
+                        int slotIndex = i;
+                        spellSlotActions[i].performed += _ => OnSpellSlotPerformed(slotIndex);
+                    }
+                }
             }
         }
 
@@ -144,6 +159,14 @@ namespace Character
             if (zoomAction != null)
             {
                 zoomAction.Disable();
+            }
+
+            if (spellSlotActions != null)
+            {
+                foreach (var action in spellSlotActions)
+                {
+                    action?.Disable();
+                }
             }
         }
 
@@ -282,6 +305,14 @@ namespace Character
             StartCoroutine(PerformPunchDetection());
 
             isLeftPunch = !isLeftPunch;
+        }
+
+        private void OnSpellSlotPerformed(int slotIndex)
+        {
+            if (spellCaster != null)
+            {
+                spellCaster.CastSpellBySlot(slotIndex);
+            }
         }
 
         private System.Collections.IEnumerator PerformPunchDetection()

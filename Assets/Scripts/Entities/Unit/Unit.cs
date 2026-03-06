@@ -67,5 +67,10 @@ namespace Entities
         {
             return true;
         }
+
+        public virtual Transform GetVisualTransform()
+        {
+            return transform;
+        }
     }
 }

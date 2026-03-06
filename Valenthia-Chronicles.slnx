@@ -5,12 +5,12 @@
   <Project Path="VHierarchy.csproj" />
   <Project Path="InitArgs.Services.csproj" />
   <Project Path="Unity.InternalAPIEditorBridgeDev.004.csproj" />
+  <Project Path="ValenthiaChronicles.Spells.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.Public.csproj" />
   <Project Path="ValenthiaChronicles.DialogueAndQuest.csproj" />
   <Project Path="VInspector.csproj" />
   <Project Path="ValenthiaChronicles.Character.csproj" />
-  <Project Path="ValenthiaChronicles.SpellSystem.csproj" />
   <Project Path="ValenthiaChronicles.Entities.csproj" />
   <Project Path="Sisus.Shared.Editor.InspectorInjectors.csproj" />
 </Solution>

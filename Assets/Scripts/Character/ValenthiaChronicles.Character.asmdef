@@ -4,7 +4,10 @@
     "references": [
         "ValenthiaChronicles.Entities",
         "ValenthiaChronicles.DialogueAndQuest",
-        "Unity.InputSystem"
+        "ValenthiaChronicles.Spells",
+        "Unity.InputSystem",
+        "InitArgs",
+        "InitArgs.Services"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
