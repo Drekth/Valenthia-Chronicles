@@ -1,6 +1,3 @@
-using Entities;
-
-
 public interface ISpells
 {
     bool CanCast(Unit caster, SpellDataSO spell);

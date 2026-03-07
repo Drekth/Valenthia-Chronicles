@@ -1,76 +1,73 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace Entities
+public interface ISelectable
 {
-    public interface ISelectable
+    void OnSelected();
+    void OnDeselected();
+    bool IsSelectable();
+}
+
+public abstract class Unit : MonoBehaviour, ISelectable
+{
+    [Header("Selection")]
+    [SerializeField] private DecalProjector selectionDecal;
+
+    private Unit currentTarget;
+    protected UnitStats stats;
+
+    public int CurrentHealth => stats != null ? stats.CurrentHealth : 0;
+    public int CurrentMana => stats != null ? stats.CurrentMana : 0;
+    public int MaxHealth => stats != null ? stats.MaxHealth : 0;
+    public int MaxMana => stats != null ? stats.MaxMana : 0;
+
+    public UnitStats Stats => stats;
+
+    public Unit GetCurrentTarget() => currentTarget;
+    public void SetCurrentTarget(Unit target) => currentTarget = target;
+
+    protected virtual void Awake()
     {
-        void OnSelected();
-        void OnDeselected();
-        bool IsSelectable();
+        stats = GetComponent<UnitStats>();
+
+        if (selectionDecal != null)
+        {
+            selectionDecal.enabled = false;
+        }
     }
-    
-    public abstract class Unit : MonoBehaviour, ISelectable
+
+    private void Start()
     {
-        [Header("Selection")]
-        [SerializeField] private DecalProjector selectionDecal;
-
-        private Unit currentTarget;
-        protected UnitStats stats;
-
-        public int CurrentHealth => stats != null ? stats.CurrentHealth : 0;
-        public int CurrentMana => stats != null ? stats.CurrentMana : 0;
-        public int MaxHealth => stats != null ? stats.MaxHealth : 0;
-        public int MaxMana => stats != null ? stats.MaxMana : 0;
-
-        public UnitStats Stats => stats;
-
-        public Unit GetCurrentTarget() => currentTarget;
-        public void SetCurrentTarget(Unit target) => currentTarget = target;
-
-        protected virtual void Awake()
+        if (stats is null)
         {
-            stats = GetComponent<UnitStats>();
-
-            if (selectionDecal != null)
-            {
-                selectionDecal.enabled = false;
-            }
+            Debug.LogError($"Unit '{gameObject.name}' is missing UnitStats component!", this);
+            Destroy(this.gameObject);
         }
+    }
 
-        private void Start()
+    public virtual void OnSelected()
+    {
+        if (selectionDecal != null)
         {
-            if (stats is null)
-            {
-                Debug.LogError($"Unit '{gameObject.name}' is missing UnitStats component!", this);
-                Destroy(this.gameObject);
-            }
+            selectionDecal.enabled = true;
         }
+    }
 
-        public virtual void OnSelected()
+    public virtual void OnDeselected()
+    {
+        if (selectionDecal != null)
         {
-            if (selectionDecal != null)
-            {
-                selectionDecal.enabled = true;
-            }
+            selectionDecal.enabled = false;
         }
+    }
 
-        public virtual void OnDeselected()
-        {
-            if (selectionDecal != null)
-            {
-                selectionDecal.enabled = false;
-            }
-        }
+    public virtual bool IsSelectable()
+    {
+        return true;
+    }
 
-        public virtual bool IsSelectable()
-        {
-            return true;
-        }
-
-        public virtual Transform GetVisualTransform()
-        {
-            return transform;
-        }
+    public virtual Transform GetVisualTransform()
+    {
+        return transform;
     }
 }

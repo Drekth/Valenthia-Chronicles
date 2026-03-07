@@ -1,77 +1,74 @@
 using TMPro;
 using UnityEngine;
 
-namespace DialogueAndQuest
+public class ConversationUI : MonoBehaviour
 {
-    public class ConversationUI : MonoBehaviour
+    public static ConversationUI Instance { get; private set; }
+
+    [Header("UI References")]
+    [SerializeField] private GameObject dialoguePanel;
+    [SerializeField] private GameObject playerHUD;
+    [SerializeField] private TextMeshProUGUI dialogueText;
+
+    private void Awake()
     {
-        public static ConversationUI Instance { get; private set; }
-
-        [Header("UI References")]
-        [SerializeField] private GameObject dialoguePanel;
-        [SerializeField] private GameObject playerHUD;
-        [SerializeField] private TextMeshProUGUI dialogueText;
-
-        private void Awake()
+        if (Instance != null && Instance != this)
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
+            Destroy(gameObject);
+            return;
         }
 
-        private void Start()
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        HideDialogue();
+    }
+
+    public bool IsDialogueActive()
+    {
+        return dialoguePanel != null && dialoguePanel.activeSelf;
+    }
+
+    public void ShowMessage(string message)
+    {
+        if (string.IsNullOrEmpty(message))
         {
-            HideDialogue();
+            return;
         }
 
-        public bool IsDialogueActive()
+        if (dialogueText != null)
         {
-            return dialoguePanel != null && dialoguePanel.activeSelf;
+            dialogueText.text = message;
         }
 
-        public void ShowMessage(string message)
+        ShowDialogue();
+    }
+
+    public void HideDialogue()
+    {
+        if (dialoguePanel != null)
         {
-            if (string.IsNullOrEmpty(message))
-            {
-                return;
-            }
-
-            if (dialogueText != null)
-            {
-                dialogueText.text = message;
-            }
-
-            ShowDialogue();
+            dialoguePanel.SetActive(false);
         }
 
-        public void HideDialogue()
+        if (playerHUD != null)
         {
-            if (dialoguePanel != null)
-            {
-                dialoguePanel.SetActive(false);
-            }
+            playerHUD.SetActive(true);
+        }
+    }
 
-            if (playerHUD != null)
-            {
-                playerHUD.SetActive(true);
-            }
+    private void ShowDialogue()
+    {
+        if (dialoguePanel != null)
+        {
+            dialoguePanel.SetActive(true);
         }
 
-        private void ShowDialogue()
+        if (playerHUD != null)
         {
-            if (dialoguePanel != null)
-            {
-                dialoguePanel.SetActive(true);
-            }
-
-            if (playerHUD != null)
-            {
-                playerHUD.SetActive(false);
-            }
+            playerHUD.SetActive(false);
         }
     }
 }

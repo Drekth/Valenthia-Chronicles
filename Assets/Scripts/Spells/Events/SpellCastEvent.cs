@@ -1,6 +1,3 @@
-using Entities;
-
-
 public readonly struct SpellCastEvent
 {
     public Unit Caster { get; }

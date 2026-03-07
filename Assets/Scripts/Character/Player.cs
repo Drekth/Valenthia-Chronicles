@@ -1,78 +1,74 @@
 using UnityEngine;
-using Entities;
 
-namespace Character
+public class Player : Unit
 {
-    public class Player : Unit
+
+    [Header("Editor References")]
+    [SerializeField] private GameObject playerPrefab;
+
+    private GameObject playerRoot;
+    private GameObject playerModel;
+    private InputController inputController;
+    private CameraController cameraController;
+
+    protected override void Awake()
     {
+        base.Awake();
 
-        [Header("Editor References")]
-        [SerializeField] private GameObject playerPrefab;
+        inputController = GetComponent<InputController>();
+        cameraController = GetComponent<CameraController>();
+    }
 
-        private GameObject playerRoot;
-        private GameObject playerModel;
-        private InputController inputController;
-        private CameraController cameraController;
+    private void Start()
+    {
+        playerRoot = new GameObject("PlayerRoot");
 
-        protected override void Awake()
+        playerModel = Instantiate(playerPrefab, playerRoot.transform);
+        playerModel.name = "PlayerModel";
+
+        if (cameraController != null)
         {
-            base.Awake();
-
-            inputController = GetComponent<InputController>();
-            cameraController = GetComponent<CameraController>();
+            cameraController.AttachToPlayer(playerRoot.transform);
         }
+    }
 
-        private void Start()
-        {
-            playerRoot = new GameObject("PlayerRoot");
+    public void SelectUnit(ISelectable selectable)
+    {
+        if (GetCurrentTarget() == selectable as Unit)
+            return;
 
-            playerModel = Instantiate(playerPrefab, playerRoot.transform);
-            playerModel.name = "PlayerModel";
+        DeselectCurrentUnit();
 
-            if (cameraController != null)
-            {
-                cameraController.AttachToPlayer(playerRoot.transform);
-            }
-        }
+        SetCurrentTarget(selectable as Unit);
+        selectable?.OnSelected();
+    }
 
-        public void SelectUnit(ISelectable selectable)
-        {
-            if (GetCurrentTarget() == selectable as Unit)
-                return;
+    public void DeselectCurrentUnit()
+    {
+        if (GetCurrentTarget() == null)
+            return;
 
-            DeselectCurrentUnit();
+        (GetCurrentTarget() as ISelectable)?.OnDeselected();
+        SetCurrentTarget(null);
+    }
 
-            SetCurrentTarget(selectable as Unit);
-            selectable?.OnSelected();
-        }
+    public Transform GetPlayerTransform()
+    {
+        return playerRoot != null ? playerRoot.transform : null;
+    }
 
-        public void DeselectCurrentUnit()
-        {
-            if (GetCurrentTarget() == null)
-                return;
+    public Transform GetPlayerModelTransform()
+    {
+        return playerModel != null ? playerModel.transform : null;
+    }
 
-            (GetCurrentTarget() as ISelectable)?.OnDeselected();
-            SetCurrentTarget(null);
-        }
+    public Vector3 GetPlayerPosition()
+    {
+        return playerRoot != null ? playerRoot.transform.position : Vector3.zero;
+    }
 
-        public Transform GetPlayerTransform()
-        {
-            return playerRoot != null ? playerRoot.transform : null;
-        }
-
-        public Transform GetPlayerModelTransform()
-        {
-            return playerModel != null ? playerModel.transform : null;
-        }
-
-        public Vector3 GetPlayerPosition()
-        {
-            return playerRoot != null ? playerRoot.transform.position : Vector3.zero;
-        }
-
-        public override Transform GetVisualTransform()
-        {
-            return playerRoot != null ? playerRoot.transform : transform;
-        }
+    public override Transform GetVisualTransform()
+    {
+        return playerRoot != null ? playerRoot.transform : transform;
     }
 }

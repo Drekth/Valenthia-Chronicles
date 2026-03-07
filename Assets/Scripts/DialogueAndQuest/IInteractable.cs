@@ -1,8 +1,5 @@
-namespace DialogueAndQuest
+public interface IInteractable
 {
-    public interface IInteractable
-    {
-        void OnInteract();
-        bool CanInteract();
-    }
+    void OnInteract();
+    bool CanInteract();
 }
