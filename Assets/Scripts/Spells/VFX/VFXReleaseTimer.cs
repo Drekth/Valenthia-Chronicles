@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 
@@ -9,9 +8,6 @@ using UnityEngine;
 /// </summary>
 public sealed class VFXReleaseTimer : MonoBehaviour
 {
-    private Action releaseCallback;
-    private float timer;
-
     public static void Schedule(GameObject target, float delay, Action onRelease)
     {
         var timer = target.GetComponent<VFXReleaseTimer>();
@@ -37,4 +33,7 @@ public sealed class VFXReleaseTimer : MonoBehaviour
     {
         releaseCallback = null;
     }
+
+    private Action releaseCallback;
+    private float timer;
 }

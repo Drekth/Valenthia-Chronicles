@@ -2,35 +2,7 @@ using UnityEngine;
 
 public class Player : Unit
 {
-
-    [Header("Editor References")]
-    [SerializeField] private GameObject playerPrefab;
-
-    private GameObject playerRoot;
-    private GameObject playerModel;
-    private InputController inputController;
-    private CameraController cameraController;
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        inputController = GetComponent<InputController>();
-        cameraController = GetComponent<CameraController>();
-    }
-
-    private void Start()
-    {
-        playerRoot = new GameObject("PlayerRoot");
-
-        playerModel = Instantiate(playerPrefab, playerRoot.transform);
-        playerModel.name = "PlayerModel";
-
-        if (cameraController != null)
-        {
-            cameraController.AttachToPlayer(playerRoot.transform);
-        }
-    }
+    public override TypeId ObjectTypeId => TypeId.Player;
 
     public void SelectUnit(ISelectable selectable)
     {
@@ -71,4 +43,32 @@ public class Player : Unit
     {
         return playerRoot != null ? playerRoot.transform : transform;
     }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        cameraController = GetComponent<CameraController>();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        playerRoot = new GameObject("PlayerRoot");
+
+        playerModel = Instantiate(playerPrefab, playerRoot.transform);
+        playerModel.name = "PlayerModel";
+
+        if (cameraController != null)
+        {
+            cameraController.AttachToPlayer(playerRoot.transform);
+        }
+    }
+
+    [Header("Editor References")]
+    [SerializeField] private GameObject playerPrefab;
+
+    private GameObject playerRoot;
+    private GameObject playerModel;
+    private CameraController cameraController;
 }

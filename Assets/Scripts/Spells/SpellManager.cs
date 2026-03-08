@@ -14,11 +14,6 @@ public sealed class SpellsService : ISpells, ISpellEvents, IUpdate
     public event Action<SpellCooldownEvent> OnCooldownStarted;
     public event Action<SpellCooldownEvent> OnCooldownEnded;
 
-    private readonly IDamageCalculator damageCalculator;
-    private readonly Dictionary<(Unit, SpellDataSO), float> cooldowns = new();
-    private readonly List<(Unit, SpellDataSO)> expiredKeys = new();
-    private readonly List<(Unit, SpellDataSO)> activeKeys = new();
-
     public SpellsService(IDamageCalculator damageCalculator)
     {
         this.damageCalculator = damageCalculator;
@@ -138,7 +133,7 @@ public sealed class SpellsService : ISpells, ISpellEvents, IUpdate
         return spell.ResourceType switch
         {
             ResourceType.Mana => caster.CurrentMana >= spell.ResourceCost,
-            ResourceType.Stamina => caster.Stats.CurrentStamina >= spell.ResourceCost,
+            ResourceType.Stamina => caster.Attributes.CurrentStamina >= spell.ResourceCost,
             _ => true
         };
     }
@@ -150,10 +145,10 @@ public sealed class SpellsService : ISpells, ISpellEvents, IUpdate
         switch (spell.ResourceType)
         {
             case ResourceType.Mana:
-                caster.Stats.ModifyMana(-spell.ResourceCost);
+                caster.Attributes.ModifyMana(-spell.ResourceCost);
                 break;
             case ResourceType.Stamina:
-                caster.Stats.ModifyStamina(-spell.ResourceCost);
+                caster.Attributes.ModifyStamina(-spell.ResourceCost);
                 break;
         }
     }
@@ -165,7 +160,7 @@ public sealed class SpellsService : ISpells, ISpellEvents, IUpdate
 
         if (damageDealt > 0)
         {
-            target.Stats.ModifyHealth(-damageDealt);
+            target.Attributes.ModifyHealth(-damageDealt);
         }
 
         return damageDealt;
@@ -182,4 +177,9 @@ public sealed class SpellsService : ISpells, ISpellEvents, IUpdate
     // Called by SpellCaster to raise cast time events
     internal void RaiseCastStarted(SpellCastStartedEvent evt) => OnSpellCastStarted?.Invoke(evt);
     internal void RaiseCastInterrupted(SpellCastInterruptedEvent evt) => OnSpellCastInterrupted?.Invoke(evt);
+
+    private readonly IDamageCalculator damageCalculator;
+    private readonly Dictionary<(Unit, SpellDataSO), float> cooldowns = new();
+    private readonly List<(Unit, SpellDataSO)> expiredKeys = new();
+    private readonly List<(Unit, SpellDataSO)> activeKeys = new();
 }

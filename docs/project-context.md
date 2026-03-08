@@ -132,18 +132,20 @@ _This file contains critical rules and patterns that AI agents must follow when 
 #### Script & Code Naming Conventions
 - **Scripts/Classes:** PascalCase, descriptive nouns — `QuestManager`, `PlayerController`, `EnemySpawner`
 - **Interfaces:** PascalCase with `I` prefix — `IInputManager`, `ICombatSystem`, `IQuestManager`
-- **MonoBehaviours:** Name matches filename exactly — one MonoBehaviour per file
+- **MonoBehaviours:** PascalCase, descriptive — one primary MonoBehaviour per file recommended, but related types (enums, structs, small helper classes) may live in the same file
 - **ScriptableObject classes:** PascalCase with `SO` suffix — `ItemDataSO`, `AbilityDataSO`
 - **Private fields:** camelCase — `playerHealth`, `currentQuest`
 - **Public properties:** PascalCase — `MaxHealth`, `CurrentLevel`
 - **Methods:** PascalCase, verb-first — `TakeDamage()`, `CompleteQuest()`, `LoadZone()`
-- **Constants:** UPPER_SNAKE_CASE — `MAX_LEVEL`, `DEFAULT_SPEED`
+- **Constants:** PascalCase — `MaxLevel`, `DefaultSpeed`
 
 #### Code Style
-- One class per file, filename matches class name
-- Group `using` statements: System → UnityEngine → Sisus.Init → Project namespaces
+- Multiple related types (enums, structs, small classes) may live in the same file — minimize file count
+- Do NOT use namespaces — all types live in the global namespace
+- Group `using` statements: System → UnityEngine → Sisus.Init → third-party
 - Use Assembly Definitions to organize code into compilation units
 - Keep MonoBehaviours thin — delegate logic to services and plain C# classes
+- All code, comments, and documentation must be written in English
 
 ### Testing Rules
 

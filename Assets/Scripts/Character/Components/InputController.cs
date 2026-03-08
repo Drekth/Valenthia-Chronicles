@@ -3,47 +3,6 @@ using UnityEngine.InputSystem;
 
 public class InputController : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float rotationSpeed = 10f;
-
-    [Header("Interaction Settings")]
-    [SerializeField] private LayerMask interactableLayer;
-
-    [Header("Combat Settings")]
-    [SerializeField] private float punchDistance = 1.5f;
-    [SerializeField] private float punchRadius = 0.5f;
-    [SerializeField] private float punchDelay = 0.3f;
-    [SerializeField] private LayerMask enemyLayer;
-
-    [Header("Editor References")]
-    [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private Camera mainCamera;
-
-    private Player player;
-    private CameraController cameraController;
-    private Animator animator;
-    private Transform playerRootTransform;
-    private Transform playerModelTransform;
-    private InputAction moveAction;
-    private InputAction interactAction;
-    private InputAction advanceDialogueAction;
-    private InputAction selectAction;
-    private InputAction attackAction;
-    private InputAction zoomAction;
-    private InputAction[] spellSlotActions;
-    private Spell spellCaster;
-    private Vector2 moveInput;
-    private bool isLeftPunch = true;
-
-    private static readonly int SpeedHash = Animator.StringToHash("Speed");
-    private static readonly int PunchLeftHash = Animator.StringToHash("PunchLeft");
-    private static readonly int PunchRightHash = Animator.StringToHash("PunchRight");
-
-    private Vector3 lastPunchPosition;
-    private Vector3 lastPunchDirection;
-    private bool showPunchGizmo;
-
     private void Awake()
     {
         player = GetComponent<Player>();
@@ -363,4 +322,43 @@ public class InputController : MonoBehaviour
         }
     }
 
+    [Header("Movement Settings")]
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float rotationSpeed = 10f;
+
+    [Header("Interaction Settings")]
+    [SerializeField] private LayerMask interactableLayer;
+
+    [Header("Combat Settings")]
+    [SerializeField] private float punchDistance = 1.5f;
+    [SerializeField] private float punchRadius = 0.5f;
+    [SerializeField] private float punchDelay = 0.3f;
+    [SerializeField] private LayerMask enemyLayer;
+
+    [Header("Editor References")]
+    [SerializeField] private InputActionAsset inputActions;
+    [SerializeField] private Camera mainCamera;
+
+    private static readonly int SpeedHash = Animator.StringToHash("Speed");
+    private static readonly int PunchLeftHash = Animator.StringToHash("PunchLeft");
+    private static readonly int PunchRightHash = Animator.StringToHash("PunchRight");
+
+    private Player player;
+    private CameraController cameraController;
+    private Animator animator;
+    private Transform playerRootTransform;
+    private Transform playerModelTransform;
+    private InputAction moveAction;
+    private InputAction interactAction;
+    private InputAction advanceDialogueAction;
+    private InputAction selectAction;
+    private InputAction attackAction;
+    private InputAction zoomAction;
+    private InputAction[] spellSlotActions;
+    private Spell spellCaster;
+    private Vector2 moveInput;
+    private Vector3 lastPunchPosition;
+    private Vector3 lastPunchDirection;
+    private bool isLeftPunch = true;
+    private bool showPunchGizmo;
 }

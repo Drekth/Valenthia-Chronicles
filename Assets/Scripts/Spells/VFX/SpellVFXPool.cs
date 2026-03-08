@@ -9,8 +9,6 @@ using UnityEngine.Pool;
 /// </summary>
 public sealed class SpellVFXPool
 {
-    private readonly Dictionary<GameObject, ObjectPool<GameObject>> pools = new();
-
     public GameObject Get(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
     {
         var pool = GetOrCreatePool(prefab);
@@ -70,4 +68,6 @@ public sealed class SpellVFXPool
 
         return pool;
     }
+
+    private readonly Dictionary<GameObject, ObjectPool<GameObject>> pools = new();
 }

@@ -5,34 +5,6 @@ using VInspector;
 [CreateAssetMenu(fileName = "New Spell", menuName = "Valenthia/Spells/Spell Data")]
 public class SpellDataSO : ScriptableObject
 {
-    [Header("Basic Information")]
-    [SerializeField] private string spellName;
-    [SerializeField, TextArea(2, 4)] private string description;
-    [SerializeField] private Sprite icon;
-
-    [Header("Cast Settings")]
-    [SerializeField] private CastType castType = CastType.Instant;
-    [SerializeField] private float castTime;
-    [SerializeField] private float cooldown;
-
-    [Header("Resource")]
-    [SerializeField] private ResourceType resourceType = ResourceType.Mana;
-    [SerializeField] private int resourceCost;
-
-    [Header("Targeting")]
-    [SerializeField] private TargetType targetType = TargetType.Enemy;
-    [HideIf("targetType", TargetType.Self)]
-    [SerializeField] private float range = 30f;
-    [EndIf]
-
-    [Header("Damage")]
-    [SerializeField] private DamageType damageType = DamageType.Magical;
-    [SerializeField] private int damage;
-
-    [Header("Visual Effects")]
-    [SerializeField] private GameObject impactVFXPrefab;
-    [SerializeField] private float vfxDuration = 2f;
-
     public string SpellName => spellName;
     public string Description => description;
     public Sprite Icon => icon;
@@ -76,4 +48,32 @@ public class SpellDataSO : ScriptableObject
         if (vfxDuration < 0f)
             vfxDuration = 0f;
     }
+
+    [Header("Basic Information")]
+    [SerializeField] private string spellName;
+    [SerializeField, TextArea(2, 4)] private string description;
+    [SerializeField] private Sprite icon;
+
+    [Header("Cast Settings")]
+    [SerializeField] private CastType castType = CastType.Instant;
+    [SerializeField] private float castTime;
+    [SerializeField] private float cooldown;
+
+    [Header("Resource")]
+    [SerializeField] private ResourceType resourceType = ResourceType.Mana;
+    [SerializeField] private int resourceCost;
+
+    [Header("Targeting")]
+    [SerializeField] private TargetType targetType = TargetType.Enemy;
+    [HideIf("targetType", TargetType.Self)]
+    [SerializeField] private float range = 30f;
+    [EndIf]
+
+    [Header("Damage")]
+    [SerializeField] private DamageType damageType = DamageType.Magical;
+    [SerializeField] private int damage;
+
+    [Header("Visual Effects")]
+    [SerializeField] private GameObject impactVFXPrefab;
+    [SerializeField] private float vfxDuration = 2f;
 }

@@ -3,25 +3,6 @@ using UnityEngine.UI;
 
 public class HUDController : MonoBehaviour
 {
-    [Header("Health Bar")]
-    [SerializeField] private Image healthBar;
-
-    [Header("Mana Bar")]
-    [SerializeField] private Image manaBar;
-
-    private Player player;
-
-    private void Awake()
-    {
-        player = GetComponentInParent<Player>();
-    }
-
-    private void Update()
-    {
-        UpdateHealthBar();
-        UpdateManaBar();
-    }
-
     private void UpdateHealthBar()
     {
         if (healthBar != null && player != null && player.MaxHealth > 0)
@@ -37,4 +18,23 @@ public class HUDController : MonoBehaviour
             manaBar.fillAmount = (float)player.CurrentMana / player.MaxMana;
         }
     }
+
+    private void Awake()
+    {
+        player = GetComponentInParent<Player>();
+    }
+
+    private void Update()
+    {
+        UpdateHealthBar();
+        UpdateManaBar();
+    }
+
+    [Header("Health Bar")]
+    [SerializeField] private Image healthBar;
+
+    [Header("Mana Bar")]
+    [SerializeField] private Image manaBar;
+
+    private Player player;
 }

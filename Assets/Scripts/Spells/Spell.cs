@@ -10,43 +10,10 @@ using UnityEngine;
 /// </summary>
 public class Spell : MonoBehaviour<ISpells, ISpellEvents>
 {
-    [Header("Spells")]
-    [SerializeField] private List<SpellDataSO> spells = new List<SpellDataSO>();
-
-    private readonly ISpells Spells = null;
-    private readonly ISpellEvents spellEvents = null;
-    private Unit owner;
-    private readonly SpellVFXPool vfxPool = new();
-
-    // Cast state
-    private SpellCastState castState = SpellCastState.Idle;
-    private SpellDataSO currentCastSpell;
-    private Unit currentCastTarget;
-    private float castTimer;
-
     public SpellCastState CastState => castState;
     public float CastProgress => currentCastSpell != null && currentCastSpell.CastTime > 0f
         ? 1f - (castTimer / currentCastSpell.CastTime)
         : 0f;
-
-    protected override void Init(ISpells Spells, ISpellEvents spellEvents)
-    {
-        this[nameof(Spells)] = Spells;
-        this[nameof(spellEvents)] = spellEvents;
-    }
-
-    protected override void OnAwake()
-    {
-        owner = GetComponent<Unit>();
-    }
-
-    private void Update()
-    {
-        if (castState == SpellCastState.Casting)
-        {
-            UpdateCasting();
-        }
-    }
 
     public void CastSpellBySlot(int slotIndex)
     {
@@ -60,6 +27,32 @@ public class Spell : MonoBehaviour<ISpells, ISpellEvents>
         TryCast(spell);
     }
 
+    public void InterruptCast()
+    {
+        if (castState != SpellCastState.Casting) return;
+
+        var spell = currentCastSpell;
+
+        if (spellEvents is SpellsService service)
+        {
+            service.RaiseCastInterrupted(new SpellCastInterruptedEvent(owner, spell));
+        }
+
+        Debug.Log($"[SpellCaster] {owner.name} cast of {spell.SpellName} was interrupted");
+        ResetCastState();
+    }
+
+    public float GetCooldownRemaining(SpellDataSO spell)
+    {
+        return spellsSystem.GetCooldownRemaining(owner, spell);
+    }
+
+    protected override void Init(ISpells spellsSystem, ISpellEvents spellEvents)
+    {
+        this[nameof(spellsSystem)] = spellsSystem;
+        this[nameof(spellEvents)] = spellEvents;
+    }
+
     private void TryCast(SpellDataSO spell)
     {
         if (castState == SpellCastState.Casting)
@@ -68,7 +61,7 @@ public class Spell : MonoBehaviour<ISpells, ISpellEvents>
             return;
         }
 
-        if (!Spells.CanCast(owner, spell))
+        if (!spellsSystem.CanCast(owner, spell))
             return;
 
         Unit target = GetTarget(spell);
@@ -78,7 +71,7 @@ public class Spell : MonoBehaviour<ISpells, ISpellEvents>
             return;
         }
 
-        if (!Spells.IsInRange(owner, spell, target))
+        if (!spellsSystem.IsInRange(owner, spell, target))
         {
             Debug.LogWarning($"[SpellCaster] Target out of range for {spell.SpellName}");
             return;
@@ -127,32 +120,22 @@ public class Spell : MonoBehaviour<ISpells, ISpellEvents>
         ExecuteCast(spell, target);
     }
 
-    public void InterruptCast()
+    private void Update()
     {
-        if (castState != SpellCastState.Casting) return;
-
-        var spell = currentCastSpell;
-
-        if (spellEvents is SpellsService service)
+        if (castState == SpellCastState.Casting)
         {
-            service.RaiseCastInterrupted(new SpellCastInterruptedEvent(owner, spell));
+            UpdateCasting();
         }
-
-        Debug.Log($"[SpellCaster] {owner.name} cast of {spell.SpellName} was interrupted");
-        ResetCastState();
     }
 
-    private void ResetCastState()
+    protected override void OnAwake()
     {
-        castState = SpellCastState.Idle;
-        currentCastSpell = null;
-        currentCastTarget = null;
-        castTimer = 0f;
+        owner = GetComponent<Unit>();
     }
 
     private void ExecuteCast(SpellDataSO spell, Unit target)
     {
-        if (!Spells.CastSpell(owner, spell, target))
+        if (!spellsSystem.CastSpell(owner, spell, target))
             return;
 
         SpawnVFX(spell, target);
@@ -179,6 +162,14 @@ public class Spell : MonoBehaviour<ISpells, ISpellEvents>
         return target.GetVisualTransform();
     }
 
+    private void ResetCastState()
+    {
+        castState = SpellCastState.Idle;
+        currentCastSpell = null;
+        currentCastTarget = null;
+        castTimer = 0f;
+    }
+
     private void SpawnVFX(SpellDataSO spell, Unit target)
     {
         if (!spell.HasVFX) return;
@@ -188,8 +179,15 @@ public class Spell : MonoBehaviour<ISpells, ISpellEvents>
         vfxPool.Release(spell.ImpactVFXPrefab, vfx, spell.VFXDuration);
     }
 
-    public float GetCooldownRemaining(SpellDataSO spell)
-    {
-        return Spells.GetCooldownRemaining(owner, spell);
-    }
+    [Header("Spells")]
+    [SerializeField] private List<SpellDataSO> spells = new();
+
+    private readonly ISpells spellsSystem = null;
+    private readonly ISpellEvents spellEvents = null;
+    private readonly SpellVFXPool vfxPool = new();
+    private SpellCastState castState = SpellCastState.Idle;
+    private SpellDataSO currentCastSpell;
+    private Unit currentCastTarget;
+    private Unit owner;
+    private float castTimer;
 }

@@ -2,30 +2,6 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [Header("Editor References")]
-    [SerializeField] private Camera playerCamera;
-
-    [Header("Camera Settings")]
-    [SerializeField, Range(0f, 89f)]
-    private float angle = 45f;
-
-    [SerializeField, Range(1f, 100f)]
-    private float distance = 20f;
-
-    [Header("Zoom Settings")]
-    [SerializeField] private float minDistance = 5f;
-    [SerializeField] private float maxDistance = 50f;
-    [SerializeField] private float zoomSpeed = 2f;
-    [SerializeField] private float zoomSmoothTime = 0.1f;
-
-    private float targetDistance;
-    private float currentZoomVelocity;
-
-    private void Awake()
-    {
-        targetDistance = distance;
-    }
-
     public void AttachToPlayer(Transform playerTransform)
     {
         if (playerCamera != null)
@@ -68,4 +44,28 @@ public class CameraController : MonoBehaviour
         playerCamera.transform.localPosition = new Vector3(0f, height, -horizontalDistance);
         playerCamera.transform.localRotation = Quaternion.Euler(angle, 0f, 0f);
     }
+
+    private void Awake()
+    {
+        targetDistance = distance;
+    }
+
+    [Header("Editor References")]
+    [SerializeField] private Camera playerCamera;
+
+    [Header("Camera Settings")]
+    [SerializeField, Range(0f, 89f)]
+    private float angle = 45f;
+
+    [SerializeField, Range(1f, 100f)]
+    private float distance = 20f;
+
+    [Header("Zoom Settings")]
+    [SerializeField] private float minDistance = 5f;
+    [SerializeField] private float maxDistance = 50f;
+    [SerializeField] private float zoomSpeed = 2f;
+    [SerializeField] private float zoomSmoothTime = 0.1f;
+
+    private float targetDistance;
+    private float currentZoomVelocity;
 }
