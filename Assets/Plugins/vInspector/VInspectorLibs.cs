@@ -1740,13 +1740,20 @@ namespace VInspector.Libs
         static void _GlobalObjectId_GlobalObjectIdentifiersToInstanceIDsSlow(GlobalObjectId[] identifiers, int[] outputInstanceIDs)
         {
 #if UNITY_6000_3_OR_NEWER
-            GlobalObjectId.GlobalObjectIdentifiersToEntityIdsSlow(identifiers, outputInstanceIDs.Select(r => (EntityId)r).ToArray());
+
+            var outputEntityIds = outputInstanceIDs.Select(r => (EntityId)r).ToArray();
+
+            GlobalObjectId.GlobalObjectIdentifiersToEntityIdsSlow(identifiers, outputEntityIds);
+
+            outputInstanceIDs = outputEntityIds.Select(r => (int)r).ToArray();
+
 #else
+
             GlobalObjectId.GlobalObjectIdentifiersToInstanceIDsSlow(identifiers, outputInstanceIDs);
+
 #endif
 
         }
-
         static void _GlobalObjectId_GetGlobalObjectIdsSlow(int[] ids, GlobalObjectId[] outputIdentifiers)
         {
 #if UNITY_6000_3_OR_NEWER
