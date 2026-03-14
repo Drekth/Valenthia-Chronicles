@@ -393,18 +393,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b235ec650b048f5acd8c4225ae59cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VCore.Entities.UnitStats
-  maxStats:
-    health: 0
-    mana: 0
-    stamina: 0
-  regeneration:
-    healthPerSecond: 0
-    manaPerSecond: 0
-    staminaPerSecond: 0
-  currentStats:
-    health: 0
-    mana: 0
-    stamina: 0
 --- !u!1 &197702005
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,6 +684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91a8ba90f59fa44b9bff0976cb9fa8cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  selectionDecal: {fileID: 0}
   playerPrefab: {fileID: 4957605393579145644, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
 --- !u!114 &298759859
 MonoBehaviour:
@@ -764,21 +753,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 298759856}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9b235ec650b048f5acd8c4225ae59cc, type: 3}
+  m_Script: {fileID: 11500000, guid: d14bdf6cd326842f28fedce895743da7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VCore.Entities.UnitStats
-  maxStats:
-    health: 100
-    mana: 100
-    stamina: 0
-  regeneration:
-    healthPerSecond: 3
-    manaPerSecond: 2
-    staminaPerSecond: 0
-  currentStats:
+  baseAttributes:
     health: 0
     mana: 0
     stamina: 0
+    strength: 0
+    agility: 0
+    intellect: 0
+    spirit: 0
+    armor: 0
+    attackPower: 0
+    spellPower: 0
+  regeneration:
+    healthPerSecond: 0
+    manaPerSecond: 0
+    staminaPerSecond: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -2090,6 +2082,7 @@ GameObject:
   - component: {fileID: 1008919685}
   - component: {fileID: 1008919684}
   - component: {fileID: 1008919683}
+  - component: {fileID: 1008919687}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -2191,6 +2184,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 726008673}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1008919687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008919682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 3b6001729f56b4b438087cfb0eedb1ab, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1061115223
 GameObject:
   m_ObjectHideFlags: 0
@@ -4068,6 +4093,8 @@ GameObject:
   - component: {fileID: 1973393628}
   - component: {fileID: 1973393631}
   - component: {fileID: 1973393632}
+  - component: {fileID: 1973393634}
+  - component: {fileID: 1973393633}
   m_Layer: 6
   m_Name: NPC_Test
   m_TagString: Untagged
@@ -4181,6 +4208,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sources.Dialogue.Components.DialogueComponent
   greeting: Hello!
+--- !u!114 &1973393633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973393625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba2e9a16e6f04bffb0091bc58e76de6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MovementAuthoring
+  startingMovement: 1
+  wanderRadius: 10
+  wanderIdleDuration: 2
+--- !u!195 &1973393634
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973393625}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5000001
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &2146560040
 GameObject:
   m_ObjectHideFlags: 0
