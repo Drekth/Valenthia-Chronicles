@@ -1,2 +1,10 @@
 ﻿<Solution>
+  <Project Path="SingularityGroup.HotReload.Editor.csproj" />
+  <Project Path="VHierarchy.csproj" />
+  <Project Path="SingularityGroup.HotReload.Runtime.csproj" />
+  <Project Path="PrimeTween.Demo.csproj" />
+  <Project Path="SingularityGroup.HotReload.Runtime.Public.csproj" />
+  <Project Path="VInspector.csproj" />
+  <Project Path="PrimeTween.Debug.csproj" />
+  <Project Path="PrimeTween.Installer.csproj" />
 </Solution>
