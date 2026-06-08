@@ -1,0 +1,87 @@
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.cs]
+
+# ─── Naming : PascalCase partout (style C++) ──────────────────────────────────
+
+# Types (class, struct, enum, delegate)
+dotnet_naming_rule.types_pascal.symbols               = types
+dotnet_naming_rule.types_pascal.style                 = pascal_case
+dotnet_naming_rule.types_pascal.severity              = warning
+dotnet_naming_symbols.types.applicable_kinds          = class,struct,interface,enum,delegate
+dotnet_naming_symbols.types.applicable_accessibilities = *
+
+# Interfaces — préfixe I obligatoire
+dotnet_naming_rule.interfaces_i.symbols               = interfaces
+dotnet_naming_rule.interfaces_i.style                 = prefix_i
+dotnet_naming_rule.interfaces_i.severity              = warning
+dotnet_naming_symbols.interfaces.applicable_kinds     = interface
+dotnet_naming_symbols.interfaces.applicable_accessibilities = *
+dotnet_naming_style.prefix_i.capitalization           = pascal_case
+dotnet_naming_style.prefix_i.required_prefix         = I
+
+# Membres (méthodes, propriétés, events)
+dotnet_naming_rule.members_pascal.symbols             = members
+dotnet_naming_rule.members_pascal.style               = pascal_case
+dotnet_naming_rule.members_pascal.severity            = warning
+dotnet_naming_symbols.members.applicable_kinds        = method,property,event
+dotnet_naming_symbols.members.applicable_accessibilities = *
+
+# Champs (privés inclus — PascalCase, pas de _ prefix)
+dotnet_naming_rule.fields_pascal.symbols              = fields
+dotnet_naming_rule.fields_pascal.style                = pascal_case
+dotnet_naming_rule.fields_pascal.severity             = warning
+dotnet_naming_symbols.fields.applicable_kinds         = field
+dotnet_naming_symbols.fields.applicable_accessibilities = *
+
+# Constantes
+dotnet_naming_rule.constants_pascal.symbols           = constants
+dotnet_naming_rule.constants_pascal.style             = pascal_case
+dotnet_naming_rule.constants_pascal.severity          = warning
+dotnet_naming_symbols.constants.applicable_kinds      = field
+dotnet_naming_symbols.constants.required_modifiers    = const
+dotnet_naming_symbols.constants.applicable_accessibilities = *
+
+# Paramètres et variables locales
+dotnet_naming_rule.locals_pascal.symbols              = locals
+dotnet_naming_rule.locals_pascal.style                = pascal_case
+dotnet_naming_rule.locals_pascal.severity             = suggestion
+dotnet_naming_symbols.locals.applicable_kinds         = parameter,local
+dotnet_naming_symbols.locals.applicable_accessibilities = *
+
+dotnet_naming_style.pascal_case.capitalization        = pascal_case
+
+# ─── Modificateurs d'accès ────────────────────────────────────────────────────
+
+dotnet_style_require_accessibility_modifiers          = always:warning
+
+# ─── Pas de var ───────────────────────────────────────────────────────────────
+
+csharp_style_var_for_built_in_types                   = false:warning
+csharp_style_var_when_type_is_apparent                = false:suggestion
+csharp_style_var_elsewhere                            = false:suggestion
+
+# ─── Accolades obligatoires ───────────────────────────────────────────────────
+
+csharp_prefer_braces                                  = true:warning
+
+# ─── Pas d'expression body sur les méthodes (style C++) ──────────────────────
+
+csharp_style_expression_bodied_methods                = false:suggestion
+csharp_style_expression_bodied_constructors           = false:suggestion
+csharp_style_expression_bodied_operators              = false:suggestion
+csharp_style_expression_bodied_properties             = when_on_single_line:suggestion
+csharp_style_expression_bodied_accessors              = when_on_single_line:suggestion
+
+# ─── Suppressions des règles Roslyn en conflit avec PascalCase privé ─────────
+
+dotnet_diagnostic.IDE1006.severity                    = none
+dotnet_diagnostic.CA1707.severity                     = none
