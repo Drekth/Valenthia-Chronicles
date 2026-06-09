@@ -1,0 +1,55 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="project://database/Assets/UI/HUD/HUDActionBar.uss" />
+    <ui:VisualElement name="ActionBarHUD" class="hud-root" picking-mode="Ignore">
+        <ui:VisualElement name="Bars" class="bars" picking-mode="Ignore">
+            <ui:VisualElement name="HealthBar" class="bar" picking-mode="Ignore">
+                <ui:VisualElement name="HealthFill" class="bar__fill bar__fill--health" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ManaBar" class="bar" picking-mode="Ignore">
+                <ui:VisualElement name="ManaFill" class="bar__fill bar__fill--mana" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Slots" class="slots" picking-mode="Ignore">
+            <ui:VisualElement name="Slot1" class="slot">
+                <ui:VisualElement name="Icon" class="slot__icon" picking-mode="Ignore" />
+                <ui:Label text="1" class="slot__key" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Slot2" class="slot">
+                <ui:VisualElement name="Icon" class="slot__icon" picking-mode="Ignore" />
+                <ui:Label text="2" class="slot__key" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Slot3" class="slot">
+                <ui:VisualElement name="Icon" class="slot__icon" picking-mode="Ignore" />
+                <ui:Label text="3" class="slot__key" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Slot4" class="slot">
+                <ui:VisualElement name="Icon" class="slot__icon" picking-mode="Ignore" />
+                <ui:Label text="4" class="slot__key" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Slot5" class="slot">
+                <ui:VisualElement name="Icon" class="slot__icon" picking-mode="Ignore" />
+                <ui:Label text="5" class="slot__key" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Slot6" class="slot">
+                <ui:VisualElement name="Icon" class="slot__icon" picking-mode="Ignore" />
+                <ui:Label text="6" class="slot__key" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Slot7" class="slot">
+                <ui:VisualElement name="Icon" class="slot__icon" picking-mode="Ignore" />
+                <ui:Label text="7" class="slot__key" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Slot8" class="slot">
+                <ui:VisualElement name="Icon" class="slot__icon" picking-mode="Ignore" />
+                <ui:Label text="8" class="slot__key" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Slot9" class="slot">
+                <ui:VisualElement name="Icon" class="slot__icon" picking-mode="Ignore" />
+                <ui:Label text="9" class="slot__key" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Slot10" class="slot">
+                <ui:VisualElement name="Icon" class="slot__icon" picking-mode="Ignore" />
+                <ui:Label text="0" class="slot__key" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,107 @@
+/* Valenthia — Action Bar HUD (UI Toolkit) */
+
+.hud-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 28px;
+    align-items: center;
+}
+
+/* ---- Resource bars ---- */
+
+.bars {
+    width: 620px;
+    margin-bottom: 10px;
+}
+
+.bar {
+    height: 16px;
+    margin-bottom: 5px;
+    background-color: rgb(16, 13, 9);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(78, 62, 34);
+    border-right-color: rgb(78, 62, 34);
+    border-top-color: rgb(92, 74, 42);
+    border-bottom-color: rgb(54, 42, 22);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    overflow: hidden;
+}
+
+.bar__fill {
+    height: 100%;
+    border-top-width: 1px;
+}
+
+.bar__fill--health {
+    width: 75%;
+    background-color: rgb(150, 32, 32);
+    border-top-color: rgb(206, 86, 86);
+}
+
+.bar__fill--mana {
+    width: 55%;
+    background-color: rgb(38, 78, 188);
+    border-top-color: rgb(104, 148, 232);
+}
+
+/* ---- Spell slots ---- */
+
+.slots {
+    flex-direction: row;
+}
+
+.slot {
+    width: 56px;
+    height: 56px;
+    margin-left: 3px;
+    margin-right: 3px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(26, 22, 17);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(108, 88, 50);
+    border-right-color: rgb(108, 88, 50);
+    border-top-color: rgb(126, 104, 60);
+    border-bottom-color: rgb(78, 62, 34);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.slot:hover {
+    border-left-color: rgb(201, 162, 39);
+    border-right-color: rgb(201, 162, 39);
+    border-top-color: rgb(220, 184, 70);
+    border-bottom-color: rgb(170, 134, 30);
+    background-color: rgb(38, 32, 24);
+}
+
+.slot__icon {
+    width: 100%;
+    height: 100%;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.slot__key {
+    position: absolute;
+    bottom: 0;
+    right: 4px;
+    font-size: 11px;
+    color: rgb(232, 220, 181);
+    -unity-font-style: bold;
+}
