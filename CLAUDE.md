@@ -184,6 +184,15 @@ int LocalCounter = 0;
 
 Interfaces are prefixed `I` (`IDamageable`, `IInitializable`). No other prefix conventions.
 
+### Condition style
+
+Don't write if/else/for condition on a single line. Do this :
+
+```csharp
+if(...)
+  do_something()
+```
+
 ### DOTS naming
 
 | Type | Convention | Example |
