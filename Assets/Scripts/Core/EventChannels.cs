@@ -62,3 +62,8 @@ public class FloatEventChannel : EventChannel<float> { }
 
 [CreateAssetMenu(menuName = "Valenthia/Events/String Event Channel")]
 public class StringEventChannel : EventChannel<string> { }
+
+// Carries the active player body. The pawn raises it with itself on spawn and with
+// null on despawn, so the persistent PlayerController can possess across zone swaps.
+[CreateAssetMenu(menuName = "Valenthia/Events/Player Character Event Channel")]
+public class PlayerCharacterEventChannel : EventChannel<PlayerCharacter> { }

@@ -35,36 +35,6 @@ Engine: Unity 6 (`6000.4.10f1`) — open via Unity Hub.
 
 ## Architecture
 
-### Hybrid ECS (balanced approach)
-
-Two worlds coexist and communicate via the **Baker** pattern (official Unity):
-
-```
-Presentation World (MonoBehaviour)          Simulation World (DOTS ECS)
-──────────────────────────────────          ──────────────────────────
-GameObject                          Baker   Entity
-├─ EntityView           ◄─────────────────► ├─ HealthData
-├─ AnimationDriver                          ├─ StatsData
-├─ SoundEmitter                             ├─ FactionData
-└─ VFX                                      ├─ MovementData
-                                            ├─ CombatStateData
-                                            └─ AIStateData
-```
-
-| Entity Type | Primary World | Reason |
-|---|---|---|
-| Common enemies | DOTS-first | Potentially high volume |
-| Projectiles | DOTS-first | High volume, simple logic |
-| Player | MonoBehaviour-first | Unique, complex logic, input |
-| NPCs | MonoBehaviour-first | Rich dialogue, low count |
-| Interactables (chests, doors) | MonoBehaviour-first | No perf constraint |
-
-NPCs and Player still have shared data (`HealthData`, `FactionData`) on the ECS side via Baker.
-
-Pure composition — no inheritance chains (`Entity → Character → Player`). Light interfaces (`IDamageable`, etc.) for cross-system communication.
-
----
-
 ### Scene Structure — Single Entry Point + Additive
 
 ```
@@ -150,21 +120,6 @@ docs/
   project-context.md  — Full implementation reference (read before coding)
 ```
 
-`Assets/Scripts/` target layout:
-
-```
-Scripts/
-  Core/       — Bootstrap, ServiceLocator, EventChannels, GameDefines
-  Entities/   — MonoBehaviour components, DOTS data, views, bakers
-  Systems/    — ECS and MonoBehaviour systems (combat, movement, AI…)
-  UI/         — Interface logic
-  Audio/      — AudioManager
-  Scene/      — SceneLoader
-  Save/       — SaveSystem (pending)
-  Quests/     — QuestManager (pending)
-  Dialogue/   — DialogueSystem (pending)
-```
-
 ---
 
 ## Coding Conventions
@@ -192,15 +147,6 @@ Don't write if/else/for condition on a single line. Do this :
 if(...)
   do_something()
 ```
-
-### DOTS naming
-
-| Type | Convention | Example |
-|---|---|---|
-| ECS Component | `XxxData` | `HealthData` |
-| ECS System | `XxxSystem` | `CombatSystem` |
-| Baker | `XxxBaker` | `EnemyBaker` |
-| Authoring MonoBehaviour | `XxxAuthoring` | `EnemyAuthoring` |
 
 ### Asset naming — Unreal Engine style prefixes
 
