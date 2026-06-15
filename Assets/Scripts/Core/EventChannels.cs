@@ -67,3 +67,8 @@ public class StringEventChannel : EventChannel<string> { }
 // null on despawn, so the persistent PlayerController can possess across zone swaps.
 [CreateAssetMenu(menuName = "Valenthia/Events/Player Character Event Channel")]
 public class PlayerCharacterEventChannel : EventChannel<PlayerCharacter> { }
+
+// Carries the container the player just opened, so the loot window can display its
+// contents without referencing the world object directly.
+[CreateAssetMenu(menuName = "Valenthia/Events/Container Event Channel")]
+public class ContainerEventChannel : EventChannel<Container> { }

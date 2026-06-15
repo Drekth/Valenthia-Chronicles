@@ -692,6 +692,9 @@ GameObject:
   - component: {fileID: 1463626391}
   - component: {fileID: 1463626392}
   - component: {fileID: 1463626393}
+  - component: {fileID: 1463626396}
+  - component: {fileID: 1463626395}
+  - component: {fileID: 1463626394}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -743,6 +746,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputController
   MoveAction: {fileID: 230242078}
   JumpAction: {fileID: 100441721}
+--- !u!114 &1463626394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463626390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e36ab9ea58b2e4da7b5f4f5267c8ca85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ContainerInteractor
+  ClickBinding: <Mouse>/leftButton
+  ViewCamera: {fileID: 910669544}
+  InteractableMask:
+    serializedVersion: 2
+    m_Bits: 256
+  OnContainerOpened: {fileID: 11400000, guid: c43eb3bb920e4444f8775be6793d84e9, type: 2}
+  OnContainerClosed: {fileID: 11400000, guid: 271d6f085fec142efb4c64570d4c4d06, type: 2}
+--- !u!114 &1463626395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463626390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9989e9d70495e4afe80d401d3a949064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
+--- !u!114 &1463626396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463626390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e279323fd11f4c35ac3060ec708d519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Container
+  LootTable: {fileID: 0}
+  Capacity: 16
+  OnOpened: {fileID: 0}
 --- !u!1 &1476693035
 GameObject:
   m_ObjectHideFlags: 0

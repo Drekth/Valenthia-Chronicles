@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="project://database/Assets/UI/ItemWindow.uss" />
+    <ui:VisualElement name="InventoryRoot" class="ui-window-root" picking-mode="Ignore">
+        <ui:VisualElement name="InventoryWindow" class="ui-window">
+            <ui:Label text="Inventaire" class="ui-window__title" picking-mode="Ignore" />
+            <ui:VisualElement name="Items" class="ui-window__grid" />
+            <ui:VisualElement name="Footer" class="ui-window__footer">
+                <ui:Button name="Close" text="Fermer" class="ui-window__button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
