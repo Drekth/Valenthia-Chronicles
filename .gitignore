@@ -108,3 +108,5 @@ InitTestScene*.unity*
 # Misc files & folders
 .DS_Store
 /Assets/Developper/
+/Assets/ThirdParty
+Assets/ThirdParty.meta
