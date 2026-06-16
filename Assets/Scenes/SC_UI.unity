@@ -289,6 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a648e8057c164b8bad696db0dc63576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LootWindowController
+  ToggleBinding: 
   OnContainerOpened: {fileID: 11400000, guid: c43eb3bb920e4444f8775be6793d84e9, type: 2}
   OnContainerClosed: {fileID: 11400000, guid: 271d6f085fec142efb4c64570d4c4d06, type: 2}
 --- !u!114 &902158672
