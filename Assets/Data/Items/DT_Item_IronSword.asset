@@ -16,6 +16,9 @@ MonoBehaviour:
   ItemName: Epee de fer
   ItemDescription: Une lame de fer solide.
   ItemIcon: {fileID: 0}
+  EquippedModel: {fileID: 919132149155446097, guid: d3e6ee3bb8f07764cad1ef9273c20761, type: 3}
+  AttachOffsetPosition: {x: 0, y: 0, z: 0}
+  AttachOffsetEuler: {x: 0, y: 0, z: 0}
   MaxStack: 1
   RarityTier: 0
   ItemCategory: 1

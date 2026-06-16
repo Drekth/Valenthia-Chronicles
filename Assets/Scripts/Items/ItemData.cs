@@ -19,6 +19,13 @@ public class ItemData : ScriptableObject
     public EquipmentSlot Slot         => EquipSlot;
     public bool          IsEquippable => EquipSlot != EquipmentSlot.None;
 
+    // 3D model attached to the player's body when this item is equipped, or null when the
+    // item has no worn visual. AttachPosition / AttachEuler are local offsets applied on the
+    // body socket so the model lines up with the bone (the imported grip rarely matches it).
+    public GameObject WorldModel     => EquippedModel;
+    public Vector3    AttachPosition => AttachOffsetPosition;
+    public Vector3    AttachEuler    => AttachOffsetEuler;
+
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
@@ -31,6 +38,9 @@ public class ItemData : ScriptableObject
 
     [Header("Visual")]
     [SerializeField] private Sprite ItemIcon;
+    [SerializeField] private GameObject EquippedModel;
+    [SerializeField] private Vector3 AttachOffsetPosition;
+    [SerializeField] private Vector3 AttachOffsetEuler;
 
     [Header("Rules")]
     [SerializeField] private int MaxStack = 99;
