@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e84312f6ba4e747bd8a6bb11ce63e627, type: 3}
-  m_Name: DT_Item_IronSword
+  m_Name: DT_Item_SilverRing
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  ItemId: sword_iron
-  ItemName: Epee de fer
-  ItemDescription: Une lame de fer solide.
+  ItemId: ring_silver
+  ItemName: Anneau d'argent
+  ItemDescription: Un simple anneau d'argent.
   ItemIcon: {fileID: 0}
   MaxStack: 1
   RarityTier: 0
-  ItemCategory: 1
-  EquipSlot: 6
+  ItemCategory: 2
+  EquipSlot: 8

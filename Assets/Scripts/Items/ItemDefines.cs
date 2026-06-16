@@ -24,6 +24,23 @@ public enum ItemType
     Currency
 }
 
+// Body slot an item occupies when equipped. None marks a non-equippable item (potion,
+// currency...). A ring targets the single Ring value; the Equipment component routes it
+// to one of its two physical ring positions.
+public enum EquipmentSlot
+{
+    None = 0,
+    Head,
+    Shoulder,
+    Chest,
+    Hands,
+    Legs,
+    MainHand,
+    OffHand,
+    Ring,
+    Neck
+}
+
 ////////////////////////////////////////////////////////////
 /// Item stack — runtime quantity wrapper                ///
 ////////////////////////////////////////////////////////////

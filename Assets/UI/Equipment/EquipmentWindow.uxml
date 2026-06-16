@@ -1,0 +1,58 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="project://database/Assets/UI/ItemWindow.uss" />
+    <ui:VisualElement name="EquipmentRoot" class="ui-window-root" picking-mode="Ignore">
+        <ui:VisualElement name="EquipmentWindow" class="ui-window">
+            <ui:Label text="Équipement" class="ui-window__title" picking-mode="Ignore" />
+            <ui:VisualElement name="Body" class="equip-body">
+                <ui:VisualElement class="equip-column">
+                    <ui:VisualElement class="equip-cell">
+                        <ui:VisualElement name="Slot_Head" class="item-slot equip-slot" />
+                        <ui:Label text="Tête" class="equip-cell__label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="equip-cell">
+                        <ui:VisualElement name="Slot_Shoulder" class="item-slot equip-slot" />
+                        <ui:Label text="Épaules" class="equip-cell__label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="equip-cell">
+                        <ui:VisualElement name="Slot_Chest" class="item-slot equip-slot" />
+                        <ui:Label text="Torse" class="equip-cell__label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="equip-cell">
+                        <ui:VisualElement name="Slot_Hands" class="item-slot equip-slot" />
+                        <ui:Label text="Mains" class="equip-cell__label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="equip-cell">
+                        <ui:VisualElement name="Slot_Legs" class="item-slot equip-slot" />
+                        <ui:Label text="Jambes" class="equip-cell__label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="equip-portrait" picking-mode="Ignore" />
+                <ui:VisualElement class="equip-column">
+                    <ui:VisualElement class="equip-cell">
+                        <ui:VisualElement name="Slot_Neck" class="item-slot equip-slot" />
+                        <ui:Label text="Cou" class="equip-cell__label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="equip-cell">
+                        <ui:VisualElement name="Slot_Ring1" class="item-slot equip-slot" />
+                        <ui:Label text="Bague 1" class="equip-cell__label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="equip-cell">
+                        <ui:VisualElement name="Slot_Ring2" class="item-slot equip-slot" />
+                        <ui:Label text="Bague 2" class="equip-cell__label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="equip-cell">
+                        <ui:VisualElement name="Slot_OffHand" class="item-slot equip-slot" />
+                        <ui:Label text="Arme gauche" class="equip-cell__label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="equip-cell">
+                        <ui:VisualElement name="Slot_MainHand" class="item-slot equip-slot" />
+                        <ui:Label text="Arme droite" class="equip-cell__label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="Footer" class="ui-window__footer">
+                <ui:Button name="Close" text="Fermer" class="ui-window__button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

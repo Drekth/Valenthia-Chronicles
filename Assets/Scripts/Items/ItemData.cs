@@ -9,13 +9,15 @@ public class ItemData : ScriptableObject
     /// Public                                               ///
     ////////////////////////////////////////////////////////////
 
-    public string     Id           => ItemId;
-    public string     DisplayName  => ItemName;
-    public string     Description  => ItemDescription;
-    public Sprite     Icon         => ItemIcon;
-    public int        MaxStackSize => MaxStack;
-    public ItemRarity Rarity       => RarityTier;
-    public ItemType   Type         => ItemCategory;
+    public string        Id           => ItemId;
+    public string        DisplayName  => ItemName;
+    public string        Description  => ItemDescription;
+    public Sprite        Icon         => ItemIcon;
+    public int           MaxStackSize => MaxStack;
+    public ItemRarity    Rarity       => RarityTier;
+    public ItemType      Type         => ItemCategory;
+    public EquipmentSlot Slot         => EquipSlot;
+    public bool          IsEquippable => EquipSlot != EquipmentSlot.None;
 
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
@@ -34,4 +36,5 @@ public class ItemData : ScriptableObject
     [SerializeField] private int MaxStack = 99;
     [SerializeField] private ItemRarity RarityTier = ItemRarity.Common;
     [SerializeField] private ItemType ItemCategory = ItemType.Misc;
+    [SerializeField] private EquipmentSlot EquipSlot = EquipmentSlot.None;
 }

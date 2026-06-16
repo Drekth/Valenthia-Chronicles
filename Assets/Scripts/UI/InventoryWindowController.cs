@@ -29,6 +29,11 @@ public class InventoryWindowController : MonoBehaviour
         {
             ToggleAction.Enable();
         }
+
+        if (OnEquipmentChanged != null)
+        {
+            OnEquipmentChanged.Subscribe(HandleEquipmentChanged);
+        }
     }
 
     private void OnDisable()
@@ -36,6 +41,11 @@ public class InventoryWindowController : MonoBehaviour
         if (ToggleAction != null)
         {
             ToggleAction.Disable();
+        }
+
+        if (OnEquipmentChanged != null)
+        {
+            OnEquipmentChanged.Unsubscribe(HandleEquipmentChanged);
         }
     }
 
@@ -78,6 +88,14 @@ public class InventoryWindowController : MonoBehaviour
         }
     }
 
+    private void HandleEquipmentChanged()
+    {
+        if (IsShown)
+        {
+            Rebuild();
+        }
+    }
+
     private void Show()
     {
         Rebuild();
@@ -98,7 +116,61 @@ public class InventoryWindowController : MonoBehaviour
         }
 
         Container Bag = Inventory.Bag;
-        ItemGridView.Rebuild(ItemsContainer, Bag.Items, Bag.SlotCount, null);
+        ItemGridView.Rebuild(ItemsContainer, Bag.Items, Bag.SlotCount, HandleSlotClicked);
+    }
+
+    // Equips the clicked bag item into its slot, swapping any worn piece back into the bag.
+    // Non-equippable items are ignored for now. Announces the change so the equipment window
+    // refreshes too.
+    private void HandleSlotClicked(int Index)
+    {
+        if (!ServiceLocator.TryGet<PlayerInventory>(out PlayerInventory Inventory))
+        {
+            return;
+        }
+
+        Container Bag = Inventory.Bag;
+        if (Index < 0 || Index >= Bag.Items.Count)
+        {
+            return;
+        }
+
+        ItemData Item = Bag.Items[Index].Item;
+        if (Item == null || !Item.IsEquippable)
+        {
+            return;
+        }
+
+        if (!ServiceLocator.TryGet<Equipment>(out Equipment Gear))
+        {
+            return;
+        }
+
+        ItemStack Stack = Bag.TakeAt(Index);
+
+        if (!Gear.TryEquip(Stack.Item, out ItemData Displaced))
+        {
+            Bag.TryAdd(Stack);
+            return;
+        }
+
+        // Equippable stacks are single, but return any remainder just in case.
+        if (Stack.Amount > 1)
+        {
+            Bag.TryAdd(new ItemStack(Stack.Item, Stack.Amount - 1));
+        }
+
+        if (Displaced != null)
+        {
+            Bag.TryAdd(new ItemStack(Displaced, 1));
+        }
+
+        if (OnEquipmentChanged != null)
+        {
+            OnEquipmentChanged.Raise();
+        }
+
+        Rebuild();
     }
 
     private void Hide()
@@ -117,6 +189,9 @@ public class InventoryWindowController : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private string ToggleBinding = "<Keyboard>/i";
+
+    [Header("Events")]
+    [SerializeField] private VoidEventChannel OnEquipmentChanged;
 
     private UIDocument Document;
     private InputAction ToggleAction;

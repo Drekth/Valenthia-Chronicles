@@ -138,3 +138,47 @@
     border-top-color: rgb(220, 184, 70);
     border-bottom-color: rgb(170, 134, 30);
 }
+
+/* ---- Equipment doll (paper-doll: two columns flanking a portrait) ---- */
+
+.equip-body {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.equip-column {
+    flex-direction: column;
+}
+
+.equip-cell {
+    align-items: center;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.equip-cell__label {
+    margin-top: 1px;
+    font-size: 10px;
+    color: rgb(200, 180, 140);
+    -unity-text-align: upper-center;
+}
+
+.equip-portrait {
+    width: 120px;
+    margin-left: 8px;
+    margin-right: 8px;
+    background-color: rgb(20, 16, 11);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(58, 47, 28);
+    border-right-color: rgb(58, 47, 28);
+    border-top-color: rgb(58, 47, 28);
+    border-bottom-color: rgb(58, 47, 28);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
