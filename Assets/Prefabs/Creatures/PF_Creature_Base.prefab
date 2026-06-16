@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   MaxHealth: 100
+  Flags: 1
 --- !u!195 &4206244394577406753
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -131,7 +132,7 @@ GameObject:
   - component: {fileID: 2190752233115698870}
   - component: {fileID: 6622833754535581001}
   - component: {fileID: 5161898721421145405}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -72,3 +72,8 @@ public class PlayerCharacterEventChannel : EventChannel<PlayerCharacter> { }
 // contents without referencing the world object directly.
 [CreateAssetMenu(menuName = "Valenthia/Events/Container Event Channel")]
 public class ContainerEventChannel : EventChannel<Container> { }
+
+// Carries the player's current target unit (null when cleared) so the on-ground halo
+// indicator can react without referencing the selection logic directly.
+[CreateAssetMenu(menuName = "Valenthia/Events/Unit Event Channel")]
+public class UnitEventChannel : EventChannel<Unit> { }

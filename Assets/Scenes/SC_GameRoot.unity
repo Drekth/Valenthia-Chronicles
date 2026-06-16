@@ -681,6 +681,67 @@ Transform:
   - {fileID: 867293903}
   m_Father: {fileID: 405700128}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1229209654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1229209656}
+  - component: {fileID: 1229209655}
+  m_Layer: 0
+  m_Name: TargetDecal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1229209655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229209654}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.DecalProjector
+  m_Material: {fileID: 2100000, guid: a73010f6e32c644c6882dae6d874ea88, type: 2}
+  m_DrawDistance: 1000
+  m_FadeScale: 0.9
+  m_StartAngleFade: 180
+  m_EndAngleFade: 180
+  m_UVScale: {x: 1, y: 1}
+  m_UVBias: {x: 0, y: 0}
+  m_RenderingLayerMask:
+    serializedVersion: 0
+    m_Bits: 2
+  m_ScaleMode: 0
+  m_Offset: {x: 0, y: 0, z: 0.5}
+  m_Size: {x: 2, y: 2, z: 4}
+  m_FadeFactor: 1
+  m_VisibleInScene: 1
+  version: 1
+  m_DecalLayerMask: 1
+--- !u!4 &1229209656
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229209654}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1463626391}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1463626390
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,6 +756,9 @@ GameObject:
   - component: {fileID: 1463626396}
   - component: {fileID: 1463626395}
   - component: {fileID: 1463626394}
+  - component: {fileID: 1463626399}
+  - component: {fileID: 1463626398}
+  - component: {fileID: 1463626397}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -714,7 +778,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1229209656}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1463626392
@@ -792,6 +857,60 @@ MonoBehaviour:
   LootTable: {fileID: 0}
   Capacity: 16
   OnOpened: {fileID: 0}
+--- !u!114 &1463626397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463626390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 138d7a98783074484b692b2dc630aa72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetIndicator
+  Projector: {fileID: 1229209655}
+  HaloRadius: 1
+  OnTargetChanged: {fileID: 11400000, guid: 16885f8da8ef7498596afecc66b8e8ab, type: 2}
+--- !u!114 &1463626398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463626390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0baf670b61b4e0eb1554bc152915b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TargetingInput
+  ClickBinding: <Mouse>/leftButton
+  DeselectBinding: <Keyboard>/escape
+  CycleBinding: <Keyboard>/tab
+  ViewCamera: {fileID: 910669544}
+  SelectableMask:
+    serializedVersion: 2
+    m_Bits: 512
+  OnSpawned: {fileID: 11400000, guid: 9b15ec946b784a03a09cb4cfbf2b6561, type: 2}
+  OnContainerOpened: {fileID: 11400000, guid: c43eb3bb920e4444f8775be6793d84e9, type: 2}
+  OnContainerClosed: {fileID: 11400000, guid: 271d6f085fec142efb4c64570d4c4d06, type: 2}
+--- !u!114 &1463626399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463626390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc233239843bf4922995e03f72f78ee1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectionManager
+  SelectableMask:
+    serializedVersion: 2
+    m_Bits: 512
+  CycleRadius: 30
+  OnTargetChanged: {fileID: 11400000, guid: 16885f8da8ef7498596afecc66b8e8ab, type: 2}
 --- !u!1 &1476693035
 GameObject:
   m_ObjectHideFlags: 0

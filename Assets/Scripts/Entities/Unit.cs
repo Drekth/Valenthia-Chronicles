@@ -8,6 +8,12 @@ public class Unit : MonoBehaviour
 
     public float CurrentHealth => Health;
     public float MaximumHealth => MaxHealth;
+    public bool IsSelectable => HasFlag(UnitFlags.IsSelectable);
+
+    public bool HasFlag(UnitFlags Flag)
+    {
+        return (Flags & Flag) != 0;
+    }
 
     public void TakeDamage(float Amount)
     {
@@ -29,6 +35,9 @@ public class Unit : MonoBehaviour
 
     [Header("Health")]
     [SerializeField] private float MaxHealth = 100.0f;
+
+    [Header("Flags")]
+    [SerializeField] private UnitFlags Flags = UnitFlags.None;
 
     private float Health;
 }
