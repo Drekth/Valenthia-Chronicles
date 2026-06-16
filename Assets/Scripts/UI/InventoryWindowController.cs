@@ -1,114 +1,38 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-// Player inventory window (UI Toolkit, InventoryWindow.uxml / ItemWindow.uss). A key toggles
-// it; when shown it draws the player's bag — resolved from the ServiceLocator — as a fixed
-// slot grid using the shared ItemGridView. Owns a self-contained toggle InputAction so it
-// stays independent of the shared input asset. Read-only for now (no take/drop).
-[RequireComponent(typeof(UIDocument))]
-public class InventoryWindowController : MonoBehaviour
+// Player inventory window. Toggled by a key (see ToggleBinding); when shown it draws the
+// player's bag — resolved from the ServiceLocator — as a fixed slot grid using the shared
+// ItemGridView. Window chrome (border, header, close) and lifecycle come from UIWindowController.
+// Clicking a bag item equips it, swapping any worn piece back into the bag.
+public class InventoryWindowController : UIWindowController
 {
     ////////////////////////////////////////////////////////////
-    /// Private                                              ///
+    /// Protected                                            ///
     ////////////////////////////////////////////////////////////
 
-    private void Awake()
+    protected override void OnBindContent(VisualElement Root)
     {
-        Document = GetComponent<UIDocument>();
-        ToggleAction = new InputAction("ToggleInventory", InputActionType.Button, ToggleBinding);
-        ToggleAction.performed += HandleToggle;
+        ItemsContainer = Root.Q<VisualElement>("Items");
     }
 
-    private void OnEnable()
+    protected override void OnSubscribe()
     {
-        BindVisualTree();
-        Hide();
-
-        if (ToggleAction != null)
-        {
-            ToggleAction.Enable();
-        }
-
         if (OnEquipmentChanged != null)
         {
             OnEquipmentChanged.Subscribe(HandleEquipmentChanged);
         }
     }
 
-    private void OnDisable()
+    protected override void OnUnsubscribe()
     {
-        if (ToggleAction != null)
-        {
-            ToggleAction.Disable();
-        }
-
         if (OnEquipmentChanged != null)
         {
             OnEquipmentChanged.Unsubscribe(HandleEquipmentChanged);
         }
     }
 
-    private void OnDestroy()
-    {
-        if (ToggleAction != null)
-        {
-            ToggleAction.performed -= HandleToggle;
-            ToggleAction.Dispose();
-        }
-    }
-
-    private void BindVisualTree()
-    {
-        VisualElement Root = Document.rootVisualElement;
-        if (Root == null)
-        {
-            return;
-        }
-
-        Window = Root.Q<VisualElement>("InventoryWindow");
-        ItemsContainer = Root.Q<VisualElement>("Items");
-
-        Button CloseButton = Root.Q<Button>("Close");
-        if (CloseButton != null)
-        {
-            CloseButton.clicked += Hide;
-        }
-    }
-
-    private void HandleToggle(InputAction.CallbackContext Context)
-    {
-        if (IsShown)
-        {
-            Hide();
-        }
-        else
-        {
-            Show();
-        }
-    }
-
-    private void HandleEquipmentChanged()
-    {
-        if (IsShown)
-        {
-            Rebuild();
-        }
-    }
-
-    private void Show()
-    {
-        Rebuild();
-
-        if (Window != null)
-        {
-            Window.style.display = DisplayStyle.Flex;
-        }
-
-        IsShown = true;
-    }
-
-    private void Rebuild()
+    protected override void Rebuild()
     {
         if (!ServiceLocator.TryGet<PlayerInventory>(out PlayerInventory Inventory))
         {
@@ -117,6 +41,18 @@ public class InventoryWindowController : MonoBehaviour
 
         Container Bag = Inventory.Bag;
         ItemGridView.Rebuild(ItemsContainer, Bag.Items, Bag.SlotCount, HandleSlotClicked);
+    }
+
+    ////////////////////////////////////////////////////////////
+    /// Private                                              ///
+    ////////////////////////////////////////////////////////////
+
+    private void HandleEquipmentChanged()
+    {
+        if (IsShown)
+        {
+            Rebuild();
+        }
     }
 
     // Equips the clicked bag item into its slot, swapping any worn piece back into the bag.
@@ -173,29 +109,12 @@ public class InventoryWindowController : MonoBehaviour
         Rebuild();
     }
 
-    private void Hide()
-    {
-        if (Window != null)
-        {
-            Window.style.display = DisplayStyle.None;
-        }
-
-        IsShown = false;
-    }
-
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
 
-    [Header("Input")]
-    [SerializeField] private string ToggleBinding = "<Keyboard>/i";
-
     [Header("Events")]
     [SerializeField] private VoidEventChannel OnEquipmentChanged;
 
-    private UIDocument Document;
-    private InputAction ToggleAction;
-    private VisualElement Window;
     private VisualElement ItemsContainer;
-    private bool IsShown;
 }

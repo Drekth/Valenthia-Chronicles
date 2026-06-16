@@ -1,8 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <ui:Style src="project://database/Assets/UI/ItemWindow.uss" />
     <ui:VisualElement name="EquipmentRoot" class="ui-window-root" picking-mode="Ignore">
-        <ui:VisualElement name="EquipmentWindow" class="ui-window">
-            <ui:Label text="Équipement" class="ui-window__title" picking-mode="Ignore" />
+        <UIWindow name="EquipmentWindow" title="Équipement" window-width="360">
             <ui:VisualElement name="Body" class="equip-body">
                 <ui:VisualElement class="equip-column">
                     <ui:VisualElement class="equip-cell">
@@ -50,9 +49,6 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="Footer" class="ui-window__footer">
-                <ui:Button name="Close" text="Fermer" class="ui-window__button" />
-            </ui:VisualElement>
-        </ui:VisualElement>
+        </UIWindow>
     </ui:VisualElement>
 </ui:UXML>

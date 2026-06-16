@@ -1,13 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <ui:Style src="project://database/Assets/UI/ItemWindow.uss" />
     <ui:VisualElement name="LootRoot" class="ui-window-root" picking-mode="Ignore">
-        <ui:VisualElement name="LootWindow" class="ui-window">
-            <ui:Label text="Coffre" class="ui-window__title" picking-mode="Ignore" />
+        <UIWindow name="LootWindow" title="Coffre" window-width="320">
             <ui:VisualElement name="Items" class="ui-window__grid" />
             <ui:VisualElement name="Footer" class="ui-window__footer">
                 <ui:Button name="TakeAll" text="Tout prendre" class="ui-window__button" />
-                <ui:Button name="Close" text="Fermer" class="ui-window__button" />
             </ui:VisualElement>
-        </ui:VisualElement>
+        </UIWindow>
     </ui:VisualElement>
 </ui:UXML>

@@ -1,75 +1,19 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-// Player equipment window (UI Toolkit, EquipmentWindow.uxml / ItemWindow.uss). A key toggles
-// it; when shown it fills a fixed paper-doll of named slots from the Equipment model resolved
-// through the ServiceLocator. Clicking a worn slot unequips it back into the bag (blocked when
-// the bag is full). Stays in sync with equips made elsewhere by listening to the changed
-// channel. Owns a self-contained toggle InputAction so it stays independent of the shared
-// input asset.
-[RequireComponent(typeof(UIDocument))]
-public class EquipmentWindowController : MonoBehaviour
+// Player equipment window. Toggled by a key (see ToggleBinding); when shown it fills a fixed
+// paper-doll of named slots from the Equipment model resolved through the ServiceLocator.
+// Clicking a worn slot unequips it back into the bag (blocked when the bag is full). Window
+// chrome (border, header, close) and lifecycle come from UIWindowController. Stays in sync with
+// equips made elsewhere by listening to the changed channel.
+public class EquipmentWindowController : UIWindowController
 {
     ////////////////////////////////////////////////////////////
-    /// Private                                              ///
+    /// Protected                                            ///
     ////////////////////////////////////////////////////////////
 
-    private void Awake()
+    protected override void OnBindContent(VisualElement Root)
     {
-        Document = GetComponent<UIDocument>();
-        ToggleAction = new InputAction("ToggleEquipment", InputActionType.Button, ToggleBinding);
-        ToggleAction.performed += HandleToggle;
-    }
-
-    private void OnEnable()
-    {
-        BindVisualTree();
-        Hide();
-
-        if (ToggleAction != null)
-        {
-            ToggleAction.Enable();
-        }
-
-        if (OnEquipmentChanged != null)
-        {
-            OnEquipmentChanged.Subscribe(HandleEquipmentChanged);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (ToggleAction != null)
-        {
-            ToggleAction.Disable();
-        }
-
-        if (OnEquipmentChanged != null)
-        {
-            OnEquipmentChanged.Unsubscribe(HandleEquipmentChanged);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (ToggleAction != null)
-        {
-            ToggleAction.performed -= HandleToggle;
-            ToggleAction.Dispose();
-        }
-    }
-
-    private void BindVisualTree()
-    {
-        VisualElement Root = Document.rootVisualElement;
-        if (Root == null)
-        {
-            return;
-        }
-
-        Window = Root.Q<VisualElement>("EquipmentWindow");
-
         SlotElements = new VisualElement[SlotMap.Length];
         for (int I = 0; I < SlotMap.Length; I++)
         {
@@ -86,47 +30,25 @@ public class EquipmentWindowController : MonoBehaviour
             int RingIndex = SlotMap[I].RingIndex;
             Element.RegisterCallback<ClickEvent>(Event => UnequipSlot(Slot, RingIndex));
         }
-
-        Button CloseButton = Root.Q<Button>("Close");
-        if (CloseButton != null)
-        {
-            CloseButton.clicked += Hide;
-        }
     }
 
-    private void HandleToggle(InputAction.CallbackContext Context)
+    protected override void OnSubscribe()
     {
-        if (IsShown)
+        if (OnEquipmentChanged != null)
         {
-            Hide();
-        }
-        else
-        {
-            Show();
+            OnEquipmentChanged.Subscribe(HandleEquipmentChanged);
         }
     }
 
-    private void HandleEquipmentChanged()
+    protected override void OnUnsubscribe()
     {
-        if (IsShown)
+        if (OnEquipmentChanged != null)
         {
-            Rebuild();
+            OnEquipmentChanged.Unsubscribe(HandleEquipmentChanged);
         }
     }
 
-    private void Show()
-    {
-        Rebuild();
-
-        if (Window != null)
-        {
-            Window.style.display = DisplayStyle.Flex;
-        }
-
-        IsShown = true;
-    }
-
-    private void Rebuild()
+    protected override void Rebuild()
     {
         if (SlotElements == null)
         {
@@ -147,6 +69,18 @@ public class EquipmentWindowController : MonoBehaviour
 
             ItemData Worn = Gear.Get(SlotMap[I].Slot, SlotMap[I].RingIndex);
             FillSlot(SlotElements[I], Worn);
+        }
+    }
+
+    ////////////////////////////////////////////////////////////
+    /// Private                                              ///
+    ////////////////////////////////////////////////////////////
+
+    private void HandleEquipmentChanged()
+    {
+        if (IsShown)
+        {
+            Rebuild();
         }
     }
 
@@ -210,31 +144,14 @@ public class EquipmentWindowController : MonoBehaviour
         Rebuild();
     }
 
-    private void Hide()
-    {
-        if (Window != null)
-        {
-            Window.style.display = DisplayStyle.None;
-        }
-
-        IsShown = false;
-    }
-
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
 
-    [Header("Input")]
-    [SerializeField] private string ToggleBinding = "<Keyboard>/c";
-
     [Header("Events")]
     [SerializeField] private VoidEventChannel OnEquipmentChanged;
 
-    private UIDocument Document;
-    private InputAction ToggleAction;
-    private VisualElement Window;
     private VisualElement[] SlotElements;
-    private bool IsShown;
 
     // Maps each named doll slot in the UXML to its model address. Ring1/Ring2 share the Ring
     // slot and differ only by ring index.

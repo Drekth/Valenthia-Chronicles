@@ -1,49 +1,18 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-// Drives the loot window built with UI Toolkit (LootWindow.uxml / ItemWindow.uss). Listens
-// for the container-opened channel, rebuilds the slot grid from the container via the shared
-// ItemGridView, and transfers clicked stacks into the player's bag. Hidden until opened.
-[RequireComponent(typeof(UIDocument))]
-public class LootWindowController : MonoBehaviour
+// Drives the loot window. Event-driven (no toggle key): listens for the container-opened
+// channel, rebuilds the slot grid from the container via the shared ItemGridView, and transfers
+// clicked stacks into the player's bag. Window chrome (border, header, close) and lifecycle come
+// from UIWindowController; closing raises the container-closed channel.
+public class LootWindowController : UIWindowController
 {
     ////////////////////////////////////////////////////////////
-    /// Private                                              ///
+    /// Protected                                            ///
     ////////////////////////////////////////////////////////////
 
-    private void Awake()
+    protected override void OnBindContent(VisualElement Root)
     {
-        Document = GetComponent<UIDocument>();
-    }
-
-    private void OnEnable()
-    {
-        BindVisualTree();
-        Hide();
-
-        if (OnContainerOpened != null)
-        {
-            OnContainerOpened.Subscribe(HandleOpen);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (OnContainerOpened != null)
-        {
-            OnContainerOpened.Unsubscribe(HandleOpen);
-        }
-    }
-
-    private void BindVisualTree()
-    {
-        VisualElement Root = Document.rootVisualElement;
-        if (Root == null)
-        {
-            return;
-        }
-
-        Window = Root.Q<VisualElement>("LootWindow");
         ItemsContainer = Root.Q<VisualElement>("Items");
 
         Button TakeAllButton = Root.Q<Button>("TakeAll");
@@ -51,22 +20,37 @@ public class LootWindowController : MonoBehaviour
         {
             TakeAllButton.clicked += HandleTakeAll;
         }
+    }
 
-        Button CloseButton = Root.Q<Button>("Close");
-        if (CloseButton != null)
+    protected override void OnSubscribe()
+    {
+        if (OnContainerOpened != null)
         {
-            CloseButton.clicked += Close;
+            OnContainerOpened.Subscribe(HandleOpen);
         }
     }
 
-    private void HandleOpen(Container Opened)
+    protected override void OnUnsubscribe()
     {
-        ActiveContainer = Opened;
-        Rebuild();
-        Show();
+        if (OnContainerOpened != null)
+        {
+            OnContainerOpened.Unsubscribe(HandleOpen);
+        }
     }
 
-    private void Rebuild()
+    // The shared Hide() raises this once the window actually closes. Clear the active container
+    // and announce the closure so the rest of the game reacts.
+    protected override void OnHidden()
+    {
+        ActiveContainer = null;
+
+        if (OnContainerClosed != null)
+        {
+            OnContainerClosed.Raise();
+        }
+    }
+
+    protected override void Rebuild()
     {
         if (ActiveContainer == null)
         {
@@ -74,6 +58,16 @@ public class LootWindowController : MonoBehaviour
         }
 
         ItemGridView.Rebuild(ItemsContainer, ActiveContainer.Items, ActiveContainer.SlotCount, TakeSlot);
+    }
+
+    ////////////////////////////////////////////////////////////
+    /// Private                                              ///
+    ////////////////////////////////////////////////////////////
+
+    private void HandleOpen(Container Opened)
+    {
+        ActiveContainer = Opened;
+        Show();
     }
 
     private void TakeSlot(int Index)
@@ -112,34 +106,7 @@ public class LootWindowController : MonoBehaviour
             }
         }
 
-        Close();
-    }
-
-    private void Show()
-    {
-        if (Window != null)
-        {
-            Window.style.display = DisplayStyle.Flex;
-        }
-    }
-
-    private void Hide()
-    {
-        if (Window != null)
-        {
-            Window.style.display = DisplayStyle.None;
-        }
-    }
-
-    private void Close()
-    {
-        ActiveContainer = null;
         Hide();
-
-        if (OnContainerClosed != null)
-        {
-            OnContainerClosed.Raise();
-        }
     }
 
     ////////////////////////////////////////////////////////////
@@ -150,8 +117,6 @@ public class LootWindowController : MonoBehaviour
     [SerializeField] private ContainerEventChannel OnContainerOpened;
     [SerializeField] private VoidEventChannel OnContainerClosed;
 
-    private UIDocument Document;
-    private VisualElement Window;
     private VisualElement ItemsContainer;
     private Container ActiveContainer;
 }
