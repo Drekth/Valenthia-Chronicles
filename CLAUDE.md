@@ -14,7 +14,7 @@ Engine: Unity 6 (`6000.4.10f1`) — open via Unity Hub.
 
 ## Engine & Tooling
 
-- **Render Pipeline**: URP 17.4.0. Separate assets for PC ([Assets/Settings/PC_RPAsset.asset](Assets/Settings/PC_RPAsset.asset)) and Mobile ([Assets/Settings/Mobile_RPAsset.asset](Assets/Settings/Mobile_RPAsset.asset)).
+- **Render Pipeline**: URP 17.4.0. Single PC pipeline ([Assets/Settings/PC_RPAsset.asset](Assets/Settings/PC_RPAsset.asset) + [PC_Renderer.asset](Assets/Settings/PC_Renderer.asset), Deferred). Only one quality level (`PC`); the Mobile pipeline/quality level was removed.
 - **Input**: Unity Input System 1.19.0. Action map: [Assets/InputSystem_Actions.inputactions](Assets/InputSystem_Actions.inputactions).
 - **Unity MCP**: local server at `http://localhost:8080/mcp` (CoplayDev/unity-mcp). Must be started from within the Unity Editor.
 

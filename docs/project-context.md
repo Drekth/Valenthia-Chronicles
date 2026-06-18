@@ -9,7 +9,7 @@ Read this file before implementing any feature. It contains the full technology 
 | Layer | Technology | Notes |
 |---|---|---|
 | Engine | Unity 6 (6000.4.10f1) | |
-| Render | URP 17.4.0 | Separate PC / Mobile pipeline assets |
+| Render | URP 17.4.0 | Single PC pipeline (Deferred); Mobile pipeline removed |
 | Input | Unity Input System 1.19.0 | New Input System only |
 | Simulation | Unity DOTS (Entities) | DOTS-first for enemies and projectiles |
 | Pathfinding | Unity AI Navigation 2.0.13 | NavMesh |
