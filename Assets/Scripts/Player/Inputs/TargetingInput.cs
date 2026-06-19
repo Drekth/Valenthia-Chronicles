@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 
 // Turns mouse and keyboard input into target selection: left click raycasts from the camera
 // through the pointer and selects any Selectable it hits (clicking empty space clears the
-// target), Escape clears, and Tab cycles to the next-nearest unit. Owns self-contained
+// target), clicking the already-selected unit again launches the player's attack, Escape
+// clears, and Tab cycles to the next-nearest unit. Owns self-contained
 // InputActions like ContainerInteractor so it stays independent of the shared input asset.
 // Tracks the possessed PlayerCharacter (via the spawn channel) to supply the cycle origin,
 // and blocks while a loot window is open to avoid stealing the click. Lives on the persistent
@@ -108,13 +109,23 @@ public class TargetingInput : MonoBehaviour
         }
 
         Unit Target = Hit.collider.GetComponentInParent<Unit>();
-        if (Target != null && Target.IsSelectable)
+        if (Target == null || !Target.IsSelectable)
         {
-            Manager.Select(Target);
+            Manager.Clear();
+            return;
+        }
+
+        // First click selects; clicking the already-selected unit again launches the attack.
+        if (Target == Manager.CurrentTarget)
+        {
+            if (Character != null)
+            {
+                Character.Attack();
+            }
         }
         else
         {
-            Manager.Clear();
+            Manager.Select(Target);
         }
     }
 

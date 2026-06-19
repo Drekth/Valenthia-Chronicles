@@ -78,6 +78,7 @@ MonoBehaviour:
   Gravity: 20
   JumpSpeed: 8
   StickForce: 2
+  PlayerAnimator: {fileID: 6800388984827457198}
 --- !u!114 &4954171693554603920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +155,11 @@ PrefabInstance:
 --- !u!4 &6800388984273072552 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4957605394132608681, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
+  m_PrefabInstance: {fileID: 1914916145375663873}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6800388984827457198 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4957605393579145647, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
   m_PrefabInstance: {fileID: 1914916145375663873}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &6800388984827457199 stripped

@@ -812,6 +812,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputController
   MoveAction: {fileID: 230242078}
   JumpAction: {fileID: 100441721}
+  AttackAction: {fileID: 0}
 --- !u!114 &1463626394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -891,7 +892,7 @@ MonoBehaviour:
   ViewCamera: {fileID: 910669544}
   SelectableMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   OnSpawned: {fileID: 11400000, guid: 9b15ec946b784a03a09cb4cfbf2b6561, type: 2}
   OnContainerOpened: {fileID: 11400000, guid: c43eb3bb920e4444f8775be6793d84e9, type: 2}
   OnContainerClosed: {fileID: 11400000, guid: 271d6f085fec142efb4c64570d4c4d06, type: 2}
@@ -909,7 +910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SelectionManager
   SelectableMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   CycleRadius: 30
   OnTargetChanged: {fileID: 11400000, guid: 16885f8da8ef7498596afecc66b8e8ab, type: 2}
 --- !u!114 &1463626400
