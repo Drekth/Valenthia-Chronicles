@@ -26,10 +26,7 @@ public class Container : MonoBehaviour
             HasRolled = true;
         }
 
-        if (OnOpened != null)
-        {
-            OnOpened.Raise(this);
-        }
+        EventBus<ContainerOpenedEvent>.Raise(new ContainerOpenedEvent { Container = this });
     }
 
     // Adds a stack, merging into existing stacks of the same item up to their max size,
@@ -93,9 +90,6 @@ public class Container : MonoBehaviour
     [Header("Loot")]
     [SerializeField] private LootTableData LootTable;
     [SerializeField] private int Capacity = 16;
-
-    [Header("Events")]
-    [SerializeField] private ContainerEventChannel OnOpened;
 
     private readonly List<ItemStack> Contents = new List<ItemStack>();
     private bool HasRolled;

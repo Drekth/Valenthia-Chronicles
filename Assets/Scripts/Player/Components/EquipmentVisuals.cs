@@ -16,10 +16,8 @@ public class EquipmentVisuals : MonoBehaviour
 
     private void OnEnable()
     {
-        if (OnEquipmentChanged != null)
-        {
-            OnEquipmentChanged.Subscribe(HandleEquipmentChanged);
-        }
+        EquipmentChangedBinding = new EventBinding<EquipmentChangedEvent>(HandleEquipmentChanged);
+        EventBus<EquipmentChangedEvent>.Register(EquipmentChangedBinding);
 
         // Show whatever is already worn when the rig comes alive.
         Refresh();
@@ -27,10 +25,7 @@ public class EquipmentVisuals : MonoBehaviour
 
     private void OnDisable()
     {
-        if (OnEquipmentChanged != null)
-        {
-            OnEquipmentChanged.Unsubscribe(HandleEquipmentChanged);
-        }
+        EventBus<EquipmentChangedEvent>.Deregister(EquipmentChangedBinding);
 
         ClearSpawned();
     }
@@ -102,15 +97,14 @@ public class EquipmentVisuals : MonoBehaviour
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
 
-    [Header("Events")]
-    [SerializeField] private VoidEventChannel OnEquipmentChanged;
-
     [Header("Sockets")]
     [SerializeField] private SocketBinding[] Sockets = Array.Empty<SocketBinding>();
 
     // Live models keyed by slot, with the prefab each was spawned from so a change can tell
     // whether the worn item actually differs before rebuilding.
     private readonly Dictionary<EquipmentSlot, SpawnedModel> Spawned = new Dictionary<EquipmentSlot, SpawnedModel>();
+
+    private EventBinding<EquipmentChangedEvent> EquipmentChangedBinding;
 
     ////////////////////////////////////////////////////////////
     /// Types                                                ///

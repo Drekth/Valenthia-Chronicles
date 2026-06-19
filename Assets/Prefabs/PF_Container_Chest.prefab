@@ -127,4 +127,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Container
   LootTable: {fileID: 11400000, guid: e691b0d998bda47658f5de3fa3787f87, type: 2}
   Capacity: 16
-  OnOpened: {fileID: 11400000, guid: c43eb3bb920e4444f8775be6793d84e9, type: 2}

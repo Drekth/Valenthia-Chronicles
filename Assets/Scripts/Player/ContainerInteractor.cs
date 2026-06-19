@@ -32,15 +32,11 @@ public class ContainerInteractor : MonoBehaviour
             SelectAction.Enable();
         }
 
-        if (OnContainerOpened != null)
-        {
-            OnContainerOpened.Subscribe(HandleContainerOpened);
-        }
+        ContainerOpenedBinding = new EventBinding<ContainerOpenedEvent>(HandleContainerOpened);
+        EventBus<ContainerOpenedEvent>.Register(ContainerOpenedBinding);
 
-        if (OnContainerClosed != null)
-        {
-            OnContainerClosed.Subscribe(HandleContainerClosed);
-        }
+        ContainerClosedBinding = new EventBinding<ContainerClosedEvent>(HandleContainerClosed);
+        EventBus<ContainerClosedEvent>.Register(ContainerClosedBinding);
     }
 
     private void OnDisable()
@@ -50,15 +46,8 @@ public class ContainerInteractor : MonoBehaviour
             SelectAction.Disable();
         }
 
-        if (OnContainerOpened != null)
-        {
-            OnContainerOpened.Unsubscribe(HandleContainerOpened);
-        }
-
-        if (OnContainerClosed != null)
-        {
-            OnContainerClosed.Unsubscribe(HandleContainerClosed);
-        }
+        EventBus<ContainerOpenedEvent>.Deregister(ContainerOpenedBinding);
+        EventBus<ContainerClosedEvent>.Deregister(ContainerClosedBinding);
     }
 
     private void OnDestroy()
@@ -92,7 +81,7 @@ public class ContainerInteractor : MonoBehaviour
         }
     }
 
-    private void HandleContainerOpened(Container Opened)
+    private void HandleContainerOpened(ContainerOpenedEvent Event)
     {
         Blocked = true;
     }
@@ -113,10 +102,8 @@ public class ContainerInteractor : MonoBehaviour
     [SerializeField] private Camera ViewCamera;
     [SerializeField] private LayerMask InteractableMask;
 
-    [Header("Events")]
-    [SerializeField] private ContainerEventChannel OnContainerOpened;
-    [SerializeField] private VoidEventChannel OnContainerClosed;
-
     private InputAction SelectAction;
     private bool Blocked;
+    private EventBinding<ContainerOpenedEvent> ContainerOpenedBinding;
+    private EventBinding<ContainerClosedEvent> ContainerClosedBinding;
 }

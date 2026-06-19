@@ -614,8 +614,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a4dda69cbf1241e28e00a35509b2295, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeManager
-  OnPaused: {fileID: 11400000, guid: c3d0acbda794843148641f4427e5e888, type: 2}
-  OnResumed: {fileID: 11400000, guid: 0942aa8bd12a34873b6a16dd4ae33938, type: 2}
 --- !u!4 &951202085
 Transform:
   m_ObjectHideFlags: 0
@@ -797,7 +795,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   Input: {fileID: 1463626393}
   CameraRig: {fileID: 910669546}
-  OnSpawned: {fileID: 11400000, guid: 9b15ec946b784a03a09cb4cfbf2b6561, type: 2}
 --- !u!114 &1463626393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -812,7 +809,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputController
   MoveAction: {fileID: 230242078}
   JumpAction: {fileID: 100441721}
-  AttackAction: {fileID: 0}
 --- !u!114 &1463626394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -830,8 +826,6 @@ MonoBehaviour:
   InteractableMask:
     serializedVersion: 2
     m_Bits: 256
-  OnContainerOpened: {fileID: 11400000, guid: c43eb3bb920e4444f8775be6793d84e9, type: 2}
-  OnContainerClosed: {fileID: 11400000, guid: 271d6f085fec142efb4c64570d4c4d06, type: 2}
 --- !u!114 &1463626395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,7 +852,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Container
   LootTable: {fileID: 0}
   Capacity: 16
-  OnOpened: {fileID: 0}
 --- !u!114 &1463626397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -873,7 +866,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TargetIndicator
   Projector: {fileID: 1229209655}
   HaloRadius: 1
-  OnTargetChanged: {fileID: 11400000, guid: 16885f8da8ef7498596afecc66b8e8ab, type: 2}
 --- !u!114 &1463626398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -892,10 +884,7 @@ MonoBehaviour:
   ViewCamera: {fileID: 910669544}
   SelectableMask:
     serializedVersion: 2
-    m_Bits: 0
-  OnSpawned: {fileID: 11400000, guid: 9b15ec946b784a03a09cb4cfbf2b6561, type: 2}
-  OnContainerOpened: {fileID: 11400000, guid: c43eb3bb920e4444f8775be6793d84e9, type: 2}
-  OnContainerClosed: {fileID: 11400000, guid: 271d6f085fec142efb4c64570d4c4d06, type: 2}
+    m_Bits: 512
 --- !u!114 &1463626399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -910,9 +899,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SelectionManager
   SelectableMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   CycleRadius: 30
-  OnTargetChanged: {fileID: 11400000, guid: 16885f8da8ef7498596afecc66b8e8ab, type: 2}
 --- !u!114 &1463626400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1083,8 +1071,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b75631e15a04fddb8dd6e0c7830f27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
-  OnLoadStart: {fileID: 11400000, guid: 4256c071e5eef4dcca611f456fd337c8, type: 2}
-  OnLoadComplete: {fileID: 11400000, guid: c34624867f38e4ecdb682256a83b3acd, type: 2}
 --- !u!4 &2029452679
 Transform:
   m_ObjectHideFlags: 0

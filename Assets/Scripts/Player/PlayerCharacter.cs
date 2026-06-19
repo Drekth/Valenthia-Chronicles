@@ -77,19 +77,13 @@ public class PlayerCharacter : MonoBehaviour
     private void OnEnable()
     {
         // Announce this body so the persistent PlayerController can possess it.
-        if (OnSpawned != null)
-        {
-            OnSpawned.Raise(this);
-        }
+        EventBus<PlayerSpawnedEvent>.Raise(new PlayerSpawnedEvent { Character = this });
     }
 
     private void OnDisable()
     {
         // Despawn (e.g. zone unload): tell the brain there is no body left to drive.
-        if (OnSpawned != null)
-        {
-            OnSpawned.Raise(null);
-        }
+        EventBus<PlayerSpawnedEvent>.Raise(new PlayerSpawnedEvent { Character = null });
     }
 
     private void UpdateRotation(Vector3 Direction)
@@ -120,9 +114,6 @@ public class PlayerCharacter : MonoBehaviour
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
-
-    [Header("Possession")]
-    [SerializeField] private PlayerCharacterEventChannel OnSpawned;
 
     [Header("Movement")]
     [SerializeField] private float MoveSpeed = 6.0f;

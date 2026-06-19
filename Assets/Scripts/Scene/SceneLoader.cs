@@ -15,7 +15,7 @@ public class SceneLoader : MonoBehaviour
         if (IsLoading) { return; }
 
         IsLoading = true;
-        OnLoadStart?.Raise();
+        EventBus<LoadStartEvent>.Raise(new LoadStartEvent());
 
         await LoadSceneAdditive(NewZoneName);
 
@@ -26,7 +26,7 @@ public class SceneLoader : MonoBehaviour
 
         CurrentZone = NewZoneName;
         IsLoading = false;
-        OnLoadComplete?.Raise();
+        EventBus<LoadCompleteEvent>.Raise(new LoadCompleteEvent());
     }
 
     public async UniTask LoadSceneAdditive(string SceneName)
@@ -55,10 +55,6 @@ public class SceneLoader : MonoBehaviour
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
-
-    [Header("Events")]
-    [SerializeField] private VoidEventChannel OnLoadStart;
-    [SerializeField] private VoidEventChannel OnLoadComplete;
 
     private string CurrentZone;
 }

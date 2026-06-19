@@ -44,9 +44,9 @@ NPCs and Player expose shared data (`HealthData`, `FactionData`) to ECS via Bake
 
 Custom static registry. Register in `Awake`, resolve in `Start`. No framework dependency.
 
-### SO Event Channels
+### EventBus (pure C#)
 
-Inter-system communication via ScriptableObject channels. Systems never hold direct references to each other. Two types: `VoidEventChannel`, `EventChannel<T>`.
+Inter-system communication via a static generic `EventBus<T>` — pure C#, no ScriptableObjects, no editor wiring (infra in `Assets/Scripts/Core/EventBus/`). Events are structs implementing `IEvent`, declared per module in `XxxEvents.cs`. Publish with `EventBus<T>.Raise(new T{…})`; subscribe by keeping an `EventBinding<T>` and calling `Register`/`Deregister` in `OnEnable`/`OnDisable`. `EventBusUtil` clears all buses on play-mode exit (robust to domain-reload-off). Systems never hold direct references to each other.
 
 ---
 

@@ -150,7 +150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentWindowController
   ToggleBinding: <Keyboard>/c
-  OnEquipmentChanged: {fileID: 11400000, guid: cd95be657515d4f2999321c8e223f495, type: 2}
 --- !u!114 &187547946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,7 +219,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryWindowController
   ToggleBinding: <Keyboard>/i
-  OnEquipmentChanged: {fileID: 11400000, guid: cd95be657515d4f2999321c8e223f495, type: 2}
 --- !u!114 &472878557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,8 +288,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LootWindowController
   ToggleBinding: 
-  OnContainerOpened: {fileID: 11400000, guid: c43eb3bb920e4444f8775be6793d84e9, type: 2}
-  OnContainerClosed: {fileID: 11400000, guid: 271d6f085fec142efb4c64570d4c4d06, type: 2}
 --- !u!114 &902158672
 MonoBehaviour:
   m_ObjectHideFlags: 0

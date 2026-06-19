@@ -72,7 +72,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c718c86e7d0f441d0814a96e5a47a4ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCharacter
-  OnSpawned: {fileID: 11400000, guid: 9b15ec946b784a03a09cb4cfbf2b6561, type: 2}
   MoveSpeed: 6
   RotationSpeed: 720
   Gravity: 20
@@ -91,7 +90,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97fcf3c46a7a94e848ab58d777aa2a2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentVisuals
-  OnEquipmentChanged: {fileID: 11400000, guid: cd95be657515d4f2999321c8e223f495, type: 2}
   Sockets:
   - BoundSlot: 6
     BoundSocket: {fileID: 6800388984273072552}

@@ -26,18 +26,13 @@ public class TargetIndicator : MonoBehaviour
             Projector.enabled = false;
         }
 
-        if (OnTargetChanged != null)
-        {
-            OnTargetChanged.Subscribe(HandleTargetChanged);
-        }
+        TargetChangedBinding = new EventBinding<TargetChangedEvent>(HandleTargetChanged);
+        EventBus<TargetChangedEvent>.Register(TargetChangedBinding);
     }
 
     private void OnDisable()
     {
-        if (OnTargetChanged != null)
-        {
-            OnTargetChanged.Unsubscribe(HandleTargetChanged);
-        }
+        EventBus<TargetChangedEvent>.Deregister(TargetChangedBinding);
     }
 
     private void LateUpdate()
@@ -56,9 +51,9 @@ public class TargetIndicator : MonoBehaviour
         PositionProjector();
     }
 
-    private void HandleTargetChanged(Unit NewTarget)
+    private void HandleTargetChanged(TargetChangedEvent Event)
     {
-        Target = NewTarget;
+        Target = Event.Target;
 
         if (Projector == null)
         {
@@ -91,8 +86,6 @@ public class TargetIndicator : MonoBehaviour
     [SerializeField] private DecalProjector Projector;
     [SerializeField] private float HaloRadius = 1.0f;
 
-    [Header("Events")]
-    [SerializeField] private UnitEventChannel OnTargetChanged;
-
     private Unit Target;
+    private EventBinding<TargetChangedEvent> TargetChangedBinding;
 }

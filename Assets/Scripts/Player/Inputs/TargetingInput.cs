@@ -38,20 +38,14 @@ public class TargetingInput : MonoBehaviour
         DeselectAction.Enable();
         CycleAction.Enable();
 
-        if (OnSpawned != null)
-        {
-            OnSpawned.Subscribe(Possess);
-        }
+        SpawnedBinding = new EventBinding<PlayerSpawnedEvent>(Possess);
+        EventBus<PlayerSpawnedEvent>.Register(SpawnedBinding);
 
-        if (OnContainerOpened != null)
-        {
-            OnContainerOpened.Subscribe(HandleContainerOpened);
-        }
+        ContainerOpenedBinding = new EventBinding<ContainerOpenedEvent>(HandleContainerOpened);
+        EventBus<ContainerOpenedEvent>.Register(ContainerOpenedBinding);
 
-        if (OnContainerClosed != null)
-        {
-            OnContainerClosed.Subscribe(HandleContainerClosed);
-        }
+        ContainerClosedBinding = new EventBinding<ContainerClosedEvent>(HandleContainerClosed);
+        EventBus<ContainerClosedEvent>.Register(ContainerClosedBinding);
     }
 
     private void OnDisable()
@@ -60,20 +54,9 @@ public class TargetingInput : MonoBehaviour
         DeselectAction.Disable();
         CycleAction.Disable();
 
-        if (OnSpawned != null)
-        {
-            OnSpawned.Unsubscribe(Possess);
-        }
-
-        if (OnContainerOpened != null)
-        {
-            OnContainerOpened.Unsubscribe(HandleContainerOpened);
-        }
-
-        if (OnContainerClosed != null)
-        {
-            OnContainerClosed.Unsubscribe(HandleContainerClosed);
-        }
+        EventBus<PlayerSpawnedEvent>.Deregister(SpawnedBinding);
+        EventBus<ContainerOpenedEvent>.Deregister(ContainerOpenedBinding);
+        EventBus<ContainerClosedEvent>.Deregister(ContainerClosedBinding);
     }
 
     private void OnDestroy()
@@ -151,12 +134,12 @@ public class TargetingInput : MonoBehaviour
     }
 
     // Cache the body the zone announced so Tab cycling measures distance from the player.
-    private void Possess(PlayerCharacter NewCharacter)
+    private void Possess(PlayerSpawnedEvent Event)
     {
-        Character = NewCharacter;
+        Character = Event.Character;
     }
 
-    private void HandleContainerOpened(Container Opened)
+    private void HandleContainerOpened(ContainerOpenedEvent Event)
     {
         Blocked = true;
     }
@@ -179,11 +162,6 @@ public class TargetingInput : MonoBehaviour
     [SerializeField] private Camera ViewCamera;
     [SerializeField] private LayerMask SelectableMask;
 
-    [Header("Events")]
-    [SerializeField] private PlayerCharacterEventChannel OnSpawned;
-    [SerializeField] private ContainerEventChannel OnContainerOpened;
-    [SerializeField] private VoidEventChannel OnContainerClosed;
-
     private Vector3 PlayerPosition => Character != null ? Character.transform.position : transform.position;
 
     private InputAction ClickAction;
@@ -191,4 +169,7 @@ public class TargetingInput : MonoBehaviour
     private InputAction CycleAction;
     private PlayerCharacter Character;
     private bool Blocked;
+    private EventBinding<PlayerSpawnedEvent> SpawnedBinding;
+    private EventBinding<ContainerOpenedEvent> ContainerOpenedBinding;
+    private EventBinding<ContainerClosedEvent> ContainerClosedBinding;
 }

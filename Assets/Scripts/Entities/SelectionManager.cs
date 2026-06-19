@@ -115,10 +115,7 @@ public class SelectionManager : MonoBehaviour
 
     private void Broadcast()
     {
-        if (OnTargetChanged != null)
-        {
-            OnTargetChanged.Raise(CurrentTarget);
-        }
+        EventBus<TargetChangedEvent>.Raise(new TargetChangedEvent { Target = CurrentTarget });
     }
 
     private static float FlatDistanceSqr(Vector3 A, Vector3 B)
@@ -135,9 +132,6 @@ public class SelectionManager : MonoBehaviour
     [Header("Cycling")]
     [SerializeField] private LayerMask SelectableMask;
     [SerializeField] private float CycleRadius = 30.0f;
-
-    [Header("Events")]
-    [SerializeField] private UnitEventChannel OnTargetChanged;
 
     private Collider[] CandidateBuffer;
 }

@@ -43,7 +43,7 @@ Bootstrap (persistent, never unloaded)
 ├── AudioManager
 ├── SaveSystem
 ├── TimeManager
-└── EventBus (SO Channels)
+└── EventBus (static, pure C#)
 
 UI (persistent additive)
 └── HUD, Menus, Dialogue, Loading screen
@@ -74,21 +74,44 @@ Order guaranteed by Unity Script Execution Order (Bootstrap runs first).
 
 ---
 
-### SO Event Channels
+### EventBus (pure C#)
 
-Systems do not reference each other directly. They communicate via shared ScriptableObjects:
+Systems do not reference each other directly. They communicate through a **static generic
+EventBus** — pure C#, **no ScriptableObjects, no editor wiring** (the old SO channels were dropped
+because their serialized references kept breaking). Infrastructure lives in
+[Assets/Scripts/Core/EventBus/](Assets/Scripts/Core/EventBus/) (Assembly-CSharp, no namespace):
+`IEvent`, `EventBus<T>`, `EventBinding<T>`, `EventBusUtil`, `PredefinedAssemblyUtil`.
 
+Events are plain structs implementing `IEvent`, **declared per module** in `XxxEvents.cs` files
+(e.g. [Player/PlayerEvents.cs](Assets/Scripts/Player/PlayerEvents.cs),
+[Entities/SelectionEvents.cs](Assets/Scripts/Entities/SelectionEvents.cs),
+[Items/ContainerEvents.cs](Assets/Scripts/Items/ContainerEvents.cs)) — each module owns its contracts.
+
+```csharp
+// Define (per-module XxxEvents.cs)
+public struct TargetChangedEvent : IEvent { public Unit Target; }
+
+// Publish
+EventBus<TargetChangedEvent>.Raise(new TargetChangedEvent { Target = CurrentTarget });
+
+// Subscribe — keep the binding; Register in OnEnable, Deregister in OnDisable
+private EventBinding<TargetChangedEvent> TargetChangedBinding;
+private void OnEnable()
+{
+    TargetChangedBinding = new EventBinding<TargetChangedEvent>(HandleTargetChanged);
+    EventBus<TargetChangedEvent>.Register(TargetChangedBinding);
+}
+private void OnDisable()
+{
+    EventBus<TargetChangedEvent>.Deregister(TargetChangedBinding);
+}
+private void HandleTargetChanged(TargetChangedEvent Event) { /* Event.Target … */ }
 ```
-OnPlayerDeath  (VoidEventChannel SO)
-    ← AudioManager   → plays death sound
-    ← UIManager      → shows death screen
-    ← SaveSystem     → triggers autosave
-    ← QuestManager   → checks fail conditions
-```
 
-Two channel types:
-- `VoidEventChannel` — payload-less notification
-- `EventChannel<T>` — typed payload (int, float, string, EntityRef…)
+Use the no-arg constructor (`new EventBinding<T>(Action)`) for payload-less events. `EventBusUtil`
+auto-discovers every `IEvent` and clears all buses on play-mode exit
+(`RuntimeInitializeOnLoadMethod`), so static listeners never leak across sessions — even with
+domain reload disabled.
 
 ---
 

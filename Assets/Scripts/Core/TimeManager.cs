@@ -14,7 +14,7 @@ public class TimeManager : MonoBehaviour
 
         TimeScaleBeforePause = Time.timeScale;
         Time.timeScale = 0f;
-        OnPaused?.Raise();
+        EventBus<PausedEvent>.Raise(new PausedEvent());
     }
 
     public void Resume()
@@ -22,7 +22,7 @@ public class TimeManager : MonoBehaviour
         if (!IsPaused) { return; }
 
         Time.timeScale = TimeScaleBeforePause;
-        OnResumed?.Raise();
+        EventBus<ResumedEvent>.Raise(new ResumedEvent());
     }
 
     public void SetTimeScale(float Scale)
@@ -53,10 +53,6 @@ public class TimeManager : MonoBehaviour
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
-
-    [Header("Events")]
-    [SerializeField] private VoidEventChannel OnPaused;
-    [SerializeField] private VoidEventChannel OnResumed;
 
     private float TimeScaleBeforePause = 1f;
 }

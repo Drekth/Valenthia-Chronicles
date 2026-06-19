@@ -24,18 +24,13 @@ public class LootWindowController : UIWindowController
 
     protected override void OnSubscribe()
     {
-        if (OnContainerOpened != null)
-        {
-            OnContainerOpened.Subscribe(HandleOpen);
-        }
+        ContainerOpenedBinding = new EventBinding<ContainerOpenedEvent>(HandleOpen);
+        EventBus<ContainerOpenedEvent>.Register(ContainerOpenedBinding);
     }
 
     protected override void OnUnsubscribe()
     {
-        if (OnContainerOpened != null)
-        {
-            OnContainerOpened.Unsubscribe(HandleOpen);
-        }
+        EventBus<ContainerOpenedEvent>.Deregister(ContainerOpenedBinding);
     }
 
     // The shared Hide() raises this once the window actually closes. Clear the active container
@@ -43,11 +38,7 @@ public class LootWindowController : UIWindowController
     protected override void OnHidden()
     {
         ActiveContainer = null;
-
-        if (OnContainerClosed != null)
-        {
-            OnContainerClosed.Raise();
-        }
+        EventBus<ContainerClosedEvent>.Raise(new ContainerClosedEvent());
     }
 
     protected override void Rebuild()
@@ -64,9 +55,9 @@ public class LootWindowController : UIWindowController
     /// Private                                              ///
     ////////////////////////////////////////////////////////////
 
-    private void HandleOpen(Container Opened)
+    private void HandleOpen(ContainerOpenedEvent Event)
     {
-        ActiveContainer = Opened;
+        ActiveContainer = Event.Container;
         Show();
     }
 
@@ -113,10 +104,7 @@ public class LootWindowController : UIWindowController
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
 
-    [Header("Events")]
-    [SerializeField] private ContainerEventChannel OnContainerOpened;
-    [SerializeField] private VoidEventChannel OnContainerClosed;
-
     private VisualElement ItemsContainer;
     private Container ActiveContainer;
+    private EventBinding<ContainerOpenedEvent> ContainerOpenedBinding;
 }

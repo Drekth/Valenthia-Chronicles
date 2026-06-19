@@ -18,18 +18,13 @@ public class InventoryWindowController : UIWindowController
 
     protected override void OnSubscribe()
     {
-        if (OnEquipmentChanged != null)
-        {
-            OnEquipmentChanged.Subscribe(HandleEquipmentChanged);
-        }
+        EquipmentChangedBinding = new EventBinding<EquipmentChangedEvent>(HandleEquipmentChanged);
+        EventBus<EquipmentChangedEvent>.Register(EquipmentChangedBinding);
     }
 
     protected override void OnUnsubscribe()
     {
-        if (OnEquipmentChanged != null)
-        {
-            OnEquipmentChanged.Unsubscribe(HandleEquipmentChanged);
-        }
+        EventBus<EquipmentChangedEvent>.Deregister(EquipmentChangedBinding);
     }
 
     protected override void Rebuild()
@@ -101,10 +96,7 @@ public class InventoryWindowController : UIWindowController
             Bag.TryAdd(new ItemStack(Displaced, 1));
         }
 
-        if (OnEquipmentChanged != null)
-        {
-            OnEquipmentChanged.Raise();
-        }
+        EventBus<EquipmentChangedEvent>.Raise(new EquipmentChangedEvent());
 
         Rebuild();
     }
@@ -113,8 +105,6 @@ public class InventoryWindowController : UIWindowController
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
 
-    [Header("Events")]
-    [SerializeField] private VoidEventChannel OnEquipmentChanged;
-
     private VisualElement ItemsContainer;
+    private EventBinding<EquipmentChangedEvent> EquipmentChangedBinding;
 }

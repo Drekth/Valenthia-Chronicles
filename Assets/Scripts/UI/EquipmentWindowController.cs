@@ -34,18 +34,13 @@ public class EquipmentWindowController : UIWindowController
 
     protected override void OnSubscribe()
     {
-        if (OnEquipmentChanged != null)
-        {
-            OnEquipmentChanged.Subscribe(HandleEquipmentChanged);
-        }
+        EquipmentChangedBinding = new EventBinding<EquipmentChangedEvent>(HandleEquipmentChanged);
+        EventBus<EquipmentChangedEvent>.Register(EquipmentChangedBinding);
     }
 
     protected override void OnUnsubscribe()
     {
-        if (OnEquipmentChanged != null)
-        {
-            OnEquipmentChanged.Unsubscribe(HandleEquipmentChanged);
-        }
+        EventBus<EquipmentChangedEvent>.Deregister(EquipmentChangedBinding);
     }
 
     protected override void Rebuild()
@@ -136,10 +131,7 @@ public class EquipmentWindowController : UIWindowController
 
         Gear.TryUnequip(Slot, RingIndex, out ItemData Removed);
 
-        if (OnEquipmentChanged != null)
-        {
-            OnEquipmentChanged.Raise();
-        }
+        EventBus<EquipmentChangedEvent>.Raise(new EquipmentChangedEvent());
 
         Rebuild();
     }
@@ -148,10 +140,8 @@ public class EquipmentWindowController : UIWindowController
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
 
-    [Header("Events")]
-    [SerializeField] private VoidEventChannel OnEquipmentChanged;
-
     private VisualElement[] SlotElements;
+    private EventBinding<EquipmentChangedEvent> EquipmentChangedBinding;
 
     // Maps each named doll slot in the UXML to its model address. Ring1/Ring2 share the Ring
     // slot and differ only by ring index.

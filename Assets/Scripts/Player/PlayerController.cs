@@ -11,18 +11,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        if (OnSpawned != null)
-        {
-            OnSpawned.Subscribe(Possess);
-        }
+        SpawnedBinding = new EventBinding<PlayerSpawnedEvent>(Possess);
+        EventBus<PlayerSpawnedEvent>.Register(SpawnedBinding);
     }
 
     private void OnDisable()
     {
-        if (OnSpawned != null)
-        {
-            OnSpawned.Unsubscribe(Possess);
-        }
+        EventBus<PlayerSpawnedEvent>.Deregister(SpawnedBinding);
     }
 
     private void Update()
@@ -43,9 +38,9 @@ public class PlayerController : MonoBehaviour
     }
 
     // Take control of the body the zone just spawned (or release it when null on despawn).
-    private void Possess(PlayerCharacter NewCharacter)
+    private void Possess(PlayerSpawnedEvent Event)
     {
-        Character = NewCharacter;
+        Character = Event.Character;
 
         if (CameraRig != null && Character != null)
         {
@@ -61,8 +56,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerInputController Input;
     [SerializeField] private CameraController CameraRig;
 
-    [Header("Possession")]
-    [SerializeField] private PlayerCharacterEventChannel OnSpawned;
-
     private PlayerCharacter Character;
+    private EventBinding<PlayerSpawnedEvent> SpawnedBinding;
 }
