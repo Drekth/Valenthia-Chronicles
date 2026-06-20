@@ -6,3 +6,11 @@ public struct PlayerSpawnedEvent : IEvent
 {
     public PlayerCharacter Character;
 }
+
+// Lie (ou vide, si Spell == null) un sort à un slot de l'action bar. Publié par le joueur
+// quand son loadout devient actif ; consommé par l'action bar du HUD pour peindre l'icône.
+public struct HotbarSlotAssignedEvent : IEvent
+{
+    public int Slot;
+    public SpellData Spell;
+}

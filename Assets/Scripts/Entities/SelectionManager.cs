@@ -108,9 +108,29 @@ public class SelectionManager : MonoBehaviour
         ServiceLocator.Register<SelectionManager>(this);
     }
 
+    private void OnEnable()
+    {
+        UnitDiedBinding = new EventBinding<UnitDiedEvent>(HandleUnitDied);
+        EventBus<UnitDiedEvent>.Register(UnitDiedBinding);
+    }
+
+    private void OnDisable()
+    {
+        EventBus<UnitDiedEvent>.Deregister(UnitDiedBinding);
+    }
+
     private void OnDestroy()
     {
         ServiceLocator.Unregister<SelectionManager>();
+    }
+
+    // Drop the target the moment it dies so the player can't keep attacking a corpse.
+    private void HandleUnitDied(UnitDiedEvent Event)
+    {
+        if (Event.Unit == CurrentTarget)
+        {
+            Clear();
+        }
     }
 
     private void Broadcast()
@@ -134,4 +154,5 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] private float CycleRadius = 30.0f;
 
     private Collider[] CandidateBuffer;
+    private EventBinding<UnitDiedEvent> UnitDiedBinding;
 }

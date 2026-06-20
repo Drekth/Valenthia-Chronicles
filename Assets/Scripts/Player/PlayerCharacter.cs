@@ -57,9 +57,24 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
 
-    public void Attack()
+    // Casts the spell bound to the given action-bar slot on the current target. Triggered by the
+    // action-bar keys (ActionBarInput). The animation is only played when the cast is accepted; the
+    // damage itself lands later, on the clip's impact frame (SpellAnimationRelay).
+    public void CastSlot(int Slot)
     {
-        if (PlayerAnimator != null)
+        SpellData Spell = ResolveSlot(Slot);
+        if (Spell == null || Caster == null)
+        {
+            return;
+        }
+
+        if (!ServiceLocator.TryGet<SelectionManager>(out SelectionManager Selection))
+        {
+            return;
+        }
+
+        SpellCastResult Result = Caster.TryCast(Spell, Selection.CurrentTarget);
+        if (Result == SpellCastResult.Success && PlayerAnimator != null)
         {
             PlayerAnimator.SetTrigger(AttackHash);
         }
@@ -72,18 +87,26 @@ public class PlayerCharacter : MonoBehaviour
     private void Awake()
     {
         Character = GetComponent<CharacterController>();
+        Caster = GetComponent<SpellCaster>();
     }
 
     private void OnEnable()
     {
         // Announce this body so the persistent PlayerController can possess it.
         EventBus<PlayerSpawnedEvent>.Raise(new PlayerSpawnedEvent { Character = this });
+
+        // Publish the action-bar loadout so the HUD can paint the slot icons. Single basic attack
+        // in slot 0 for now; a future PlayerHotbar would back ResolveSlot with a real spellbook.
+        PublishHotbar(false);
     }
 
     private void OnDisable()
     {
         // Despawn (e.g. zone unload): tell the brain there is no body left to drive.
         EventBus<PlayerSpawnedEvent>.Raise(new PlayerSpawnedEvent { Character = null });
+
+        // Clear every action-bar slot this body owned.
+        PublishHotbar(true);
     }
 
     private void UpdateRotation(Vector3 Direction)
@@ -95,6 +118,27 @@ public class PlayerCharacter : MonoBehaviour
 
         Quaternion TargetRotation = Quaternion.LookRotation(Direction, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, TargetRotation, RotationSpeed * Time.deltaTime);
+    }
+
+    // The spell bound to an action-bar slot. Slot 0 is the basic attack; the rest are empty until a
+    // real spellbook exists. Single place that maps slots to spells, shared by casting and the HUD.
+    private SpellData ResolveSlot(int Slot)
+    {
+        return Slot == 0 ? BasicAttack : null;
+    }
+
+    // Raises one HotbarSlotAssignedEvent per slot so the HUD mirrors the loadout exactly. When
+    // Clear is true every slot is emptied (despawn); otherwise each slot reflects ResolveSlot.
+    private void PublishHotbar(bool Clear)
+    {
+        for (int Slot = 0; Slot < HUDActionBar.SlotCount; Slot++)
+        {
+            EventBus<HotbarSlotAssignedEvent>.Raise(new HotbarSlotAssignedEvent
+            {
+                Slot  = Slot,
+                Spell = Clear ? null : ResolveSlot(Slot),
+            });
+        }
     }
 
     // Converts world-space Direction to local space so the blend tree works correctly
@@ -125,6 +169,10 @@ public class PlayerCharacter : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator PlayerAnimator;
 
+    [Header("Combat")]
+    [SerializeField] private SpellData BasicAttack;
+
     private CharacterController Character;
+    private SpellCaster Caster;
     private float VerticalVelocity;
 }

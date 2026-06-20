@@ -53,6 +53,19 @@ public class HUDActionBar : MonoBehaviour
     {
         BindVisualTree();
         ApplyDemoState();
+
+        SlotAssignedBinding = new EventBinding<HotbarSlotAssignedEvent>(HandleSlotAssigned);
+        EventBus<HotbarSlotAssignedEvent>.Register(SlotAssignedBinding);
+    }
+
+    private void OnDisable()
+    {
+        EventBus<HotbarSlotAssignedEvent>.Deregister(SlotAssignedBinding);
+    }
+
+    private void HandleSlotAssigned(HotbarSlotAssignedEvent Event)
+    {
+        SetSlotIcon(Event.Slot, Event.Spell != null ? Event.Spell.Icon : null);
     }
 
     private void BindVisualTree()
@@ -83,6 +96,7 @@ public class HUDActionBar : MonoBehaviour
     ////////////////////////////////////////////////////////////
 
     private UIDocument Document;
+    private EventBinding<HotbarSlotAssignedEvent> SlotAssignedBinding;
     private VisualElement HealthFill;
     private VisualElement ManaFill;
     private VisualElement[] SlotIcons = new VisualElement[SlotCount];

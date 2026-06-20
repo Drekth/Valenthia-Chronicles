@@ -7,5 +7,7 @@ public enum UnitFlags
 {
     None         = 0,
     IsSelectable = 1 << 0,
-    // Future: IsAttackable = 1 << 1, IsDead = 1 << 2, InCombat = 1 << 3, ...
+    IsDead       = 1 << 1,
+    IsAttackable = 1 << 2,
+    // Future: InCombat = 1 << 3, ...
 }

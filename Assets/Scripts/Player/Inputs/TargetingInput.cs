@@ -3,8 +3,8 @@ using UnityEngine.InputSystem;
 
 // Turns mouse and keyboard input into target selection: left click raycasts from the camera
 // through the pointer and selects any Selectable it hits (clicking empty space clears the
-// target), clicking the already-selected unit again launches the player's attack, Escape
-// clears, and Tab cycles to the next-nearest unit. Owns self-contained
+// target), Escape clears, and Tab cycles to the next-nearest unit. Spells are cast from the
+// action-bar keys (ActionBarInput), not from clicks. Owns self-contained
 // InputActions like ContainerInteractor so it stays independent of the shared input asset.
 // Tracks the possessed PlayerCharacter (via the spawn channel) to supply the cycle origin,
 // and blocks while a loot window is open to avoid stealing the click. Lives on the persistent
@@ -98,15 +98,8 @@ public class TargetingInput : MonoBehaviour
             return;
         }
 
-        // First click selects; clicking the already-selected unit again launches the attack.
-        if (Target == Manager.CurrentTarget)
-        {
-            if (Character != null)
-            {
-                Character.Attack();
-            }
-        }
-        else
+        // Left click only selects now; spells are launched from the action-bar keys (ActionBarInput).
+        if (Target != Manager.CurrentTarget)
         {
             Manager.Select(Target);
         }
