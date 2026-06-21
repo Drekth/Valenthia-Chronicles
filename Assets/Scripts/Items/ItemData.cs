@@ -19,6 +19,10 @@ public class ItemData : ScriptableObject
     public EquipmentSlot Slot         => EquipSlot;
     public bool          IsEquippable => EquipSlot != EquipmentSlot.None;
 
+    // Melee damage dealt by an auto-attack swing while this item is equipped in the MainHand.
+    // Stays 0 for every non-weapon item; only MainHand weapons author a real value.
+    public float         AttackDamage => MeleeDamage;
+
     // 3D model attached to the player's body when this item is equipped, or null when the
     // item has no worn visual. AttachPosition / AttachEuler are local offsets applied on the
     // body socket so the model lines up with the bone (the imported grip rarely matches it).
@@ -47,4 +51,7 @@ public class ItemData : ScriptableObject
     [SerializeField] private ItemRarity RarityTier = ItemRarity.Common;
     [SerializeField] private ItemType ItemCategory = ItemType.Misc;
     [SerializeField] private EquipmentSlot EquipSlot = EquipmentSlot.None;
+
+    [Header("Combat")]
+    [SerializeField] private float MeleeDamage = 0.0f;
 }

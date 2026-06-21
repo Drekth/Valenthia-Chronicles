@@ -51,6 +51,14 @@ public class SpellCaster : MonoBehaviour
         return SpellCastResult.Success;
     }
 
+    // Side-effect-free validation: same rules as TryCast, but raises no event and starts no
+    // cooldown. Lets a repeating driver (auto-attack) gate its swings on range/cooldown/target each
+    // frame without spamming SpellCastFailedEvent while out of range.
+    public SpellCastResult CanCast(SpellData Spell, Unit Target)
+    {
+        return Validate(Spell, Target);
+    }
+
     // Called from the attack animation's impact frame (via SpellAnimationRelay). Resolves the
     // pending cast on a still-living target, then clears it.
     public void NotifyImpact()

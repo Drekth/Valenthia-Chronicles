@@ -80,6 +80,20 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
 
+    // Toggles the WoW-style auto-attack on the currently selected target. Triggered by the
+    // right-click input (AutoAttackInput). While on, Update keeps swinging on the weapon's attack
+    // speed; the actual weapon damage lands on the clip's impact frame like any other cast.
+    public void ToggleAutoAttack()
+    {
+        AutoAttacking = !AutoAttacking;
+    }
+
+    // Hard stop, used when the body is despawned or auto-attack must be cancelled externally.
+    public void StopAutoAttack()
+    {
+        AutoAttacking = false;
+    }
+
     ////////////////////////////////////////////////////////////
     /// Private                                              ///
     ////////////////////////////////////////////////////////////
@@ -107,6 +121,44 @@ public class PlayerCharacter : MonoBehaviour
 
         // Clear every action-bar slot this body owned.
         PublishHotbar(true);
+
+        // Drop any running auto-attack so a re-spawned body starts idle.
+        AutoAttacking = false;
+    }
+
+    // Drives the auto-attack loop: while active, swings at the weapon's attack speed on the current
+    // target. Cadence and range are owned by SpellCaster — CanCast returns OnCooldown between swings
+    // and OutOfRange when too far, both silently, so the loop never spams SpellCastFailedEvent. The
+    // target is re-read each frame so the auto-attack follows the selection, WoW-style.
+    private void Update()
+    {
+        if (!AutoAttacking || AutoAttack == null || Caster == null)
+        {
+            return;
+        }
+
+        if (!ServiceLocator.TryGet<SelectionManager>(out SelectionManager Selection))
+        {
+            return;
+        }
+
+        Unit Target = Selection.CurrentTarget;
+        if (Target == null || Target.IsDead)
+        {
+            AutoAttacking = false;
+            return;
+        }
+
+        if (Caster.CanCast(AutoAttack, Target) != SpellCastResult.Success)
+        {
+            return;
+        }
+
+        Caster.TryCast(AutoAttack, Target);
+        if (PlayerAnimator != null)
+        {
+            PlayerAnimator.SetTrigger(AttackHash);
+        }
     }
 
     private void UpdateRotation(Vector3 Direction)
@@ -171,8 +223,10 @@ public class PlayerCharacter : MonoBehaviour
 
     [Header("Combat")]
     [SerializeField] private SpellData BasicAttack;
+    [SerializeField] private SpellData AutoAttack;
 
     private CharacterController Character;
     private SpellCaster Caster;
     private float VerticalVelocity;
+    private bool AutoAttacking;
 }

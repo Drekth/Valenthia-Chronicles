@@ -804,6 +804,7 @@ GameObject:
   - component: {fileID: 1463626397}
   - component: {fileID: 1463626400}
   - component: {fileID: 1463626401}
+  - component: {fileID: 1463626402}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -982,6 +983,19 @@ MonoBehaviour:
   - <Keyboard>/8
   - <Keyboard>/9
   - <Keyboard>/0
+--- !u!114 &1463626402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463626390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22c424db715d8474bb110194db1e0c0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoAttackInput
+  ToggleBinding: <Mouse>/rightButton
 --- !u!1 &1476693035
 GameObject:
   m_ObjectHideFlags: 0

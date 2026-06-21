@@ -81,6 +81,7 @@ MonoBehaviour:
   StickForce: 2
   PlayerAnimator: {fileID: 6800388984827457198}
   BasicAttack: {fileID: 11400000, guid: 14836c353f77c43599aebe6285f8faec, type: 2}
+  AutoAttack: {fileID: 11400000, guid: 6aeb3d7b53dd431684d225483d3223b5, type: 2}
 --- !u!114 &4954171693554603920
 MonoBehaviour:
   m_ObjectHideFlags: 0

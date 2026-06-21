@@ -23,3 +23,4 @@ MonoBehaviour:
   RarityTier: 0
   ItemCategory: 1
   EquipSlot: 6
+  MeleeDamage: 8
