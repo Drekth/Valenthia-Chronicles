@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="project://database/Assets/UI/HUD/EnemyHealthBars.uss" />
+    <ui:VisualElement name="EnemyHealthBarsRoot" class="enemy-bars-root" picking-mode="Ignore" />
+</ui:UXML>

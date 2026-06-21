@@ -1,0 +1,40 @@
+/* Valenthia — Enemy floating mini health bars (UI Toolkit) */
+
+.enemy-bars-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* Mirrors the player resource bar look (HUDActionBar.uss), shrunk for an over-head badge.
+   Anchored bottom-center on its screen point via the translate offset. */
+.enemy-bar {
+    position: absolute;
+    width: 64px;
+    height: 8px;
+    background-color: rgb(16, 13, 9);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(78, 62, 34);
+    border-right-color: rgb(78, 62, 34);
+    border-top-color: rgb(92, 74, 42);
+    border-bottom-color: rgb(54, 42, 22);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    overflow: hidden;
+    translate: -50% -100%;
+}
+
+.enemy-bar__fill {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(150, 32, 32);
+    border-top-width: 1px;
+    border-top-color: rgb(206, 86, 86);
+}

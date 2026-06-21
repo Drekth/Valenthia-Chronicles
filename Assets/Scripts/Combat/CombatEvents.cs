@@ -17,6 +17,15 @@ public struct UnitDiedEvent : IEvent
     public Unit Killer;
 }
 
+// Raised by a creature brain when its combat phase toggles, so feedback consumers (floating
+// health bars, music, threat) react without polling AI state. InCombat is true on entering
+// combat, false on leaving.
+public struct UnitCombatStateChangedEvent : IEvent
+{
+    public Unit Unit;
+    public bool InCombat;
+}
+
 // Raised when a cast is accepted (validated, cooldown started, pending its impact).
 public struct SpellCastEvent : IEvent
 {

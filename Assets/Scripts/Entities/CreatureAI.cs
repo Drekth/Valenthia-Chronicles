@@ -138,6 +138,12 @@ public class CreatureAI : MonoBehaviour
         State                  = CombatState.Combat;
         NavAgent.stoppingDistance = Motion.Data.AttackRange;
         Motion.SwitchToChase(Target.transform);
+
+        EventBus<UnitCombatStateChangedEvent>.Raise(new UnitCombatStateChangedEvent
+        {
+            Unit     = OwnerUnit,
+            InCombat = true,
+        });
     }
 
     private void ExitCombat()
@@ -147,6 +153,12 @@ public class CreatureAI : MonoBehaviour
         NavAgent.stoppingDistance = DefaultStoppingDistance;
         NextAggroScanTime        = Time.time + AggroScanInterval;
         Motion.SwitchToWander();
+
+        EventBus<UnitCombatStateChangedEvent>.Raise(new UnitCombatStateChangedEvent
+        {
+            Unit     = OwnerUnit,
+            InCombat = false,
+        });
     }
 
     private void PerformAttack()
