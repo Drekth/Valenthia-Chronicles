@@ -10,11 +10,26 @@ public class CreatureMotion : MonoBehaviour
 
     public CreatureData Data => CreatureDataAsset;
 
-    // ECS-like state: written directly by MotionManager
-    public Vector3     Origin;
-    public Vector3     Target;
-    public float       IdleTimer;
-    public WanderState State;
+    // Spawn anchor: wander samples around it and the AI leashes back to it.
+    public Vector3 Origin;
+
+    // Active movement policy; the MotionManager ticks it, the AI swaps it.
+    public IMovementGenerator CurrentGenerator { get; private set; }
+
+    // Switch to chasing a target, re-initialising the chase generator from the current position.
+    public void SwitchToChase(Transform Target)
+    {
+        Chase.Target     = Target;
+        CurrentGenerator = Chase;
+        CurrentGenerator.Begin(this, NavAgent);
+    }
+
+    // Return to passive wandering around the spawn point.
+    public void SwitchToWander()
+    {
+        CurrentGenerator = Wander;
+        CurrentGenerator.Begin(this, NavAgent);
+    }
 
     ////////////////////////////////////////////////////////////
     /// Private                                              ///
@@ -24,6 +39,11 @@ public class CreatureMotion : MonoBehaviour
     {
         NavAgent = GetComponent<NavMeshAgent>();
         Origin   = transform.position;
+
+        Wander           = new WanderMovement();
+        Chase            = new ChaseMovement();
+        CurrentGenerator = Wander;
+
         SpawnVisual();
     }
 
@@ -65,5 +85,7 @@ public class CreatureMotion : MonoBehaviour
 
     [SerializeField] private CreatureData CreatureDataAsset;
 
-    private NavMeshAgent NavAgent;
+    private NavMeshAgent   NavAgent;
+    private WanderMovement Wander;
+    private ChaseMovement  Chase;
 }

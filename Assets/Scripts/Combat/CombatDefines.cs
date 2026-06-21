@@ -24,6 +24,7 @@ public enum SpellCastResult
     Success,
     NoTarget,
     TargetDead,
+    NotAttackable,
     OutOfRange,
     OnCooldown,
     InvalidSpell,

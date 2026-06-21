@@ -16,10 +16,11 @@ public class MotionManager : MonoBehaviour
             return;
         }
 
-        Agent.speed      = Motion.Data.Speed;
-        Motion.IdleTimer = Random.Range(Motion.Data.MinIdle, Motion.Data.MaxIdle);
-        Motion.State     = WanderState.Idle;
-        Creatures.Add((Motion, Agent));
+        Agent.speed = Motion.Data.Speed;
+        Motion.CurrentGenerator.Begin(Motion, Agent);
+
+        CreatureAI AI = Motion.GetComponent<CreatureAI>();
+        Creatures.Add((Motion, Agent, AI));
     }
 
     public void Unregister(CreatureMotion Motion)
@@ -40,7 +41,7 @@ public class MotionManager : MonoBehaviour
 
     private void Awake()
     {
-        Creatures = new List<(CreatureMotion Motion, NavMeshAgent Agent)>();
+        Creatures = new List<(CreatureMotion Motion, NavMeshAgent Agent, CreatureAI AI)>();
         ServiceLocator.Register<MotionManager>(this);
     }
 
@@ -55,59 +56,23 @@ public class MotionManager : MonoBehaviour
 
         for (int I = 0; I < Creatures.Count; I++)
         {
-            ProcessCreature(Creatures[I].Motion, Creatures[I].Agent, DeltaTime);
-        }
-    }
+            CreatureMotion Motion = Creatures[I].Motion;
+            NavMeshAgent   Agent  = Creatures[I].Agent;
+            CreatureAI     AI     = Creatures[I].AI;
 
-    private void ProcessCreature(CreatureMotion Motion, NavMeshAgent Agent, float DeltaTime)
-    {
-        if (Motion.State == WanderState.Idle)
-        {
-            Motion.IdleTimer -= DeltaTime;
-
-            if (Motion.IdleTimer <= 0.0f)
+            // The brain decides (and may swap the active generator) before the generator moves.
+            if (AI != null)
             {
-                if (TryPickWanderTarget(Motion.Origin, Motion.Data.Radius, out Vector3 NewTarget))
-                {
-                    Motion.Target = NewTarget;
-                    Agent.SetDestination(NewTarget);
-                    Motion.State = WanderState.Moving;
-                }
-                else
-                {
-                    Motion.IdleTimer = Random.Range(Motion.Data.MinIdle, Motion.Data.MaxIdle);
-                }
+                AI.Tick(DeltaTime);
             }
-        }
-        else
-        {
-            if (!Agent.pathPending && Agent.remainingDistance <= Agent.stoppingDistance)
-            {
-                Motion.IdleTimer = Random.Range(Motion.Data.MinIdle, Motion.Data.MaxIdle);
-                Motion.State     = WanderState.Idle;
-            }
-        }
-    }
 
-    private bool TryPickWanderTarget(Vector3 Origin, float Radius, out Vector3 Result)
-    {
-        Vector3 RandomPoint = Origin + Random.insideUnitSphere * Radius;
-        RandomPoint.y = Origin.y;
-
-        NavMeshHit Hit;
-        if (NavMesh.SamplePosition(RandomPoint, out Hit, Radius, NavMesh.AllAreas))
-        {
-            Result = Hit.position;
-            return true;
+            Motion.CurrentGenerator.Tick(Motion, Agent, DeltaTime);
         }
-
-        Result = Origin;
-        return false;
     }
 
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
 
-    private List<(CreatureMotion Motion, NavMeshAgent Agent)> Creatures;
+    private List<(CreatureMotion Motion, NavMeshAgent Agent, CreatureAI AI)> Creatures;
 }

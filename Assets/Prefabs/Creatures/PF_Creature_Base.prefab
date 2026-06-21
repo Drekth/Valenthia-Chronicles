@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3986238240250463962}
   - component: {fileID: 4206244394577406753}
   - component: {fileID: 8727650660747117095}
+  - component: {fileID: 4163143162110410687}
   m_Layer: 0
   m_Name: PF_Creature_Base
   m_TagString: Untagged
@@ -84,10 +85,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreatureMotion
   Origin: {x: 0, y: 0, z: 0}
-  Target: {x: 0, y: 0, z: 0}
-  IdleTimer: 0
-  State: 0
   CreatureDataAsset: {fileID: 11400000, guid: 5bf870e2bb23b4362b6f9a14f6c79b7c, type: 2}
+--- !u!114 &4163143162110410687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85637744799688998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70d67023f184b4ea4a41dc3d4d0c54b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureAI
+  PlayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &3114128192448837619
 GameObject:
   m_ObjectHideFlags: 0

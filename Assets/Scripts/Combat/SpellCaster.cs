@@ -107,6 +107,11 @@ public class SpellCaster : MonoBehaviour
             return SpellCastResult.TargetDead;
         }
 
+        if (!Target.IsAttackable)
+        {
+            return SpellCastResult.NotAttackable;
+        }
+
         if (!InRange(Target, Spell.Range))
         {
             return SpellCastResult.OutOfRange;

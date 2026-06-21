@@ -52,20 +52,64 @@ public class HUDActionBar : MonoBehaviour
     private void OnEnable()
     {
         BindVisualTree();
-        ApplyDemoState();
+        RefreshPlayerHealth();
 
         SlotAssignedBinding = new EventBinding<HotbarSlotAssignedEvent>(HandleSlotAssigned);
         EventBus<HotbarSlotAssignedEvent>.Register(SlotAssignedBinding);
+
+        DamageTakenBinding = new EventBinding<DamageTakenEvent>(HandleDamageTaken);
+        EventBus<DamageTakenEvent>.Register(DamageTakenBinding);
     }
 
     private void OnDisable()
     {
         EventBus<HotbarSlotAssignedEvent>.Deregister(SlotAssignedBinding);
+        EventBus<DamageTakenEvent>.Deregister(DamageTakenBinding);
     }
 
     private void HandleSlotAssigned(HotbarSlotAssignedEvent Event)
     {
         SetSlotIcon(Event.Slot, Event.Spell != null ? Event.Spell.Icon : null);
+    }
+
+    private void HandleDamageTaken(DamageTakenEvent Event)
+    {
+        Unit Player = GetPlayerUnit();
+        if (Event.Target != Player)
+        {
+            return;
+        }
+
+        SetHealthPercent(Player.CurrentHealth / Player.MaximumHealth);
+    }
+
+    private void RefreshPlayerHealth()
+    {
+        Unit Player = GetPlayerUnit();
+        if (Player != null)
+        {
+            SetHealthPercent(Player.CurrentHealth / Player.MaximumHealth);
+        }
+        else
+        {
+            SetHealthPercent(1.0f);
+        }
+
+        SetManaPercent(1.0f);
+    }
+
+    private Unit GetPlayerUnit()
+    {
+        if (PlayerUnit == null)
+        {
+            GameObject PlayerGO = GameObject.FindGameObjectWithTag("Player");
+            if (PlayerGO != null)
+            {
+                PlayerUnit = PlayerGO.GetComponent<Unit>();
+            }
+        }
+
+        return PlayerUnit;
     }
 
     private void BindVisualTree()
@@ -83,20 +127,14 @@ public class HUDActionBar : MonoBehaviour
         }
     }
 
-    private void ApplyDemoState()
-    {
-        // Placeholder resource levels until the health/mana systems drive the bars.
-        // Spell slots start empty; icons are assigned at runtime via SetSlotIcon.
-        SetHealthPercent(0.75f);
-        SetManaPercent(0.55f);
-    }
-
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
 
     private UIDocument Document;
+    private Unit PlayerUnit;
     private EventBinding<HotbarSlotAssignedEvent> SlotAssignedBinding;
+    private EventBinding<DamageTakenEvent>        DamageTakenBinding;
     private VisualElement HealthFill;
     private VisualElement ManaFill;
     private VisualElement[] SlotIcons = new VisualElement[SlotCount];

@@ -9,11 +9,26 @@ public class Unit : MonoBehaviour
     public float CurrentHealth => Health;
     public float MaximumHealth => MaxHealth;
     public bool IsSelectable => HasFlag(UnitFlags.IsSelectable);
+    public bool IsAttackable => HasFlag(UnitFlags.IsAttackable);
     public bool IsDead => HasFlag(UnitFlags.IsDead);
 
     public bool HasFlag(UnitFlags Flag)
     {
         return (Flags & Flag) != 0;
+    }
+
+    // Toggles a runtime flag. Used to drive disposition-based state (e.g. a friendly creature is
+    // not attackable) without exposing the raw bitmask.
+    public void SetFlag(UnitFlags Flag, bool Enable)
+    {
+        if (Enable)
+        {
+            Flags |= Flag;
+        }
+        else
+        {
+            Flags &= ~Flag;
+        }
     }
 
     // Applies a resolved damage packet: reduces health, announces it, and handles death once.

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4954171693554603920}
   - component: {fileID: 2012422170612279046}
   - component: {fileID: 7013888455638977258}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PF_Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
   MaxHealth: 100
-  Flags: 0
+  Flags: 4
 --- !u!114 &7013888455638977258
 MonoBehaviour:
   m_ObjectHideFlags: 0

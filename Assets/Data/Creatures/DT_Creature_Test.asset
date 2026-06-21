@@ -17,3 +17,9 @@ MonoBehaviour:
   WanderRadius: 8
   IdleTimeMin: 2
   IdleTimeMax: 5
+  Disposition: 2
+  AggroRange: 8
+  LeashRange: 15
+  MeleeRange: 2
+  MeleeDamage: 5
+  MeleeCooldown: 2
