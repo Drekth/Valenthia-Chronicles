@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="project://database/Assets/UI/ItemWindow.uss" />
+    <ui:Style src="project://database/Assets/UI/QuestLog/QuestLogPanel.uss" />
+    <ui:VisualElement name="QuestLogRoot" class="ui-window-root" picking-mode="Ignore">
+        <UIWindow name="QuestLogWindow" title="Journal de quêtes" window-width="640" window-height="420">
+            <ui:VisualElement name="QuestLogBody" class="questlog__body">
+                <!-- Master: clickable quest list -->
+                <ui:ScrollView name="QuestListScroll" class="questlog__list">
+                    <ui:VisualElement name="QuestList" />
+                </ui:ScrollView>
+                <!-- Detail pane -->
+                <ui:ScrollView name="QuestDetailScroll" class="questlog__detail">
+                    <ui:Label name="DetailTitle" class="questlog__detail-title" />
+                    <ui:Label name="DetailStatus" class="questlog__detail-status" />
+                    <ui:Label name="DetailSummary" class="questlog__detail-summary" />
+                    <ui:Label name="ObjectivesHeader" text="Objectifs" class="questlog__section-header" />
+                    <ui:VisualElement name="DetailObjectives" class="questlog__objectives" />
+                    <ui:Label name="RewardsHeader" text="Récompenses" class="questlog__section-header" />
+                    <ui:VisualElement name="DetailRewards" class="questlog__rewards" />
+                </ui:ScrollView>
+                <!-- Empty state -->
+                <ui:Label name="EmptyHint" text="Aucune quête active." class="questlog__empty" />
+            </ui:VisualElement>
+        </UIWindow>
+    </ui:VisualElement>
+</ui:UXML>

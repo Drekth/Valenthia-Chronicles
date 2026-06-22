@@ -11,6 +11,10 @@ public interface IQuestManager
     bool        CanOffer(QuestData Quest);
     bool        IsReadyToTurnIn(string QuestId);
     ActiveQuest GetActive(string QuestId);
+
+    // Every quest the manager knows about (active, ready-to-turn-in and completed). Consumers such
+    // as the quest journal filter on Status. Backed by the live dictionary, so it allocates nothing.
+    IReadOnlyCollection<ActiveQuest> AllQuests { get; }
 }
 
 // Runtime-only mutable progress for one quest. The QuestData definition stays immutable.
@@ -103,6 +107,8 @@ public class QuestManager : MonoBehaviour, IQuestManager
         }
         return null;
     }
+
+    public IReadOnlyCollection<ActiveQuest> AllQuests => Quests.Values;
 
     ////////////////////////////////////////////////////////////
     /// Private                                              ///
