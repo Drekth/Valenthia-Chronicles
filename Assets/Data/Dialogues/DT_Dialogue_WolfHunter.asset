@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388272bf694d349b2a37c0fbee8e0801, type: 3}
+  m_Name: DT_Dialogue_WolfHunter
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  DialogueId: wolf_hunter
+  EntryNodeGuid: start
+  GraphNodes:
+  - rid: 1575893144451940445
+  - rid: 1575893144451940446
+  - rid: 1575893144451940447
+  - rid: 1575893144451940448
+  - rid: 1575893144451940449
+  - rid: 1575893144451940450
+  - rid: 1575893144451940451
+  references:
+    version: 2
+    RefIds:
+    - rid: 1575893144451940445
+      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: start
+        NodePosition: {x: 0, y: 0}
+        NextNodeGuid: turnin
+        GreetingText: "Ah, un aventurier ! Les loups nous assaillent\u2026"
+    - rid: 1575893144451940446
+      type: {class: QuestTurnInNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: turnin
+        NodePosition: {x: 320, y: 0}
+        NextNodeGuid: 
+        TurnInQuest: {fileID: 11400000, guid: 8b2549f444ef442fea686f5e5e2fb25e, type: 2}
+        CompletedGuid: done_thanks
+        NotReadyGuid: offer
+    - rid: 1575893144451940447
+      type: {class: QuestOfferNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: offer
+        NodePosition: {x: 640, y: 140}
+        NextNodeGuid: 
+        OfferedQuest: {fileID: 11400000, guid: 8b2549f444ef442fea686f5e5e2fb25e, type: 2}
+        AcceptedGuid: accept_line
+        DeclinedGuid: decline_line
+    - rid: 1575893144451940448
+      type: {class: LineNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: accept_line
+        NodePosition: {x: 980, y: 60}
+        NextNodeGuid: end
+        SpeakerName: Garde
+        LineText: "Merci ! Les loups r\xF4dent vers l'ouest."
+    - rid: 1575893144451940449
+      type: {class: LineNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: decline_line
+        NodePosition: {x: 980, y: 260}
+        NextNodeGuid: end
+        SpeakerName: Garde
+        LineText: Reviens me voir si tu changes d'avis.
+    - rid: 1575893144451940450
+      type: {class: LineNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: done_thanks
+        NodePosition: {x: 640, y: -160}
+        NextNodeGuid: end
+        SpeakerName: Garde
+        LineText: "Tu as dispers\xE9 la meute ! Le village t'est redevable."
+    - rid: 1575893144451940451
+      type: {class: EndNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: end
+        NodePosition: {x: 1320, y: 60}
+        NextNodeGuid: 

@@ -74,7 +74,9 @@ public class DialogueRunner : MonoBehaviour
         }
     }
 
-    // Routes the flow through the chosen option of the current ChoiceNode.
+    // Routes the flow through the chosen option of the current ChoiceNode, or the accept/decline of
+    // a paused quest node (0 = accept / complete, 1 = decline / later). The same button channel as
+    // a choice, so the panel needs no extra callback.
     public void SubmitChoice(int Index)
     {
         if (!InDialogue)
@@ -85,6 +87,35 @@ public class DialogueRunner : MonoBehaviour
         if (CurrentNode is ChoiceNode Choice)
         {
             ResolveFrom(GetNode(Choice.GetOutputTarget(Index)));
+            return;
+        }
+
+        if (CurrentNode is QuestOfferNode Offer)
+        {
+            if (Index == 0)
+            {
+                IQuestManager Quests = ResolveQuests();
+                if (Quests != null)
+                {
+                    Quests.StartQuest(Offer.Quest);
+                }
+            }
+            ResolveFrom(GetNode(Offer.GetOutputTarget(Index)));
+            return;
+        }
+
+        if (CurrentNode is QuestTurnInNode TurnIn)
+        {
+            if (Index == 0 && TurnIn.Quest != null)
+            {
+                IQuestManager Quests = ResolveQuests();
+                if (Quests != null)
+                {
+                    Quests.CompleteQuest(TurnIn.Quest.Id);
+                }
+            }
+            ResolveFrom(GetNode(TurnIn.GetOutputTarget(Index)));
+            return;
         }
     }
 
@@ -155,6 +186,36 @@ public class DialogueRunner : MonoBehaviour
                 continue;
             }
 
+            if (Node is QuestOfferNode Offer)
+            {
+                IQuestManager Quests = ResolveQuests();
+                if (Quests != null && Quests.CanOffer(Offer.Quest))
+                {
+                    CurrentNode = Offer;
+                    EventBus<DialogueQuestOfferedEvent>.Raise(BuildQuestOffer(Offer.Quest, false));
+                    return;
+                }
+
+                // Nothing to offer (already taken / completed / unavailable) — take the Declined path.
+                Node = GetNode(Offer.GetOutputTarget(1));
+                continue;
+            }
+
+            if (Node is QuestTurnInNode TurnIn)
+            {
+                IQuestManager Quests = ResolveQuests();
+                if (Quests != null && TurnIn.Quest != null && Quests.IsReadyToTurnIn(TurnIn.Quest.Id))
+                {
+                    CurrentNode = TurnIn;
+                    EventBus<DialogueQuestOfferedEvent>.Raise(BuildQuestOffer(TurnIn.Quest, true));
+                    return;
+                }
+
+                // Not ready to hand in — take the NotReady path.
+                Node = GetNode(TurnIn.GetOutputTarget(1));
+                continue;
+            }
+
             if (Node is LineNode Line)
             {
                 CurrentNode = Line;
@@ -202,6 +263,63 @@ public class DialogueRunner : MonoBehaviour
             };
         }
         return Options;
+    }
+
+    private static IQuestManager ResolveQuests()
+    {
+        ServiceLocator.TryGet<IQuestManager>(out IQuestManager Manager);
+        return Manager;
+    }
+
+    // Builds the panel payload for a quest offer or hand-in: objective lines (offers only) and
+    // reward lines, as plain strings so the UI never touches QuestData. Runs on a discrete offer
+    // event, never per frame.
+    private static DialogueQuestOfferedEvent BuildQuestOffer(QuestData Quest, bool IsTurnIn)
+    {
+        return new DialogueQuestOfferedEvent
+        {
+            QuestTitle = Quest.Title,
+            Summary    = Quest.Summary,
+            Objectives = BuildObjectiveLines(Quest, IsTurnIn),
+            Rewards    = BuildRewardLines(Quest),
+            IsTurnIn   = IsTurnIn,
+        };
+    }
+
+    private static string[] BuildObjectiveLines(QuestData Quest, bool IsTurnIn)
+    {
+        if (IsTurnIn || Quest.Stages.Count == 0)
+        {
+            return System.Array.Empty<string>();
+        }
+
+        IReadOnlyList<QuestObjective> Objectives = Quest.Stages[0].Objectives;
+        string[] Lines = new string[Objectives.Count];
+        for (int Index = 0; Index < Objectives.Count; Index++)
+        {
+            Lines[Index] = Objectives[Index].Describe();
+        }
+        return Lines;
+    }
+
+    private static string[] BuildRewardLines(QuestData Quest)
+    {
+        IReadOnlyList<QuestReward> Rewards = Quest.Rewards;
+        if (Rewards == null || Rewards.Count == 0)
+        {
+            return System.Array.Empty<string>();
+        }
+
+        List<string> Lines = new List<string>(Rewards.Count);
+        for (int Index = 0; Index < Rewards.Count; Index++)
+        {
+            string Line = Rewards[Index].Describe();
+            if (!string.IsNullOrEmpty(Line))
+            {
+                Lines.Add(Line);
+            }
+        }
+        return Lines.ToArray();
     }
 
     // The configured entry node by Guid, falling back to the first StartNode in the graph.

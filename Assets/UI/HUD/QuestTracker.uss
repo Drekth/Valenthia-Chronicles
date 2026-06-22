@@ -1,0 +1,42 @@
+/* Valenthia — Quest Tracker HUD (UI Toolkit) */
+
+.quest-tracker {
+    position: absolute;
+    top: 80px;
+    right: 24px;
+    width: 280px;
+    align-items: flex-start;
+}
+
+.quest-tracker__header {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(220, 184, 70);
+    margin-bottom: 6px;
+}
+
+.quest-tracker__list {
+    align-items: flex-start;
+}
+
+.quest-title {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(232, 220, 181);
+    margin-top: 6px;
+    white-space: normal;
+}
+
+.quest-objective {
+    font-size: 12px;
+    color: rgb(196, 184, 150);
+    margin-left: 8px;
+    white-space: normal;
+}
+
+.quest-ready {
+    font-size: 12px;
+    color: rgb(120, 200, 120);
+    margin-left: 8px;
+    white-space: normal;
+}

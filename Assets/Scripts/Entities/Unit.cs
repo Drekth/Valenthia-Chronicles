@@ -6,6 +6,10 @@ public class Unit : MonoBehaviour
     /// Public                                               ///
     ////////////////////////////////////////////////////////////
 
+    // Stable identifier of what this unit is (e.g. "wolf"), used by quest KillObjective matching.
+    // Empty for units that are not quest targets.
+    public string Id => UnitId;
+
     public float CurrentHealth => Health;
     public float MaximumHealth => MaxHealth;
     public bool IsSelectable => HasFlag(UnitFlags.IsSelectable);
@@ -82,6 +86,9 @@ public class Unit : MonoBehaviour
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
+
+    [Header("Identity")]
+    [SerializeField] private string UnitId;
 
     [Header("Health")]
     [SerializeField] private float MaxHealth = 100.0f;

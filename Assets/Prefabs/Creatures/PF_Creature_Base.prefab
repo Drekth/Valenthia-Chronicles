@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21bdb4609fa684692a31eb446b7ac1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
+  UnitId: wolf
   MaxHealth: 100
   Flags: 1
 --- !u!195 &4206244394577406753

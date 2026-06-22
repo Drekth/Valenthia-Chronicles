@@ -37,6 +37,9 @@ public class DialoguePanelController : UIWindowController
 
         EndedBinding = new EventBinding<DialogueEndedEvent>(HandleEnded);
         EventBus<DialogueEndedEvent>.Register(EndedBinding);
+
+        QuestOfferedBinding = new EventBinding<DialogueQuestOfferedEvent>(HandleQuestOffered);
+        EventBus<DialogueQuestOfferedEvent>.Register(QuestOfferedBinding);
     }
 
     protected override void OnUnsubscribe()
@@ -45,6 +48,7 @@ public class DialoguePanelController : UIWindowController
         EventBus<DialogueLineShownEvent>.Deregister(LineBinding);
         EventBus<DialogueChoicesShownEvent>.Deregister(ChoicesBinding);
         EventBus<DialogueEndedEvent>.Deregister(EndedBinding);
+        EventBus<DialogueQuestOfferedEvent>.Deregister(QuestOfferedBinding);
     }
 
     // Show() resets the panel before the first event paints it.
@@ -109,6 +113,64 @@ public class DialoguePanelController : UIWindowController
         Hide();
     }
 
+    // A quest offer / hand-in pauses the conversation: the body shows the quest details and the
+    // option bar becomes Accept/Decline (or Complete/Later). The buttons route through the same
+    // SubmitChoice channel as ordinary choices (0 = accept/complete, 1 = decline/later).
+    private void HandleQuestOffered(DialogueQuestOfferedEvent Event)
+    {
+        if (BodyLabel != null)
+        {
+            BodyLabel.text = BuildQuestBody(Event);
+        }
+
+        ClearOptions();
+
+        if (Event.IsTurnIn)
+        {
+            AddOption("Terminer la quête", () => SubmitChoice(0));
+            AddOption("Plus tard", () => SubmitChoice(1));
+        }
+        else
+        {
+            AddOption("Accepter", () => SubmitChoice(0));
+            AddOption("Refuser", () => SubmitChoice(1));
+        }
+    }
+
+    private static string BuildQuestBody(DialogueQuestOfferedEvent Event)
+    {
+        System.Text.StringBuilder Builder = new System.Text.StringBuilder();
+        Builder.Append(Event.QuestTitle);
+
+        if (!string.IsNullOrEmpty(Event.Summary))
+        {
+            Builder.Append("\n\n");
+            Builder.Append(Event.Summary);
+        }
+
+        if (Event.Objectives != null && Event.Objectives.Length > 0)
+        {
+            Builder.Append("\n\nObjectifs :");
+            for (int Index = 0; Index < Event.Objectives.Length; Index++)
+            {
+                Builder.Append("\n- ");
+                Builder.Append(Event.Objectives[Index]);
+            }
+        }
+
+        if (Event.Rewards != null && Event.Rewards.Length > 0)
+        {
+            Builder.Append("\n\nRécompenses :");
+            for (int Index = 0; Index < Event.Rewards.Length; Index++)
+            {
+                Builder.Append("\n- ");
+                Builder.Append(Event.Rewards[Index]);
+            }
+        }
+
+        return Builder.ToString();
+    }
+
     private void AddOption(string Text, System.Action OnClick)
     {
         if (OptionsBox == null)
@@ -167,4 +229,5 @@ public class DialoguePanelController : UIWindowController
     private EventBinding<DialogueLineShownEvent>     LineBinding;
     private EventBinding<DialogueChoicesShownEvent>  ChoicesBinding;
     private EventBinding<DialogueEndedEvent>          EndedBinding;
+    private EventBinding<DialogueQuestOfferedEvent>   QuestOfferedBinding;
 }

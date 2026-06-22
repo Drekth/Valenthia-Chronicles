@@ -31,6 +31,20 @@ public struct DialogueEndedEvent : IEvent
 {
 }
 
+// Presents a WoW-style quest offer (IsTurnIn false) or hand-in (IsTurnIn true) inside the dialogue
+// panel. The runner pauses on a QuestOfferNode / QuestTurnInNode, raises this, and waits for the
+// panel to call back through DialogueRunner.SubmitChoice — 0 = accept / complete, 1 = decline /
+// later — exactly the channel a ChoiceNode uses. Payload is strings so the panel stays decoupled
+// from QuestData.
+public struct DialogueQuestOfferedEvent : IEvent
+{
+    public string   QuestTitle;
+    public string   Summary;
+    public string[] Objectives;
+    public string[] Rewards;
+    public bool     IsTurnIn;
+}
+
 // One selectable option carried in DialogueChoicesShownEvent: the text to display and the index the
 // UI passes back to DialogueRunner.SubmitChoice.
 public struct DialogueOption

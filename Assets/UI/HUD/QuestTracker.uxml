@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="project://database/Assets/UI/HUD/QuestTracker.uss" />
+    <ui:VisualElement name="QuestTrackerRoot" class="quest-tracker" picking-mode="Ignore">
+        <ui:Label name="QuestTrackerHeader" text="Quêtes" class="quest-tracker__header" picking-mode="Ignore" />
+        <ui:VisualElement name="QuestList" class="quest-tracker__list" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

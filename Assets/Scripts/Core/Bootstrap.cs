@@ -16,6 +16,7 @@ public class Bootstrap : MonoBehaviour
         AudioManagerRef.gameObject.SetActive(true);
         TimeManagerRef.gameObject.SetActive(true);
         SceneLoaderRef.gameObject.SetActive(true);
+        QuestManagerRef.gameObject.SetActive(true);
     }
 
     private async UniTaskVoid Start()
@@ -31,6 +32,7 @@ public class Bootstrap : MonoBehaviour
         if (AudioManagerRef == null) { Debug.LogError("[Bootstrap] AudioManager is not assigned.", this); Valid = false; }
         if (TimeManagerRef  == null) { Debug.LogError("[Bootstrap] TimeManager is not assigned.",  this); Valid = false; }
         if (SceneLoaderRef  == null) { Debug.LogError("[Bootstrap] SceneLoader is not assigned.",  this); Valid = false; }
+        if (QuestManagerRef == null) { Debug.LogError("[Bootstrap] QuestManager is not assigned.", this); Valid = false; }
 
         return Valid;
     }
@@ -43,6 +45,7 @@ public class Bootstrap : MonoBehaviour
     [SerializeField] private AudioManager AudioManagerRef;
     [SerializeField] private TimeManager TimeManagerRef;
     [SerializeField] private SceneLoader SceneLoaderRef;
+    [SerializeField] private QuestManager QuestManagerRef;
 
     [Header("Initial Scenes")]
     [SerializeField] private string UISceneName   = "SC_UI";

@@ -15,43 +15,43 @@ MonoBehaviour:
   DialogueId: test_greeting
   EntryNodeGuid: start
   GraphNodes:
-  - rid: 1575893141688680547
-  - rid: 1575893141688680548
-  - rid: 1575893141688680549
-  - rid: 1575893141688680550
+  - rid: 1575893141688680551
+  - rid: 1575893141688680552
+  - rid: 1575893141688680553
+  - rid: 1575893141688680554
   references:
     version: 2
     RefIds:
-    - rid: 1575893141688680547
+    - rid: 1575893141688680551
       type: {class: StartNode, ns: , asm: Assembly-CSharp}
       data:
         NodeGuid: start
         NodePosition: {x: 0, y: 0}
         NextNodeGuid: choice
         GreetingText: Bonjour, voyageur ! Que puis-je pour toi ?
-    - rid: 1575893141688680548
+    - rid: 1575893141688680552
       type: {class: ChoiceNode, ns: , asm: Assembly-CSharp}
       data:
         NodeGuid: choice
-        NodePosition: {x: 280, y: 0}
+        NodePosition: {x: 320, y: 0}
         NextNodeGuid: 
         ChoiceList:
         - ChoiceText: Parle-moi du village.
           Target: about
         - ChoiceText: Au revoir.
           Target: end
-    - rid: 1575893141688680549
+    - rid: 1575893141688680553
       type: {class: LineNode, ns: , asm: Assembly-CSharp}
       data:
         NodeGuid: about
-        NodePosition: {x: 560, y: 220}
+        NodePosition: {x: 640, y: 220}
         NextNodeGuid: choice
         SpeakerName: Villageois
         LineText: Notre village vit du commerce, mais les routes du nord sont devenues
           bien dangereuses.
-    - rid: 1575893141688680550
+    - rid: 1575893141688680554
       type: {class: EndNode, ns: , asm: Assembly-CSharp}
       data:
         NodeGuid: end
-        NodePosition: {x: 560, y: 0}
+        NodePosition: {x: 640, y: 0}
         NextNodeGuid: 
