@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="project://database/Assets/UI/ItemWindow.uss" />
+    <ui:Style src="project://database/Assets/UI/Dialogue/DialogueWindow.uss" />
+    <ui:VisualElement name="DialogueRoot" class="dialogue-root" picking-mode="Ignore">
+        <UIWindow name="DialogueWindow" title="" window-width="440">
+            <ui:Label name="Body" class="dialogue-text" />
+            <ui:VisualElement name="Options" class="dialogue-options" />
+        </UIWindow>
+    </ui:VisualElement>
+</ui:UXML>

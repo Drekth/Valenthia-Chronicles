@@ -37,6 +37,12 @@ public class ContainerInteractor : MonoBehaviour
 
         ContainerClosedBinding = new EventBinding<ContainerClosedEvent>(HandleContainerClosed);
         EventBus<ContainerClosedEvent>.Register(ContainerClosedBinding);
+
+        DialogueStartedBinding = new EventBinding<DialogueStartedEvent>(HandleDialogueStarted);
+        EventBus<DialogueStartedEvent>.Register(DialogueStartedBinding);
+
+        DialogueEndedBinding = new EventBinding<DialogueEndedEvent>(HandleDialogueEnded);
+        EventBus<DialogueEndedEvent>.Register(DialogueEndedBinding);
     }
 
     private void OnDisable()
@@ -48,6 +54,8 @@ public class ContainerInteractor : MonoBehaviour
 
         EventBus<ContainerOpenedEvent>.Deregister(ContainerOpenedBinding);
         EventBus<ContainerClosedEvent>.Deregister(ContainerClosedBinding);
+        EventBus<DialogueStartedEvent>.Deregister(DialogueStartedBinding);
+        EventBus<DialogueEndedEvent>.Deregister(DialogueEndedBinding);
     }
 
     private void OnDestroy()
@@ -91,6 +99,16 @@ public class ContainerInteractor : MonoBehaviour
         Blocked = false;
     }
 
+    private void HandleDialogueStarted(DialogueStartedEvent Event)
+    {
+        Blocked = true;
+    }
+
+    private void HandleDialogueEnded()
+    {
+        Blocked = false;
+    }
+
     ////////////////////////////////////////////////////////////
     /// Fields                                               ///
     ////////////////////////////////////////////////////////////
@@ -106,4 +124,6 @@ public class ContainerInteractor : MonoBehaviour
     private bool Blocked;
     private EventBinding<ContainerOpenedEvent> ContainerOpenedBinding;
     private EventBinding<ContainerClosedEvent> ContainerClosedBinding;
+    private EventBinding<DialogueStartedEvent> DialogueStartedBinding;
+    private EventBinding<DialogueEndedEvent> DialogueEndedBinding;
 }

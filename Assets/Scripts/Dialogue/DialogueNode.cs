@@ -48,13 +48,33 @@ public abstract class DialogueNode
 }
 
 // Entry point of the graph. No incoming connection and a single "Next" output; the runner starts
-// here. Titled "Greeting" — a conversation opens on it.
+// here. Titled "Greeting" — a conversation opens on it. Carries the opening line shown when the
+// dialogue is first opened (the WoW-style greeting), so no separate LineNode is needed for it.
+// Leaving the text empty makes it a pure pass-through entry.
 [Serializable]
 public class StartNode : DialogueNode
 {
     public override string DisplayName  => "Greeting";
     public override bool   AcceptsInput => false;
-    public override string Summary      => "Conversation start";
+
+    public string Text => GreetingText;
+
+    public override string Summary
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(GreetingText))
+            {
+                return "Conversation start";
+            }
+            return DialoguePreview.Shorten(GreetingText, PreviewLength);
+        }
+    }
+
+    private const int PreviewLength = 40;
+
+    [TextArea]
+    [SerializeField] private string GreetingText;
 }
 
 // Terminates the conversation. No outgoing connection.
@@ -157,6 +177,10 @@ public class ChoiceNode : DialogueNode
     ////////////////////////////////////////////////////////////
 
     public override string DisplayName => "Choice";
+
+    // Exposes the authored choices so the runtime DialogueRunner can read their text; the targets
+    // are still reached through GetOutputTarget(Index), keeping the by-Guid wiring authoritative.
+    public IReadOnlyList<DialogueChoice> Choices => ChoiceList;
 
     public override int    OutputCount              => ChoiceList.Count;
     public override string GetOutputLabel(int Index) => $"Choice {Index + 1}";

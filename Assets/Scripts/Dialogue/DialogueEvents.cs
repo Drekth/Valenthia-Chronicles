@@ -1,0 +1,40 @@
+// Dialogue domain events, published by the DialogueRunner and consumed by the DialoguePanel UI.
+// The runner never touches the UI directly: it raises these and waits for the UI to call back
+// (Advance / SubmitChoice) — same decoupling as the loot window over the container channels.
+
+// Announces that a conversation has begun, carrying the speaking NPC's display name so the panel
+// can title itself before the first line arrives.
+public struct DialogueStartedEvent : IEvent
+{
+    public string DialogueId;
+    public string NpcName;
+}
+
+// One spoken line. IsFinal is true when advancing past it ends the conversation, so the UI can
+// label its button "Au revoir" instead of "Continuer".
+public struct DialogueLineShownEvent : IEvent
+{
+    public string Speaker;
+    public string Text;
+    public bool   IsFinal;
+}
+
+// Presents the player's options for the current ChoiceNode. The array is allocated only when a
+// choice is shown (on player input), never per frame.
+public struct DialogueChoicesShownEvent : IEvent
+{
+    public DialogueOption[] Options;
+}
+
+// Notifies that the conversation has ended (no payload).
+public struct DialogueEndedEvent : IEvent
+{
+}
+
+// One selectable option carried in DialogueChoicesShownEvent: the text to display and the index the
+// UI passes back to DialogueRunner.SubmitChoice.
+public struct DialogueOption
+{
+    public int    Index;
+    public string Text;
+}
