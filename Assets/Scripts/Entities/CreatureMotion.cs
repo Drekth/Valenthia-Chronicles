@@ -48,6 +48,7 @@ public class CreatureMotion : MonoBehaviour
         Chase            = new ChaseMovement();
         CurrentGenerator = Wander;
 
+        ApplyStatProfile();
         SpawnVisual();
     }
 
@@ -65,6 +66,29 @@ public class CreatureMotion : MonoBehaviour
         if (ServiceLocator.TryGet<MotionManager>(out MotionManager Manager))
         {
             Manager.Unregister(this);
+        }
+    }
+
+    // Routes the creature's authored stat profile (carried by its CreatureData) into the StatComponent,
+    // so every creature stat has a single source. Runs in Awake — before Unit.Start reads the
+    // derived maxima. A missing profile is left to the StatComponent (Get returns 0) and warned here.
+    private void ApplyStatProfile()
+    {
+        if (CreatureDataAsset == null)
+        {
+            return;
+        }
+
+        if (CreatureDataAsset.Stats == null)
+        {
+            Debug.LogWarning($"[CreatureMotion] {name} has no StatProfile on its CreatureData.", this);
+            return;
+        }
+
+        StatComponent Sheet = GetComponent<StatComponent>();
+        if (Sheet != null)
+        {
+            Sheet.SetData(CreatureDataAsset.Stats);
         }
     }
 

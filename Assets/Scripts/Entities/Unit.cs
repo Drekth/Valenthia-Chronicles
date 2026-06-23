@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(StatComponent))]
 public class Unit : MonoBehaviour
 {
     ////////////////////////////////////////////////////////////
@@ -12,9 +13,9 @@ public class Unit : MonoBehaviour
     public string Id => UnitId;
 
     public float CurrentHealth => Health;
-    public float MaximumHealth => MaxHealth;
+    public float MaximumHealth => Stats.Get(StatType.MaxHealth);
     public float CurrentMana   => Mana;
-    public float MaximumMana   => MaxMana;
+    public float MaximumMana   => Stats.Get(StatType.MaxMana);
     public bool IsSelectable      => HasFlag(UnitFlags.IsSelectable);
     public bool IsAttackable      => HasFlag(UnitFlags.IsAttackable);
     public bool IsDead            => HasFlag(UnitFlags.IsDead);
@@ -63,7 +64,7 @@ public class Unit : MonoBehaviour
         {
             Target        = this,
             CurrentHealth = Health,
-            MaxHealth     = MaxHealth,
+            MaxHealth     = MaximumHealth,
         });
 
         EnterCombat();
@@ -87,7 +88,7 @@ public class Unit : MonoBehaviour
             return;
         }
 
-        float Actual = Mathf.Min(Amount, MaxHealth - Health);
+        float Actual = Mathf.Min(Amount, MaximumHealth - Health);
         if (Actual <= 0.0f)
         {
             return;
@@ -99,7 +100,7 @@ public class Unit : MonoBehaviour
         {
             Target        = this,
             CurrentHealth = Health,
-            MaxHealth     = MaxHealth,
+            MaxHealth     = MaximumHealth,
         });
     }
 
@@ -117,7 +118,7 @@ public class Unit : MonoBehaviour
         {
             Target      = this,
             CurrentMana = Mana,
-            MaxMana     = MaxMana,
+            MaxMana     = MaximumMana,
         });
 
         return true;
@@ -131,7 +132,7 @@ public class Unit : MonoBehaviour
             return;
         }
 
-        float Actual = Mathf.Min(Amount, MaxMana - Mana);
+        float Actual = Mathf.Min(Amount, MaximumMana - Mana);
         if (Actual <= 0.0f)
         {
             return;
@@ -143,7 +144,7 @@ public class Unit : MonoBehaviour
         {
             Target      = this,
             CurrentMana = Mana,
-            MaxMana     = MaxMana,
+            MaxMana     = MaximumMana,
         });
     }
 
@@ -195,8 +196,33 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
-        Health = MaxHealth;
-        Mana   = MaxMana;
+        Stats = GetComponent<StatComponent>();
+    }
+
+    // Current pools start full. Done in Start (not Awake) so a creature's StatComponent has already
+    // received its profile from CreatureData (CreatureMotion.Awake) before we read the derived
+    // maxima.
+    private void Start()
+    {
+        Health = MaximumHealth;
+        Mana   = MaximumMana;
+
+        // Announce starting vitals so UI that bound before Start (e.g. the HUD on
+        // PlayerSpawnedEvent, raised in OnEnable) reflects the initial pools instead of the
+        // pre-Start zero. Listeners that don't track this unit simply ignore it.
+        EventBus<UnitHealthChangedEvent>.Raise(new UnitHealthChangedEvent
+        {
+            Target        = this,
+            CurrentHealth = Health,
+            MaxHealth     = MaximumHealth,
+        });
+
+        EventBus<ManaChangedEvent>.Raise(new ManaChangedEvent
+        {
+            Target      = this,
+            CurrentMana = Mana,
+            MaxMana     = MaximumMana,
+        });
     }
 
     // Marks the unit dead (so it stops being selectable/attackable), exits combat, and announces
@@ -249,12 +275,6 @@ public class Unit : MonoBehaviour
     [Header("Identity")]
     [SerializeField] private string UnitId;
 
-    [Header("Health")]
-    [SerializeField] private float MaxHealth = 100.0f;
-
-    [Header("Mana")]
-    [SerializeField] private float MaxMana = 100.0f;
-
     [Header("Combat")]
     // Auto-exit delay after the last combat action (damage dealt or received). 0 = disabled;
     // AI-driven creatures leave this at 0 so their brain controls combat state directly.
@@ -267,4 +287,5 @@ public class Unit : MonoBehaviour
     private float Health;
     private float Mana;
     private Coroutine CombatExitRoutine;
+    private StatComponent Stats;
 }

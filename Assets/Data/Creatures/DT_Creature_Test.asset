@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DT_Creature_Test
   m_EditorClassIdentifier: Assembly-CSharp::CreatureData
   ModelPrefab: {fileID: 0}
+  StatProfileAsset: {fileID: 11400000, guid: 7ef039ac13f3540e2aa2d7de4552afc1, type: 2}
   MoveSpeed: 3.5
   WanderRadius: 8
   IdleTimeMin: 2

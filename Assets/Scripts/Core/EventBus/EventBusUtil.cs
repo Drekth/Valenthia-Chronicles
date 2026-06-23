@@ -67,6 +67,12 @@ public static class EventBusUtil {
     /// Clears (removes all listeners from) all event buses in the application.
     /// </summary>
     public static void ClearAllBuses() {
+        // Initialize() runs on BeforeSceneLoad; with domain reload disabled a mid-play script reload
+        // can skip it, leaving EventBusTypes null. Guard so the play-exit clear never throws.
+        if (EventBusTypes == null) {
+            return;
+        }
+
         Debug.Log("Clearing all buses...");
         for (int i = 0; i < EventBusTypes.Count; i++) {
             var busType = EventBusTypes[i];

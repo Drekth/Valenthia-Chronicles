@@ -7,11 +7,12 @@ public class CreatureData : ScriptableObject
     /// Public                                               ///
     ////////////////////////////////////////////////////////////
 
-    public GameObject Model   => ModelPrefab;
-    public float      Speed   => MoveSpeed;
-    public float      Radius  => WanderRadius;
-    public float      MinIdle => IdleTimeMin;
-    public float      MaxIdle => IdleTimeMax;
+    public GameObject      Model   => ModelPrefab;
+    public StatData Stats   => StatProfileAsset;
+    public float           Speed   => MoveSpeed;
+    public float           Radius  => WanderRadius;
+    public float           MinIdle => IdleTimeMin;
+    public float           MaxIdle => IdleTimeMax;
 
     public ReactState Reaction       => Disposition;
     public float      AggroRadius    => AggroRange;
@@ -26,6 +27,11 @@ public class CreatureData : ScriptableObject
 
     [Header("Visual")]
     [SerializeField] private GameObject ModelPrefab;
+
+    [Header("Stats")]
+    // Single source of truth for this creature's stats (health/mana via Stamina/Intellect).
+    // Pushed into the StatSheet at spawn by CreatureMotion.
+    [SerializeField] private StatData StatProfileAsset;
 
     [Header("Movement")]
     [SerializeField] private float MoveSpeed    = 3.5f;
