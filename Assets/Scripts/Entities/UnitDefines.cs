@@ -5,9 +5,10 @@ using System;
 [Flags]
 public enum UnitFlags
 {
-    None         = 0,
-    IsSelectable = 1 << 0,
-    IsDead       = 1 << 1,
-    IsAttackable = 1 << 2,
-    InCombat     = 1 << 3,
+    None             = 0,
+    IsSelectable     = 1 << 0,
+    IsDead           = 1 << 1,
+    IsAttackable     = 1 << 2,
+    InCombat         = 1 << 3,
+    MovementDisabled = 1 << 4,
 }

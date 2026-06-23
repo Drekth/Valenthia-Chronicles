@@ -60,6 +60,15 @@ public class MotionManager : MonoBehaviour
             NavMeshAgent   Agent  = Creatures[I].Agent;
             CreatureAI     AI     = Creatures[I].AI;
 
+            if (Motion.Owner != null && Motion.Owner.IsMovementDisabled)
+            {
+                if (Agent.isOnNavMesh)
+                {
+                    Agent.ResetPath();
+                }
+                continue;
+            }
+
             // The brain decides (and may swap the active generator) before the generator moves.
             if (AI != null)
             {

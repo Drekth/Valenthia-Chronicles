@@ -15,10 +15,11 @@ public class Unit : MonoBehaviour
     public float MaximumHealth => MaxHealth;
     public float CurrentMana   => Mana;
     public float MaximumMana   => MaxMana;
-    public bool IsSelectable   => HasFlag(UnitFlags.IsSelectable);
-    public bool IsAttackable   => HasFlag(UnitFlags.IsAttackable);
-    public bool IsDead         => HasFlag(UnitFlags.IsDead);
-    public bool InCombat       => HasFlag(UnitFlags.InCombat);
+    public bool IsSelectable      => HasFlag(UnitFlags.IsSelectable);
+    public bool IsAttackable      => HasFlag(UnitFlags.IsAttackable);
+    public bool IsDead            => HasFlag(UnitFlags.IsDead);
+    public bool InCombat          => HasFlag(UnitFlags.InCombat);
+    public bool IsMovementDisabled => HasFlag(UnitFlags.MovementDisabled);
 
     public bool HasFlag(UnitFlags Flag)
     {
@@ -202,7 +203,7 @@ public class Unit : MonoBehaviour
     // it once, so selection clearing, loot, and death visuals can react without polling.
     private void Die(Unit Killer)
     {
-        Flags |= UnitFlags.IsDead;
+        Flags |= UnitFlags.IsDead | UnitFlags.MovementDisabled;
         Flags &= ~(UnitFlags.IsSelectable | UnitFlags.IsAttackable);
 
         ExitCombat();

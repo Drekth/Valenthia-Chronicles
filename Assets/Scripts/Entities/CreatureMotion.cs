@@ -10,6 +10,9 @@ public class CreatureMotion : MonoBehaviour
 
     public CreatureData Data => CreatureDataAsset;
 
+    // Unit on this same GameObject; may be null if the creature has no Unit component.
+    public Unit Owner { get; private set; }
+
     // Spawn anchor: wander samples around it and the AI leashes back to it.
     public Vector3 Origin;
 
@@ -38,6 +41,7 @@ public class CreatureMotion : MonoBehaviour
     private void Awake()
     {
         NavAgent = GetComponent<NavMeshAgent>();
+        Owner    = GetComponent<Unit>();
         Origin   = transform.position;
 
         Wander           = new WanderMovement();
