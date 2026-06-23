@@ -1,0 +1,128 @@
+/* Valenthia — Spellbook / Grimoire (master-detail) — UI Toolkit */
+
+.spellbook__body {
+    flex-direction: row;
+    height: 100%;
+}
+
+/* ---- Master: spell list ---- */
+
+.spellbook__list {
+    width: 220px;
+    flex-shrink: 0;
+    margin-right: 10px;
+    padding-right: 10px;
+    border-right-width: 1px;
+    border-right-color: rgb(78, 62, 34);
+}
+
+.spellbook__entry {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0);
+}
+
+.spellbook__entry:hover {
+    background-color: rgb(38, 32, 24);
+}
+
+.spellbook__entry--selected {
+    background-color: rgb(54, 45, 33);
+    border-left-color: rgb(220, 184, 70);
+}
+
+.spellbook__entry-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    margin-right: 8px;
+    background-color: rgb(28, 24, 18);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.spellbook__entry-name {
+    font-size: 13px;
+    color: rgb(232, 220, 181);
+    -unity-text-align: middle-left;
+    white-space: normal;
+    flex-shrink: 1;
+}
+
+/* ---- Detail pane ---- */
+
+.spellbook__detail {
+    flex-grow: 1;
+}
+
+.spellbook__detail-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.spellbook__detail-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    margin-right: 10px;
+    background-color: rgb(28, 24, 18);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.spellbook__detail-name {
+    font-size: 18px;
+    color: rgb(220, 184, 70);
+    -unity-font-style: bold;
+    white-space: normal;
+    flex-shrink: 1;
+}
+
+.spellbook__detail-line {
+    font-size: 13px;
+    color: rgb(232, 220, 181);
+    margin-bottom: 2px;
+    white-space: normal;
+}
+
+.spellbook__detail-hint {
+    font-size: 12px;
+    color: rgb(150, 140, 115);
+    -unity-font-style: italic;
+    margin-top: 8px;
+    margin-bottom: 6px;
+    white-space: normal;
+}
+
+.spellbook__detail-description {
+    font-size: 13px;
+    color: rgb(196, 184, 150);
+    white-space: normal;
+}
+
+/* ---- Empty state ---- */
+
+.spellbook__empty {
+    flex-grow: 1;
+    font-size: 14px;
+    color: rgb(196, 184, 150);
+    -unity-text-align: middle-center;
+    display: none;
+}
+
+/* ---- Drag ghost ---- */
+
+.spellbook__drag-ghost {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    display: none;
+    -unity-background-scale-mode: scale-to-fit;
+    opacity: 0.85;
+}

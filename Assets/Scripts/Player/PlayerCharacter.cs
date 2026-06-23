@@ -106,21 +106,16 @@ public class PlayerCharacter : MonoBehaviour
 
     private void OnEnable()
     {
-        // Announce this body so the persistent PlayerController can possess it.
+        // Announce this body so the persistent PlayerController can possess it. The HUD loadout is
+        // owned by PlayerHotbar (persistent rig), which repaints the slot icons on this same event.
         EventBus<PlayerSpawnedEvent>.Raise(new PlayerSpawnedEvent { Character = this });
-
-        // Publish the action-bar loadout so the HUD can paint the slot icons. Single basic attack
-        // in slot 0 for now; a future PlayerHotbar would back ResolveSlot with a real spellbook.
-        PublishHotbar(false);
     }
 
     private void OnDisable()
     {
-        // Despawn (e.g. zone unload): tell the brain there is no body left to drive.
+        // Despawn (e.g. zone unload): tell the brain there is no body left to drive. The action-bar
+        // loadout is owned by the persistent PlayerHotbar and intentionally survives the despawn.
         EventBus<PlayerSpawnedEvent>.Raise(new PlayerSpawnedEvent { Character = null });
-
-        // Clear every action-bar slot this body owned.
-        PublishHotbar(true);
 
         // Drop any running auto-attack so a re-spawned body starts idle.
         AutoAttacking = false;
@@ -172,25 +167,16 @@ public class PlayerCharacter : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, TargetRotation, RotationSpeed * Time.deltaTime);
     }
 
-    // The spell bound to an action-bar slot. Slot 0 is the basic attack; the rest are empty until a
-    // real spellbook exists. Single place that maps slots to spells, shared by casting and the HUD.
+    // The spell bound to an action-bar slot, read from the persistent PlayerHotbar. Returns null when
+    // the slot is empty or no hotbar is registered yet. Single place mapping slots to spells for the cast.
     private SpellData ResolveSlot(int Slot)
     {
-        return Slot == 0 ? BasicAttack : null;
-    }
-
-    // Raises one HotbarSlotAssignedEvent per slot so the HUD mirrors the loadout exactly. When
-    // Clear is true every slot is emptied (despawn); otherwise each slot reflects ResolveSlot.
-    private void PublishHotbar(bool Clear)
-    {
-        for (int Slot = 0; Slot < HUDActionBar.SlotCount; Slot++)
+        if (!ServiceLocator.TryGet<PlayerHotbar>(out PlayerHotbar Hotbar))
         {
-            EventBus<HotbarSlotAssignedEvent>.Raise(new HotbarSlotAssignedEvent
-            {
-                Slot  = Slot,
-                Spell = Clear ? null : ResolveSlot(Slot),
-            });
+            return null;
         }
+
+        return Hotbar.GetSlot(Slot);
     }
 
     // Converts world-space Direction to local space so the blend tree works correctly
@@ -222,7 +208,6 @@ public class PlayerCharacter : MonoBehaviour
     [SerializeField] private Animator PlayerAnimator;
 
     [Header("Combat")]
-    [SerializeField] private SpellData BasicAttack;
     [SerializeField] private SpellData AutoAttack;
 
     private CharacterController Character;

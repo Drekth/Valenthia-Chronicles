@@ -851,6 +851,8 @@ GameObject:
   - component: {fileID: 1463626401}
   - component: {fileID: 1463626402}
   - component: {fileID: 1463626403}
+  - component: {fileID: 1463626405}
+  - component: {fileID: 1463626404}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -1058,6 +1060,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9678b33ff2ac42b095640324af557c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueRunner
+--- !u!114 &1463626404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463626390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf48f317dffd4746bbddb2f95bca5da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpellbook
+  Spells:
+  - {fileID: 11400000, guid: 14836c353f77c43599aebe6285f8faec, type: 2}
+  - {fileID: 11400000, guid: 6aeb3d7b53dd431684d225483d3223b5, type: 2}
+--- !u!114 &1463626405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463626390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29c98567826b4dac97ff9677571d333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHotbar
+  DefaultLoadout:
+  - {fileID: 11400000, guid: 14836c353f77c43599aebe6285f8faec, type: 2}
 --- !u!1 &1476693035
 GameObject:
   m_ObjectHideFlags: 0

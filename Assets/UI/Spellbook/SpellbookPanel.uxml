@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="project://database/Assets/UI/ItemWindow.uss" />
+    <ui:Style src="project://database/Assets/UI/Spellbook/SpellbookPanel.uss" />
+    <ui:VisualElement name="SpellbookRoot" class="ui-window-root" picking-mode="Ignore">
+        <UIWindow name="SpellbookWindow" title="Grimoire" window-width="640" window-height="420">
+            <ui:VisualElement name="SpellbookBody" class="spellbook__body">
+                <!-- Master: known-spell list -->
+                <ui:ScrollView name="SpellListScroll" class="spellbook__list">
+                    <ui:VisualElement name="SpellList" />
+                </ui:ScrollView>
+                <!-- Detail pane -->
+                <ui:ScrollView name="SpellDetailScroll" class="spellbook__detail">
+                    <ui:VisualElement name="DetailHeader" class="spellbook__detail-header">
+                        <ui:VisualElement name="DetailIcon" class="spellbook__detail-icon" />
+                        <ui:Label name="DetailName" class="spellbook__detail-name" />
+                    </ui:VisualElement>
+                    <ui:Label name="DetailManaCost" class="spellbook__detail-line" />
+                    <ui:Label name="DetailCooldown" class="spellbook__detail-line" />
+                    <ui:Label name="DetailRange" class="spellbook__detail-line" />
+                    <ui:Label name="DetailHint" text="Glissez un sort sur la barre d'action pour l'assigner." class="spellbook__detail-hint" />
+                    <ui:Label name="DetailDescription" class="spellbook__detail-description" />
+                </ui:ScrollView>
+                <!-- Empty state -->
+                <ui:Label name="EmptyHint" text="Aucun sort connu." class="spellbook__empty" />
+            </ui:VisualElement>
+        </UIWindow>
+        <!-- Floating ghost that follows the cursor during a drag -->
+        <ui:VisualElement name="DragGhost" class="spellbook__drag-ghost" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

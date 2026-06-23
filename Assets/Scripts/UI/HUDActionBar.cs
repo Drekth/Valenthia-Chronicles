@@ -78,6 +78,9 @@ public class HUDActionBar : MonoBehaviour
         ManaChangedBinding = new EventBinding<ManaChangedEvent>(HandleManaChanged);
         EventBus<ManaChangedEvent>.Register(ManaChangedBinding);
 
+        SpellDragDroppedBinding = new EventBinding<SpellDragDroppedEvent>(HandleSpellDragDropped);
+        EventBus<SpellDragDroppedEvent>.Register(SpellDragDroppedBinding);
+
         // Snapshot current state in case the player was already spawned before this enable.
         RefreshFromPlayerUnit();
     }
@@ -88,6 +91,7 @@ public class HUDActionBar : MonoBehaviour
         EventBus<HotbarSlotAssignedEvent>.Deregister(SlotAssignedBinding);
         EventBus<UnitHealthChangedEvent>.Deregister(HealthChangedBinding);
         EventBus<ManaChangedEvent>.Deregister(ManaChangedBinding);
+        EventBus<SpellDragDroppedEvent>.Deregister(SpellDragDroppedBinding);
     }
 
     private void HandlePlayerSpawned(PlayerSpawnedEvent Event)
@@ -121,6 +125,28 @@ public class HUDActionBar : MonoBehaviour
         SetManaPercent(Event.CurrentMana / Event.MaxMana);
     }
 
+    // A spell was dropped from the spellbook: find which slot (if any) the pointer landed on and
+    // request its assignment. Positions are in shared panel space, so they compare directly to the
+    // slot worldBounds. The actual binding and icon repaint flow back through PlayerHotbar.
+    private void HandleSpellDragDropped(SpellDragDroppedEvent Event)
+    {
+        for (int Index = 0; Index < SlotCount; Index++)
+        {
+            VisualElement Slot = Slots[Index];
+            if (Slot == null || !Slot.worldBound.Contains(Event.PanelPosition))
+            {
+                continue;
+            }
+
+            EventBus<HotbarAssignRequestedEvent>.Raise(new HotbarAssignRequestedEvent
+            {
+                Slot  = Index,
+                Spell = Event.Spell,
+            });
+            return;
+        }
+    }
+
     private void RefreshFromPlayerUnit()
     {
         if (PlayerUnit != null)
@@ -149,6 +175,7 @@ public class HUDActionBar : MonoBehaviour
         for (int I = 0; I < SlotCount; I++)
         {
             VisualElement Slot = Root.Q<VisualElement>("Slot" + (I + 1));
+            Slots[I]     = Slot;
             SlotIcons[I] = Slot != null ? Slot.Q<VisualElement>("Icon") : null;
         }
     }
@@ -164,8 +191,10 @@ public class HUDActionBar : MonoBehaviour
     private EventBinding<HotbarSlotAssignedEvent> SlotAssignedBinding;
     private EventBinding<UnitHealthChangedEvent>  HealthChangedBinding;
     private EventBinding<ManaChangedEvent>        ManaChangedBinding;
+    private EventBinding<SpellDragDroppedEvent>   SpellDragDroppedBinding;
 
     private VisualElement   HealthFill;
     private VisualElement   ManaFill;
+    private VisualElement[] Slots     = new VisualElement[SlotCount];
     private VisualElement[] SlotIcons = new VisualElement[SlotCount];
 }

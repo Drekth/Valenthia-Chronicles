@@ -14,6 +14,7 @@ public class SpellData : ScriptableObject
 
     public string             Id          => SpellId;
     public string             DisplayName => SpellName;
+    public string             Description => SpellDescription;
     public Sprite             Icon        => SpellIcon;
     public float              Range       => CastRange;
     public float              Cooldown    => CooldownSeconds;
@@ -27,6 +28,7 @@ public class SpellData : ScriptableObject
     [Header("Identity")]
     [SerializeField] private string SpellId;
     [SerializeField] private string SpellName;
+    [SerializeField, TextArea] private string SpellDescription;
     [SerializeField] private Sprite SpellIcon;
 
     [Header("Rules")]

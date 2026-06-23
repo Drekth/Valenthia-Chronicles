@@ -14,3 +14,11 @@ public struct HotbarSlotAssignedEvent : IEvent
     public int Slot;
     public SpellData Spell;
 }
+
+// Demande d'assignation d'un sort à un slot, issue du drag-and-drop du grimoire. Consommé par
+// PlayerHotbar, qui écrit le slot puis republie un HotbarSlotAssignedEvent pour rafraîchir le HUD.
+public struct HotbarAssignRequestedEvent : IEvent
+{
+    public int Slot;
+    public SpellData Spell;
+}
