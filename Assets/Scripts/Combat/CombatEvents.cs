@@ -41,3 +41,20 @@ public struct SpellCastFailedEvent : IEvent
     public SpellData Spell;
     public SpellCastResult Reason;
 }
+
+// Raised by Unit any time health changes (damage, heal, regen). Carries the new absolute values
+// so consumers never need to re-query the unit — a single subscription covers every source.
+public struct UnitHealthChangedEvent : IEvent
+{
+    public Unit Target;
+    public float CurrentHealth;
+    public float MaxHealth;
+}
+
+// Raised by Unit any time mana changes (spell cost, regen). Same convention as UnitHealthChangedEvent.
+public struct ManaChangedEvent : IEvent
+{
+    public Unit Target;
+    public float CurrentMana;
+    public float MaxMana;
+}

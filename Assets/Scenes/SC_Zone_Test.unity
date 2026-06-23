@@ -650,7 +650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae264770182547429f387624b83d822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSource
-  DialogueAsset: {fileID: 11400000, guid: 29206e5d56ddb481391e11f38dc95c6c, type: 2}
+  DialogueAsset: {fileID: 11400000, guid: d4f984ae4640a49469fad4212e6594ec, type: 2}
   NpcName: Villageois
 --- !u!114 &1989482102
 MonoBehaviour:
@@ -664,6 +664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21bdb4609fa684692a31eb446b7ac1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
+  UnitId: 
   MaxHealth: 100
   Flags: 1
 --- !u!23 &1989482103

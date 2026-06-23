@@ -134,31 +134,23 @@ public class CreatureAI : MonoBehaviour
 
     private void EnterCombat(Unit Target)
     {
-        CurrentTarget          = Target;
-        State                  = CombatState.Combat;
+        CurrentTarget             = Target;
+        State                     = CombatState.Combat;
         NavAgent.stoppingDistance = Motion.Data.AttackRange;
         Motion.SwitchToChase(Target.transform);
 
-        EventBus<UnitCombatStateChangedEvent>.Raise(new UnitCombatStateChangedEvent
-        {
-            Unit     = OwnerUnit,
-            InCombat = true,
-        });
+        OwnerUnit.EnterCombat();
     }
 
     private void ExitCombat()
     {
-        CurrentTarget            = null;
-        State                    = CombatState.Idle;
+        CurrentTarget             = null;
+        State                     = CombatState.Idle;
         NavAgent.stoppingDistance = DefaultStoppingDistance;
-        NextAggroScanTime        = Time.time + AggroScanInterval;
+        NextAggroScanTime         = Time.time + AggroScanInterval;
         Motion.SwitchToWander();
 
-        EventBus<UnitCombatStateChangedEvent>.Raise(new UnitCombatStateChangedEvent
-        {
-            Unit     = OwnerUnit,
-            InCombat = false,
-        });
+        OwnerUnit.ExitCombat();
     }
 
     private void PerformAttack()

@@ -28,6 +28,7 @@ public enum SpellCastResult
     OutOfRange,
     OnCooldown,
     InvalidSpell,
+    NotEnoughMana,
 }
 
 // Everything an effect needs to apply itself: who casts, from where (for range/facing), and on

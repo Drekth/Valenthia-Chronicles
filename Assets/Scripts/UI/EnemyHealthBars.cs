@@ -45,8 +45,8 @@ public class EnemyHealthBars : MonoBehaviour
         CombatStateBinding = new EventBinding<UnitCombatStateChangedEvent>(HandleCombatStateChanged);
         EventBus<UnitCombatStateChangedEvent>.Register(CombatStateBinding);
 
-        DamageTakenBinding = new EventBinding<DamageTakenEvent>(HandleDamageTaken);
-        EventBus<DamageTakenEvent>.Register(DamageTakenBinding);
+        HealthChangedBinding = new EventBinding<UnitHealthChangedEvent>(HandleHealthChanged);
+        EventBus<UnitHealthChangedEvent>.Register(HealthChangedBinding);
 
         UnitDiedBinding = new EventBinding<UnitDiedEvent>(HandleUnitDied);
         EventBus<UnitDiedEvent>.Register(UnitDiedBinding);
@@ -55,7 +55,7 @@ public class EnemyHealthBars : MonoBehaviour
     private void OnDisable()
     {
         EventBus<UnitCombatStateChangedEvent>.Deregister(CombatStateBinding);
-        EventBus<DamageTakenEvent>.Deregister(DamageTakenBinding);
+        EventBus<UnitHealthChangedEvent>.Deregister(HealthChangedBinding);
         EventBus<UnitDiedEvent>.Deregister(UnitDiedBinding);
     }
 
@@ -111,7 +111,7 @@ public class EnemyHealthBars : MonoBehaviour
 
     private void HandleCombatStateChanged(UnitCombatStateChangedEvent Event)
     {
-        if (Event.InCombat)
+        if (Event.InCombat && Event.Unit.IsAttackable)
         {
             ShowBar(Event.Unit);
         }
@@ -121,7 +121,7 @@ public class EnemyHealthBars : MonoBehaviour
         }
     }
 
-    private void HandleDamageTaken(DamageTakenEvent Event)
+    private void HandleHealthChanged(UnitHealthChangedEvent Event)
     {
         if (Event.Target == null)
         {
@@ -130,7 +130,7 @@ public class EnemyHealthBars : MonoBehaviour
 
         if (ActiveBars.TryGetValue(Event.Target, out BarEntry Entry))
         {
-            SetFill(Entry, Event.Target.CurrentHealth / Event.Target.MaximumHealth);
+            SetFill(Entry, Event.CurrentHealth / Event.MaxHealth);
         }
     }
 
@@ -221,8 +221,8 @@ public class EnemyHealthBars : MonoBehaviour
     private List<Unit> StaleUnits;
 
     private EventBinding<UnitCombatStateChangedEvent> CombatStateBinding;
-    private EventBinding<DamageTakenEvent> DamageTakenBinding;
-    private EventBinding<UnitDiedEvent> UnitDiedBinding;
+    private EventBinding<UnitHealthChangedEvent>      HealthChangedBinding;
+    private EventBinding<UnitDiedEvent>               UnitDiedBinding;
 
     ////////////////////////////////////////////////////////////
     /// Bar entry                                            ///

@@ -17,6 +17,7 @@ public class SpellData : ScriptableObject
     public Sprite             Icon        => SpellIcon;
     public float              Range       => CastRange;
     public float              Cooldown    => CooldownSeconds;
+    public float              ManaCost    => ManaCostAmount;
     public List<SpellEffect>  Effects     => SpellEffects;
 
     ////////////////////////////////////////////////////////////
@@ -33,6 +34,7 @@ public class SpellData : ScriptableObject
     // attack until a dedicated attack-speed stat exists.
     [SerializeField] private float CastRange = 3.0f;
     [SerializeField] private float CooldownSeconds = 1.5f;
+    [SerializeField] private float ManaCostAmount = 0.0f;
 
     [Header("Effects")]
     [SerializeReference] private List<SpellEffect> SpellEffects = new List<SpellEffect>();

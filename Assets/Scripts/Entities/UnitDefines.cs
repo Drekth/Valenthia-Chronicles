@@ -9,5 +9,5 @@ public enum UnitFlags
     IsSelectable = 1 << 0,
     IsDead       = 1 << 1,
     IsAttackable = 1 << 2,
-    // Future: InCombat = 1 << 3, ...
+    InCombat     = 1 << 3,
 }

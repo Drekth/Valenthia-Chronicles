@@ -33,6 +33,11 @@ public class SpellCaster : MonoBehaviour
 
         ReadyTime[Spell] = Time.time + Spell.Cooldown;
 
+        if (Spell.ManaCost > 0.0f && OwnerUnit != null)
+        {
+            OwnerUnit.SpendMana(Spell.ManaCost);
+        }
+
         PendingSpell   = Spell;
         PendingContext = new SpellCastContext
         {
@@ -103,6 +108,11 @@ public class SpellCaster : MonoBehaviour
         if (ReadyTime.TryGetValue(Spell, out float Ready) && Time.time < Ready)
         {
             return SpellCastResult.OnCooldown;
+        }
+
+        if (Spell.ManaCost > 0.0f && OwnerUnit != null && OwnerUnit.CurrentMana < Spell.ManaCost)
+        {
+            return SpellCastResult.NotEnoughMana;
         }
 
         if (Target == null)

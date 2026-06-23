@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4954171693554603920}
   - component: {fileID: 2012422170612279046}
   - component: {fileID: 7013888455638977258}
+  - component: {fileID: 8019650075633907823}
   m_Layer: 10
   m_Name: PF_Player
   m_TagString: Player
@@ -109,7 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21bdb4609fa684692a31eb446b7ac1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
+  UnitId: 
   MaxHealth: 100
+  MaxMana: 100
+  CombatExitDelay: 6
   Flags: 4
 --- !u!114 &7013888455638977258
 MonoBehaviour:
@@ -123,6 +127,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b65c4557c3fb4ebbbd94f6929ac1321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpellCaster
+--- !u!114 &8019650075633907823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2586622766699849573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77b4eaa1e4e7141b3bbb29eb1c873297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RegenComponent
+  HealthRegenPerSecond: 5
+  ManaRegenPerSecond: 10
+  TickInterval: 1
 --- !u!1001 &1914916145375663873
 PrefabInstance:
   m_ObjectHideFlags: 0
