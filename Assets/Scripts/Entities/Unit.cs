@@ -22,6 +22,20 @@ public class Unit : MonoBehaviour
     public bool InCombat          => HasFlag(UnitFlags.InCombat);
     public bool IsMovementDisabled => HasFlag(UnitFlags.MovementDisabled);
 
+    // Reference-counted combat membership (who this unit is fighting). Created in Awake; every unit
+    // has one.
+    public CombatManager Combat { get; private set; }
+
+    // Threat ledger for targeting. Null for units that cannot hold threat (the player, friendly
+    // creatures); attached by CreatureAI for hostile creatures. ApplyDamage feeds it at the source.
+    public ThreatManager Threat { get; private set; }
+
+    // Wires a threat ledger onto this unit. Called once by CreatureAI in Awake for hostile creatures.
+    public void AttachThreat(ThreatManager Manager)
+    {
+        Threat = Manager;
+    }
+
     public bool HasFlag(UnitFlags Flag)
     {
         return (Flags & Flag) != 0;
@@ -42,7 +56,9 @@ public class Unit : MonoBehaviour
     }
 
     // Applies a resolved damage packet: reduces health, announces it, and handles death once.
-    // A dead unit absorbs nothing further. Both receiver and attacker enter combat.
+    // A dead unit absorbs nothing further. A surviving receiver feeds threat to the attacker (if it
+    // holds a threat ledger) and establishes a mutual combat reference. A lethal blow ends here — the
+    // dead unit holds no threat and joins no combat.
     public void ApplyDamage(in DamageInfo Info)
     {
         if (IsDead)
@@ -67,16 +83,20 @@ public class Unit : MonoBehaviour
             MaxHealth     = MaximumHealth,
         });
 
-        EnterCombat();
-
-        if (Info.Source != null)
-        {
-            Info.Source.EnterCombat();
-        }
-
         if (Health <= 0.0f)
         {
             Die(Info.Source);
+            return;
+        }
+
+        if (Info.Source != null)
+        {
+            if (Threat != null)
+            {
+                Threat.AddThreat(Info.Source, Info.Amount);
+            }
+
+            Combat.SetInCombatWith(Info.Source);
         }
     }
 
@@ -148,55 +168,55 @@ public class Unit : MonoBehaviour
         });
     }
 
-    // Transitions this unit into combat. Safe to call when already in combat — only resets the
-    // auto-exit timer. CombatExitDelay <= 0 disables auto-exit (used for creature units whose AI
-    // controls the combat state directly).
-    public void EnterCombat()
-    {
-        if (HasFlag(UnitFlags.InCombat))
-        {
-            RestartCombatExitTimer();
-            return;
-        }
-
-        SetFlag(UnitFlags.InCombat, true);
-
-        EventBus<UnitCombatStateChangedEvent>.Raise(new UnitCombatStateChangedEvent
-        {
-            Unit     = this,
-            InCombat = true,
-        });
-
-        RestartCombatExitTimer();
-    }
-
-    // Exits combat. Called externally by AI brains (CreatureAI) or internally by the auto-exit
-    // timer. Cancels the timer if it was running.
-    public void ExitCombat()
+    // Called by CombatManager when this unit gains its first combat reference. Cancels any pending
+    // out-of-combat linger and flags the unit in combat.
+    public void NotifyEnteredCombat()
     {
         CancelCombatExitTimer();
+        SetCombatFlag(true);
+    }
 
-        if (!HasFlag(UnitFlags.InCombat))
+    // Called by CombatManager when this unit loses its last combat reference. CombatExitDelay > 0
+    // (typically the player) lingers in combat for that delay before dropping; otherwise it drops
+    // immediately (AI-driven creatures leave the delay at 0).
+    public void NotifyExitedCombat()
+    {
+        if (CombatExitDelay > 0.0f)
         {
-            return;
+            RestartCombatExitTimer();
         }
-
-        SetFlag(UnitFlags.InCombat, false);
-
-        EventBus<UnitCombatStateChangedEvent>.Raise(new UnitCombatStateChangedEvent
+        else
         {
-            Unit     = this,
-            InCombat = false,
-        });
+            SetCombatFlag(false);
+        }
     }
 
     ////////////////////////////////////////////////////////////
     /// Private                                              ///
     ////////////////////////////////////////////////////////////
 
+    // Drives the InCombat flag, raising the state-changed event only on an actual transition so the
+    // linger timer and repeated references stay idempotent.
+    private void SetCombatFlag(bool InCombatNow)
+    {
+        if (HasFlag(UnitFlags.InCombat) == InCombatNow)
+        {
+            return;
+        }
+
+        SetFlag(UnitFlags.InCombat, InCombatNow);
+
+        EventBus<UnitCombatStateChangedEvent>.Raise(new UnitCombatStateChangedEvent
+        {
+            Unit     = this,
+            InCombat = InCombatNow,
+        });
+    }
+
     private void Awake()
     {
-        Stats = GetComponent<StatComponent>();
+        Stats  = GetComponent<StatComponent>();
+        Combat = new CombatManager(this);
     }
 
     // Current pools start full. Done in Start (not Awake) so a creature's StatComponent has already
@@ -232,7 +252,13 @@ public class Unit : MonoBehaviour
         Flags |= UnitFlags.IsDead | UnitFlags.MovementDisabled;
         Flags &= ~(UnitFlags.IsSelectable | UnitFlags.IsAttackable);
 
-        ExitCombat();
+        // Drop my combat references on every unit I was fighting (cascading their combat-drop) and
+        // wipe my threat. Other creatures holding me as an attacker prune me in their own update.
+        Combat.EndAllCombat();
+        if (Threat != null)
+        {
+            Threat.ResetThreat();
+        }
 
         EventBus<UnitDiedEvent>.Raise(new UnitDiedEvent
         {
@@ -265,7 +291,7 @@ public class Unit : MonoBehaviour
     {
         yield return new WaitForSeconds(CombatExitDelay);
         CombatExitRoutine = null;
-        ExitCombat();
+        SetCombatFlag(false);
     }
 
     ////////////////////////////////////////////////////////////

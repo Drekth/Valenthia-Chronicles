@@ -4,12 +4,14 @@ using UnityEngine.AI;
 // Reactive brain carried by a creature alongside its Unit / CreatureMotion / NavMeshAgent. It
 // decides WHEN to fight and drives the movement generators accordingly; CreatureMotion owns the
 // "how to move". Disposition (ReactState) comes from the creature's CreatureData:
-//   Friendly   — not attackable, never reacts.
-//   Neutral    — retaliates only once damaged (defensive).
-//   Aggressive — attacks the player on sight within AggroRadius.
+//   Friendly   — not attackable, holds no threat ledger, never reacts.
+//   Neutral    — retaliates only once damaged (threat is fed at the source by Unit.ApplyDamage).
+//   Aggressive — proactively seeds threat on players it spots within AggroRadius.
 //
-// The MotionManager ticks this brain each frame (before the active movement generator). Aggro
-// scanning is throttled and uses a shared NonAlloc overlap buffer to stay off the GC.
+// Targeting is delegated to the owner's ThreatManager: the brain reads CurrentVictim each tick and
+// chases/attacks it, rather than tracking its own target. The MotionManager ticks this brain each
+// frame (before the active movement generator). Aggro scanning is throttled and uses a shared
+// NonAlloc overlap buffer to stay off the GC.
 [RequireComponent(typeof(CreatureMotion))]
 [RequireComponent(typeof(Unit))]
 public class CreatureAI : MonoBehaviour
@@ -21,6 +23,10 @@ public class CreatureAI : MonoBehaviour
     private const int   MaxAggroCandidates = 16;
     private const float AggroScanInterval  = 0.2f;
 
+    // Threat granted to a player spotted by a proactive aggro scan, so it becomes the victim before
+    // dealing any damage. Kept small so real damage quickly dominates the table.
+    private const float AggroSeedThreat = 1.0f;
+
     ////////////////////////////////////////////////////////////
     /// Public                                               ///
     ////////////////////////////////////////////////////////////
@@ -28,19 +34,42 @@ public class CreatureAI : MonoBehaviour
     // Per-frame decision pass, driven by MotionManager so there is a single creature update loop.
     public void Tick(float DeltaTime)
     {
-        if (OwnerUnit.IsDead || Motion.Data == null)
+        if (OwnerUnit.IsDead || Motion.Data == null || Threat == null)
         {
             return;
         }
 
-        if (State == CombatState.Idle)
+        // Refresh the threat table (expire taunt, prune the dead, reselect) before reading the victim.
+        Threat.Update(DeltaTime);
+
+        Unit Victim = Threat.CurrentVictim;
+
+        if (Victim == null)
         {
-            TickIdle();
+            if (State == CombatState.Combat)
+            {
+                ExitCombat();
+            }
+            else
+            {
+                TickIdle();
+            }
+            return;
         }
-        else
+
+        // Give up if we have been dragged too far from home; drop threat and return.
+        if (IsLeashed())
         {
-            TickCombat();
+            ExitCombat();
+            return;
         }
+
+        if (State == CombatState.Idle || Victim != CurrentTarget)
+        {
+            EnterCombat(Victim);
+        }
+
+        TickCombat(Victim);
     }
 
     ////////////////////////////////////////////////////////////
@@ -55,28 +84,27 @@ public class CreatureAI : MonoBehaviour
 
         DefaultStoppingDistance = NavAgent.stoppingDistance;
 
-        // Disposition gates attackability: a friendly creature simply lacks the IsAttackable flag,
-        // so SpellCaster.Validate rejects the player's attacks on it.
-        if (Motion.Data != null)
+        if (Motion.Data == null)
         {
-            OwnerUnit.SetFlag(UnitFlags.IsAttackable, Motion.Data.Reaction != ReactState.Friendly);
+            return;
         }
-    }
 
-    private void OnEnable()
-    {
-        DamageTakenBinding = new EventBinding<DamageTakenEvent>(HandleDamageTaken);
-        EventBus<DamageTakenEvent>.Register(DamageTakenBinding);
-    }
+        // Disposition gates attackability: a friendly creature simply lacks the IsAttackable flag,
+        // so SpellCaster.Validate rejects the player's attacks on it. Only hostile creatures hold a
+        // threat ledger — friendly ones keep Threat null and therefore never fight.
+        bool Hostile = Motion.Data.Reaction != ReactState.Friendly;
+        OwnerUnit.SetFlag(UnitFlags.IsAttackable, Hostile);
 
-    private void OnDisable()
-    {
-        EventBus<DamageTakenEvent>.Deregister(DamageTakenBinding);
+        if (Hostile)
+        {
+            Threat = new ThreatManager(OwnerUnit, new HighestThreatSelector());
+            OwnerUnit.AttachThreat(Threat);
+        }
     }
 
     private void TickIdle()
     {
-        // Only aggressive creatures hunt proactively; neutrals wait to be hit (see HandleDamageTaken).
+        // Only aggressive creatures hunt proactively; neutrals wait until damage feeds their threat.
         if (Motion.Data.Reaction != ReactState.Aggressive)
         {
             return;
@@ -91,45 +119,18 @@ public class CreatureAI : MonoBehaviour
         Unit Found = ScanForTarget();
         if (Found != null)
         {
-            EnterCombat(Found);
+            // Seed threat; next tick's Threat.Update promotes it to victim and drops us into combat.
+            Threat.AddThreat(Found, AggroSeedThreat);
         }
     }
 
-    private void TickCombat()
+    private void TickCombat(Unit Victim)
     {
-        // Give up if the target is gone, dead, or we have been dragged too far from home.
-        if (CurrentTarget == null || CurrentTarget.IsDead || IsLeashed())
+        if (InAttackRange(Victim) && Time.time >= NextAttackTime)
         {
-            ExitCombat();
-            return;
-        }
-
-        if (InAttackRange(CurrentTarget) && Time.time >= NextAttackTime)
-        {
-            PerformAttack();
+            PerformAttack(Victim);
             NextAttackTime = Time.time + Motion.Data.AttackCooldown;
         }
-    }
-
-    // Defensive retaliation: any non-friendly creature that takes damage latches onto its attacker.
-    private void HandleDamageTaken(DamageTakenEvent Event)
-    {
-        if (Event.Target != OwnerUnit || State == CombatState.Combat || Motion.Data == null)
-        {
-            return;
-        }
-
-        if (Motion.Data.Reaction == ReactState.Friendly)
-        {
-            return;
-        }
-
-        if (Event.Source == null || Event.Source.IsDead)
-        {
-            return;
-        }
-
-        EnterCombat(Event.Source);
     }
 
     private void EnterCombat(Unit Target)
@@ -139,7 +140,7 @@ public class CreatureAI : MonoBehaviour
         NavAgent.stoppingDistance = Motion.Data.AttackRange;
         Motion.SwitchToChase(Target.transform);
 
-        OwnerUnit.EnterCombat();
+        OwnerUnit.Combat.SetInCombatWith(Target);
     }
 
     private void ExitCombat()
@@ -150,21 +151,22 @@ public class CreatureAI : MonoBehaviour
         NextAggroScanTime         = Time.time + AggroScanInterval;
         Motion.SwitchToWander();
 
-        OwnerUnit.ExitCombat();
+        Threat.ResetThreat();
+        OwnerUnit.Combat.EndAllCombat();
     }
 
-    private void PerformAttack()
+    private void PerformAttack(Unit Victim)
     {
-        FaceTarget();
+        FaceTarget(Victim);
 
         DamageInfo Info = new DamageInfo
         {
             Source = OwnerUnit,
-            Target = CurrentTarget,
+            Target = Victim,
             Amount = Motion.Data.AttackDamage,
             School = DamageType.Physical,
         };
-        CurrentTarget.ApplyDamage(in Info);
+        Victim.ApplyDamage(in Info);
     }
 
     private Unit ScanForTarget()
@@ -196,9 +198,9 @@ public class CreatureAI : MonoBehaviour
         return FlatDistanceSqr(transform.position, Target.transform.position) <= (Range * Range);
     }
 
-    private void FaceTarget()
+    private void FaceTarget(Unit Target)
     {
-        Vector3 Direction = CurrentTarget.transform.position - transform.position;
+        Vector3 Direction = Target.transform.position - transform.position;
         Direction.y = 0.0f;
 
         if (Direction.sqrMagnitude > 0.0001f)
@@ -224,14 +226,13 @@ public class CreatureAI : MonoBehaviour
     private CreatureMotion Motion;
     private NavMeshAgent   NavAgent;
     private Unit           OwnerUnit;
+    private ThreatManager  Threat;
 
     private CombatState State;
     private Unit        CurrentTarget;
     private float       NextAttackTime;
     private float       NextAggroScanTime;
     private float       DefaultStoppingDistance;
-
-    private EventBinding<DamageTakenEvent> DamageTakenBinding;
 
     private static readonly Collider[] AggroBuffer = new Collider[MaxAggroCandidates];
 }
