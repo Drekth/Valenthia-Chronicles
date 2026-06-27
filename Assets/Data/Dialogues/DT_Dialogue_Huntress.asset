@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388272bf694d349b2a37c0fbee8e0801, type: 3}
+  m_Name: DT_Dialogue_Huntress
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  DialogueId: huntress
+  EntryNodeGuid: start
+  GraphNodes:
+  - rid: 1575893249984299322
+  - rid: 1575893249984299323
+  - rid: 1575893249984299324
+  - rid: 1575893249984299325
+  - rid: 1575893249984299326
+  - rid: 1575893249984299327
+  - rid: 1575893249984299328
+  references:
+    version: 2
+    RefIds:
+    - rid: 1575893249984299322
+      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: start
+        NodePosition: {x: 0, y: 0}
+        NextNodeGuid: turnin
+        GreetingText: Tu sais te battre ? Les sangliers du sud sont devenus fous
+          et saccagent nos champs.
+    - rid: 1575893249984299323
+      type: {class: QuestTurnInNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: turnin
+        NodePosition: {x: 300, y: 0}
+        NextNodeGuid: 
+        TurnInQuest: {fileID: 11400000, guid: 1fe0a100cf73a43089be05d19354f6af, type: 2}
+        CompletedGuid: done
+        NotReadyGuid: offer
+    - rid: 1575893249984299324
+      type: {class: QuestOfferNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: offer
+        NodePosition: {x: 600, y: 150}
+        NextNodeGuid: 
+        OfferedQuest: {fileID: 11400000, guid: 1fe0a100cf73a43089be05d19354f6af, type: 2}
+        AcceptedGuid: accept
+        DeclinedGuid: decline
+    - rid: 1575893249984299325
+      type: {class: LineNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: accept
+        NodePosition: {x: 900, y: 100}
+        NextNodeGuid: end
+        SpeakerName: Chasseuse Yssa
+        LineText: Vise le flanc, ils chargent droit devant. Bonne chasse.
+    - rid: 1575893249984299326
+      type: {class: LineNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: decline
+        NodePosition: {x: 900, y: 300}
+        NextNodeGuid: end
+        SpeakerName: Chasseuse Yssa
+        LineText: Tant pis. Je finirai bien par m'en charger seule.
+    - rid: 1575893249984299327
+      type: {class: LineNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: done
+        NodePosition: {x: 600, y: -150}
+        NextNodeGuid: end
+        SpeakerName: Chasseuse Yssa
+        LineText: "Cinq de moins ! Les champs te remercient, \xE9tranger."
+    - rid: 1575893249984299328
+      type: {class: EndNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: end
+        NodePosition: {x: 1200, y: 0}
+        NextNodeGuid: 

@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388272bf694d349b2a37c0fbee8e0801, type: 3}
+  m_Name: DT_Dialogue_GuardCaptain
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueData
+  DialogueId: guard_captain
+  EntryNodeGuid: start
+  GraphNodes:
+  - rid: 1575893249984299315
+  - rid: 1575893249984299316
+  - rid: 1575893249984299317
+  - rid: 1575893249984299318
+  - rid: 1575893249984299319
+  - rid: 1575893249984299320
+  - rid: 1575893249984299321
+  references:
+    version: 2
+    RefIds:
+    - rid: 1575893249984299315
+      type: {class: StartNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: start
+        NodePosition: {x: 0, y: 0}
+        NextNodeGuid: turnin
+        GreetingText: "Halte ! Tu m'as l'air d'en d\xE9coudre. Les routes de l'est
+          ne sont plus s\xFBres depuis que les bandits y r\xF4dent."
+    - rid: 1575893249984299316
+      type: {class: QuestTurnInNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: turnin
+        NodePosition: {x: 300, y: 0}
+        NextNodeGuid: 
+        TurnInQuest: {fileID: 11400000, guid: cb30e3ba3252c4d189d23f80f03f513d, type: 2}
+        CompletedGuid: done
+        NotReadyGuid: offer
+    - rid: 1575893249984299317
+      type: {class: QuestOfferNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: offer
+        NodePosition: {x: 600, y: 150}
+        NextNodeGuid: 
+        OfferedQuest: {fileID: 11400000, guid: cb30e3ba3252c4d189d23f80f03f513d, type: 2}
+        AcceptedGuid: accept
+        DeclinedGuid: decline
+    - rid: 1575893249984299318
+      type: {class: LineNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: accept
+        NodePosition: {x: 900, y: 100}
+        NextNodeGuid: end
+        SpeakerName: Capitaine Doran
+        LineText: Bien ! Frappe-les avant qu'ils ne s'enhardissent davantage.
+    - rid: 1575893249984299319
+      type: {class: LineNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: decline
+        NodePosition: {x: 900, y: 300}
+        NextNodeGuid: end
+        SpeakerName: Capitaine Doran
+        LineText: "Reviens me voir quand tu auras du c\u0153ur au ventre."
+    - rid: 1575893249984299320
+      type: {class: LineNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: done
+        NodePosition: {x: 600, y: -150}
+        NextNodeGuid: end
+        SpeakerName: Capitaine Doran
+        LineText: "Beau travail. La route respire de nouveau. Voici ta r\xE9compense."
+    - rid: 1575893249984299321
+      type: {class: EndNode, ns: , asm: Assembly-CSharp}
+      data:
+        NodeGuid: end
+        NodePosition: {x: 1200, y: 0}
+        NextNodeGuid: 

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6388d04938d524c3abc16924acd0a774, type: 3}
+  m_Name: DT_Quest_BoarHunt
+  m_EditorClassIdentifier: Assembly-CSharp::QuestData
+  QuestId: boar_hunt
+  QuestTitle: Chasse aux sangliers
+  QuestSummary: "Les sangliers enrag\xE9s ravagent les cultures au sud. Abats-en
+    cinq pour la chasseuse Yssa."
+  QuestStages:
+  - StageDescription: "Chasser les sangliers enrag\xE9s au sud du hameau."
+    StageObjectives:
+    - rid: 1575893249984299312
+  QuestRewards:
+  - Item: {fileID: 0}
+    Count: 1
+    Gold: 60
+    Xp: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 1575893249984299312
+      type: {class: KillObjective, ns: , asm: Assembly-CSharp}
+      data:
+        TargetId: boar
+        TargetLabel: Sangliers
+        RequiredCount: 5
