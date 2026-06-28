@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private PlayerInputController Input;
-    [SerializeField] private CameraController CameraRig;
+    [SerializeField] private CameraTarget CameraRig;
 
     private PlayerCharacter Character;
     private EventBinding<PlayerSpawnedEvent> SpawnedBinding;

@@ -485,6 +485,8 @@ GameObject:
   - component: {fileID: 910669543}
   - component: {fileID: 910669546}
   - component: {fileID: 910669547}
+  - component: {fileID: 910669549}
+  - component: {fileID: 910669548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -587,6 +589,7 @@ MonoBehaviour:
   ZoomStep: 1.5
   ZoomSpeed: 12
   FollowSmoothTime: 0.15
+  Target: {fileID: 910669549}
 --- !u!114 &910669547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,6 +634,36 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &910669548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910669542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e291872e5d964b3dbe9d933ca8ee79d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraOcclusionFader
+  OccluderMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  SphereRadius: 0.4
+  TargetHeightOffset: 1
+  Target: {fileID: 910669549}
+--- !u!114 &910669549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910669542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 259563bc142b347c09e8c17fa4469473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraTarget
 --- !u!1 &922755320
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,7 +922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   Input: {fileID: 1463626393}
-  CameraRig: {fileID: 910669546}
+  CameraRig: {fileID: 910669549}
 --- !u!114 &1463626393
 MonoBehaviour:
   m_ObjectHideFlags: 0

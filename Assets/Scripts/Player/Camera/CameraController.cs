@@ -3,26 +3,21 @@ using UnityEngine.InputSystem;
 
 // Top-down player camera (Diablo-like). Fixed-angle perspective rig that smoothly
 // follows a target on the ground plane, with mouse-wheel zoom.
-// The follow target is pushed in by the player via SetTarget — the camera never
+// The follow target lives on the shared CameraTarget component — the camera never
 // searches the scene for it.
 public class CameraController : MonoBehaviour
 {
-    ////////////////////////////////////////////////////////////
-    /// Public                                               ///
-    ////////////////////////////////////////////////////////////
-
-    // Called by the player so the camera knows what to follow.
-    public void SetTarget(Transform NewTarget)
-    {
-        Target = NewTarget;
-    }
-
     ////////////////////////////////////////////////////////////
     /// Private                                              ///
     ////////////////////////////////////////////////////////////
 
     private void Awake()
     {
+        if (Target == null)
+        {
+            Target = GetComponent<CameraTarget>();
+        }
+
         TargetDistance = StartDistance;
         CurrentDistance = StartDistance;
     }
@@ -45,7 +40,7 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (Target == null)
+        if (Target == null || Target.Current == null)
         {
             return;
         }
@@ -53,7 +48,7 @@ public class CameraController : MonoBehaviour
         UpdateZoom();
 
         Quaternion Rotation = Quaternion.Euler(Pitch, Yaw, 0.0f);
-        Vector3 DesiredPosition = Target.position + Rotation * new Vector3(0.0f, 0.0f, -CurrentDistance);
+        Vector3 DesiredPosition = Target.Current.position + Rotation * new Vector3(0.0f, 0.0f, -CurrentDistance);
 
         transform.position = Vector3.SmoothDamp(transform.position, DesiredPosition, ref FollowVelocity, FollowSmoothTime);
         transform.rotation = Rotation;
@@ -105,7 +100,9 @@ public class CameraController : MonoBehaviour
     [Header("Follow")]
     [SerializeField] private float FollowSmoothTime = 0.15f;
 
-    private Transform Target;
+    [Header("References")]
+    [SerializeField] private CameraTarget Target;
+
     private float TargetDistance;
     private float CurrentDistance;
     private Vector3 FollowVelocity;
